@@ -1,0 +1,151 @@
+{
+  "model": "HistGradientBoostingClassifier",
+  "max_iter": 300,
+  "learning_rate": 0.08,
+  "random_state": 0,
+  "window_seconds": 2.0,
+  "hop_seconds": 0.5,
+  "sample_rate_hz": 10.0,
+  "classes": {
+    "0": "stationary",
+    "1": "moving"
+  },
+  "input_channels": [
+    "ax",
+    "ay",
+    "az",
+    "gx_c",
+    "gy_c",
+    "gz_c"
+  ],
+  "n_features": 26,
+  "feature_names": [
+    "acc_mag_mean",
+    "acc_mag_std",
+    "acc_mag_min",
+    "acc_mag_max",
+    "acc_mag_absdiff",
+    "gyr_mag_mean",
+    "gyr_mag_std",
+    "gyr_mag_max",
+    "acc_std_x",
+    "acc_absdiff_x",
+    "gyr_std_x",
+    "acc_std_y",
+    "acc_absdiff_y",
+    "gyr_std_y",
+    "acc_std_z",
+    "acc_absdiff_z",
+    "gyr_std_z",
+    "band_x_0.5-1.5Hz",
+    "band_x_1.5-3Hz",
+    "band_x_3-5Hz",
+    "band_y_0.5-1.5Hz",
+    "band_y_1.5-3Hz",
+    "band_y_3-5Hz",
+    "band_z_0.5-1.5Hz",
+    "band_z_1.5-3Hz",
+    "band_z_3-5Hz"
+  ],
+  "n_windows": 171440,
+  "n_stationary": 12902,
+  "n_moving": 158538,
+  "excluded_drives": [
+    "Vtb1"
+  ],
+  "sync_threshold": 0.4,
+  "loo_scores": {
+    "A": {
+      "n_test": 54974,
+      "accuracy": 0.9869756612216685,
+      "stationary_recall": 0.913769123783032,
+      "stationary_precision": 0.9598246895544192,
+      "idling_recall": 0.913769123783032
+    },
+    "B": {
+      "n_test": 20009,
+      "accuracy": 0.9979509220850618,
+      "stationary_recall": 0.9866369710467706,
+      "stationary_precision": 0.9904974846282839,
+      "idling_recall": 0.9866369710467706
+    },
+    "D": {
+      "n_test": 12166,
+      "accuracy": 0.9937530823606773,
+      "stationary_recall": 0.948561464690497,
+      "stationary_precision": 0.9846153846153847,
+      "idling_recall": 0.9494584837545126
+    },
+    "E": {
+      "n_test": 84291,
+      "accuracy": 0.9955036718036326,
+      "stationary_recall": 0.9160922272403138,
+      "stationary_precision": 0.993298969072165,
+      "idling_recall": 0.9160922272403138
+    }
+  },
+  "mean_loo_accuracy": 0.99354583436776,
+  "naive_threshold_accuracy": 0.9026714885674288,
+  "feature_extraction_seconds": 43.1,
+  "splits": {
+    "1. E held out  (train A+B+D)": {
+      "n": 84291,
+      "accuracy": 0.9955036718036326,
+      "stat_recall": 0.9160922272403138,
+      "stat_prec": 0.993298969072165,
+      "idling_recall": 0.9160922272403138,
+      "train_windows": 87149
+    },
+    "2. D held out  (train A+B+E)": {
+      "n": 12166,
+      "accuracy": 0.9937530823606773,
+      "stat_recall": 0.948561464690497,
+      "stat_prec": 0.9846153846153847,
+      "idling_recall": 0.9494584837545126,
+      "train_windows": 159274
+    },
+    "3. within-driver 75/25": {
+      "n": 42862,
+      "accuracy": 0.99741029350007,
+      "stat_recall": 0.9758397171479081,
+      "stat_prec": 0.99131996408261,
+      "idling_recall": 0.9758397171479081,
+      "train_windows": 125150
+    }
+  },
+  "within_split_per_driver": {
+    "A": {
+      "name": "A",
+      "n": 13744,
+      "accuracy": 0.9949796274738067,
+      "stat_recall": 0.9693548387096774,
+      "stat_prec": 0.9933884297520661,
+      "idling_recall": 0.9693548387096774
+    },
+    "B": {
+      "name": "B",
+      "n": 5003,
+      "accuracy": 0.9996002398560864,
+      "stat_recall": 0.9933554817275747,
+      "stat_prec": 1.0,
+      "idling_recall": 0.9933554817275747
+    },
+    "D": {
+      "name": "D",
+      "n": 3042,
+      "accuracy": 0.9930966469428008,
+      "stat_recall": 0.9627507163323782,
+      "stat_prec": 0.9767441860465116,
+      "idling_recall": 0.9627507163323782
+    },
+    "E": {
+      "name": "E",
+      "n": 21073,
+      "accuracy": 0.9990983723247758,
+      "stat_recall": 0.9886877828054299,
+      "stat_prec": 0.9898074745186863,
+      "idling_recall": 0.9886877828054299
+    }
+  },
+  "note_on_deploy": "deploy_all is trained on every driver. Ship it; never quote its in-sample score. The honest figures are the held-out ones above."
+}

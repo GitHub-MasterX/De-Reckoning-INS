@@ -1,0 +1,205 @@
+<mxfile host="app.diagrams.net" agent="claude" version="24.0.0">
+  <diagram name="1 · Overview" id="1_·_Overview">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="1 ·h1" value="&lt;b&gt;Intelligent Dead Reckoning — system overview&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:13px;color:#cfd8dc'&gt;GNSS-denied navigation from a dashboard-mounted smartphone · SIH PS 26168&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#37474f;strokeColor=none;fontColor=#ffffff;fontSize=19;verticalAlign=middle;align=left;spacingLeft=22;" vertex="1" parent="1"><mxGeometry x="60" y="40" width="1480" height="56" as="geometry"/></mxCell>
+        <mxCell id="1 ·n2" value="&lt;b&gt;IO-VNBD&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;72 drives · 1,341 km&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#666666;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="70" y="170" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="1 ·n3" value="&lt;b&gt;Clean &amp;amp; align&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;sync, sessions, frame&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="376" y="170" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="1 ·n4" value="&lt;b&gt;Features&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;26 per 2 s window&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="682" y="170" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="1 ·n5" value="&lt;b&gt;Train&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;leave-one-driver-out&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="988" y="170" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="1 ·n6" value="&lt;b&gt;Models&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;classifier + regressor&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#2d7d32;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="1294" y="170" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="1 ·e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="1 ·n2" target="1 ·n3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="1 ·e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="1 ·n3" target="1 ·n4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="1 ·e9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="1 ·n4" target="1 ·n5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="1 ·e10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="1 ·n5" target="1 ·n6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="1 ·n11" value="&lt;b&gt;Phone sensors&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;IMU + GNSS&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="70" y="360" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="1 ·n12" value="&lt;b&gt;Engine&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;normalise · align · fuse&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="376" y="360" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="1 ·n13" value="&lt;b&gt;Map layer&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;OSM · NHC&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="682" y="360" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="1 ·n14" value="&lt;b&gt;Position&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;10 Hz&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="988" y="360" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="1 ·n15" value="&lt;b&gt;App&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;Kotlin · Compose&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="1294" y="360" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="1 ·e16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="1 ·n11" target="1 ·n12"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="1 ·e17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="1 ·n12" target="1 ·n13"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="1 ·e18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="1 ·n13" target="1 ·n14"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="1 ·e19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="1 ·n14" target="1 ·n15"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="1 ·e20" value="trained model" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="1 ·n6" target="1 ·n12"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="1 ·t21" value="WHAT SHIPS
+
+✓  Motion classifier — 99.4% leave-one-driver-out
+✓  Alignment engine — 97–100% of theoretical optimum
+✓  Kalman fusion, map matching, NHC
+
+✗  Speed regressor — measured, degrades drift, NOT deployed" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#2d7d32;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="70" y="520" width="700" height="250" as="geometry"/></mxCell>
+        <mxCell id="1 ·t22" value="BENCHMARKS
+
+5 m over 50 m        1.3 – 2.6 m      PASS on all 4 drivers
+100 m over 1 km      102 m            driver E, misses by 1.8 m
+                     161 – 196 m      urban drivers
+
+Driver E is the problem statement's stated condition:
+steady ~60 km/h, tunnel-like." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#e8f0fe;strokeColor=#4d7fb3;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="810" y="520" width="740" height="250" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="2 · Data pipeline" id="2_·_Data_pipeline">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2 ·h1" value="&lt;b&gt;Data pipeline&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:13px;color:#cfd8dc'&gt;raw CSV → analysis-ready · analysis/*.py, run in order&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#37474f;strokeColor=none;fontColor=#ffffff;fontSize=19;verticalAlign=middle;align=left;spacingLeft=22;" vertex="1" parent="1"><mxGeometry x="60" y="40" width="1480" height="56" as="geometry"/></mxCell>
+        <mxCell id="2 ·n2" value="&lt;b&gt;1 · Ingest&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;latin-1 · pairing · truncation&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="70" y="170" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="2 ·n3" value="&lt;b&gt;2 · Enrich&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;speed_best · gyro bias&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="376" y="170" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="2 ·n4" value="&lt;b&gt;3 · Sessions&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;83 across 72 drives&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="682" y="170" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="2 ·n5" value="&lt;b&gt;4 · Sync&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;two-stage alignment&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="988" y="170" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="2 ·n6" value="&lt;b&gt;5 · Vehicle frame&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;phone → car axes&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="1294" y="170" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="2 ·e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="2 ·n2" target="2 ·n3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="2 ·e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="2 ·n3" target="2 ·n4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="2 ·e9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="2 ·n4" target="2 ·n5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="2 ·e10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="2 ·n5" target="2 ·n6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="2 ·t11" value="THE FOUR INGEST TRAPS
+
+•  latin-1 encoding — all 72 files
+•  case-mismatched filenames — 40 of 72
+•  two column-naming schemes
+•  unequal row counts — 9 pairs" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#fffbe6;strokeColor=#c9a227;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="70" y="340" width="460" height="210" as="geometry"/></mxCell>
+        <mxCell id="2 ·t12" value="SESSION SPLIT
+
+One file can hold several recordings.
+Only 3 gaps of 1,070,673 exceed 150 ms.
+Nothing falls in 0.12–1.28 s, so the
+0.5 s threshold is read off the data." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#fffbe6;strokeColor=#c9a227;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="570" y="340" width="460" height="210" as="geometry"/></mxCell>
+        <mxCell id="2 ·t13" value="TWO-STAGE SYNC
+
+COARSE  GPS tracks, ±10 min
+        finds +111 s, +309 s offsets
+FINE    gyro vs yaw-rate, ±30 s
+        refines to sub-second
+
+Recovered 6 h, including the test set." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#fffbe6;strokeColor=#c9a227;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="1070" y="340" width="470" height="210" as="geometry"/></mxCell>
+        <mxCell id="2 ·t14" value="OUTPUT   ·   data/clean/*.parquet — 72 drives, 29.7 h, 1,341 km, 1,070,741 samples at 10 Hz, 49 columns
+             every original column preserved byte-identical; all corrections added as NEW columns" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#e8f0fe;strokeColor=#4d7fb3;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="70" y="590" width="1470" height="130" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="3 · Model training" id="3_·_Model_training">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="3 ·h1" value="&lt;b&gt;Model training&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:13px;color:#cfd8dc'&gt;offline · scikit-learn · leave-one-driver-out&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#37474f;strokeColor=none;fontColor=#ffffff;fontSize=19;verticalAlign=middle;align=left;spacingLeft=22;" vertex="1" parent="1"><mxGeometry x="60" y="40" width="1480" height="56" as="geometry"/></mxCell>
+        <mxCell id="3 ·n2" value="&lt;b&gt;26 features&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;2.0 s window, 0.5 s hop&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="70" y="170" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="3 ·n3" value="&lt;b&gt;Split&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;hold out a whole driver&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="376" y="170" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="3 ·n4" value="&lt;b&gt;Motion classifier&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;stationary vs moving&lt;br&gt;IMU only&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#2d7d32;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="682" y="170" width="230" height="136" as="geometry"/></mxCell>
+        <mxCell id="3 ·n5" value="&lt;b&gt;✓ 99.4%&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;naive threshold 90.3%&lt;br&gt;DEPLOYED&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#2d7d32;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="988" y="170" width="230" height="136" as="geometry"/></mxCell>
+        <mxCell id="3 ·e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="3 ·n2" target="3 ·n3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="3 ·e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="3 ·n3" target="3 ·n4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="3 ·e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="3 ·n4" target="3 ·n5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="3 ·n9" value="&lt;b&gt;Speed regressor&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;predicts Δv&lt;br&gt;r = 0.43–0.61&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;dashed=1;" vertex="1" parent="1"><mxGeometry x="682" y="330" width="230" height="136" as="geometry"/></mxCell>
+        <mxCell id="3 ·n10" value="&lt;b&gt;✗ worse than coast&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;drift 43% vs 10%&lt;br&gt;NOT DEPLOYED&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;dashed=1;" vertex="1" parent="1"><mxGeometry x="988" y="330" width="230" height="136" as="geometry"/></mxCell>
+        <mxCell id="3 ·e11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="3 ·n3" target="3 ·n9"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="3 ·e12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="3 ·n9" target="3 ·n10"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="3 ·t13" value="WHY THE REGRESSOR FAILS
+
+Its errors LEAN rather than scatter.
+A blackout stacks ~2,000 predictions, so a
+0.05 m/s bias compounds into 22 km/h.
+
+Correlation cannot see this — two models with
+identical MAE differ 5× in drift.
+Shrinkage sweep: best weight is ZERO." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="70" y="490" width="720" height="240" as="geometry"/></mxCell>
+        <mxCell id="3 ·t14" value="WHY THE CLASSIFIER WORKS
+
+A stopped vehicle is a large, sustained,
+structural signature — not a small quantity
+buried in noise.
+
+Held out E entirely (trained urban-only):
+still 99.6% on 84,291 unseen highway windows." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#2d7d32;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="830" y="490" width="710" height="240" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="4 · Runtime engine" id="4_·_Runtime_engine">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="4 ·h1" value="&lt;b&gt;On-device runtime&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:13px;color:#cfd8dc'&gt;portable core · phone, Raspberry Pi, or FOG IMU&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#37474f;strokeColor=none;fontColor=#ffffff;fontSize=19;verticalAlign=middle;align=left;spacingLeft=22;" vertex="1" parent="1"><mxGeometry x="60" y="40" width="1480" height="56" as="geometry"/></mxCell>
+        <mxCell id="4 ·n2" value="&lt;b&gt;Sensors&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;accel · gyro · mag · GNSS&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="70" y="190" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="4 ·n3" value="&lt;b&gt;Normalise&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;any rate → 10 Hz&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="376" y="190" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="4 ·n4" value="&lt;b&gt;Align&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;phone → vehicle frame&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="682" y="190" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="4 ·n5" value="&lt;b&gt;Classify&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;ZUPT · shock reject&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#2d7d32;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="988" y="190" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="4 ·n6" value="&lt;b&gt;Fuse&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;Kalman, GNSS+INS&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="1294" y="190" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="4 ·e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="4 ·n2" target="4 ·n3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="4 ·e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="4 ·n3" target="4 ·n4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="4 ·e9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="4 ·n4" target="4 ·n5"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="4 ·e10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="4 ·n5" target="4 ·n6"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="4 ·n11" value="&lt;b&gt;Map layer&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;OSM · HMM · NHC&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="376" y="380" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="4 ·n12" value="&lt;b&gt;Blackout handler&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;seamless switch&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="682" y="380" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="4 ·n13" value="&lt;b&gt;Position out&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:11px;color:#444'&gt;10 Hz phone / 200 Hz edge&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;verticalAlign=middle;align=center;spacingTop=2;strokeWidth=2;" vertex="1" parent="1"><mxGeometry x="988" y="380" width="230" height="96" as="geometry"/></mxCell>
+        <mxCell id="4 ·e14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="4 ·n6" target="4 ·n11"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="4 ·e15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="4 ·n11" target="4 ·n12"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="4 ·e16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2.5;endArrow=blockThin;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="4 ·n12" target="4 ·n13"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="4 ·t17" value="SAMPLE-RATE HANDLING
+
+Phone samples at 248 Hz; the model expects 10 Hz.
+
+low-pass 4 Hz  →  interpolate on timestamps  →  10 Hz
+
+Filter BEFORE decimating, or vibration folds
+into the signal band and cannot be removed." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#fffbe6;strokeColor=#c9a227;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="70" y="540" width="700" height="200" as="geometry"/></mxCell>
+        <mxCell id="4 ·t18" value="WHAT THE CLASSIFIER DOES HERE
+
+It detects vehicle STATE, not position.
+
+stationary  →  force velocity to zero (ZUPT)
+moving      →  coast + Kalman + map
+
+Prevents 333 m of phantom motion per 30 s stop." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#2d7d32;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="810" y="540" width="730" height="200" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="5 · Results" id="5_·_Results">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="5 ·h1" value="&lt;b&gt;Results&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:13px;color:#cfd8dc'&gt;leave-one-driver-out · each driver unseen by the model that scored it&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#37474f;strokeColor=none;fontColor=#ffffff;fontSize=19;verticalAlign=middle;align=left;spacingLeft=22;" vertex="1" parent="1"><mxGeometry x="60" y="40" width="1480" height="56" as="geometry"/></mxCell>
+        <mxCell id="5 ·t2" value="POSITIONAL DRIFT (%)                50 m     100 m     200 m     500 m    1000 m
+───────────────────────────────────────────────────────────────────────────────
+Driver E   steady highway            2.6       4.1       6.7       9.1      10.2
+Driver B   urban / mixed             3.2       5.2       7.9      11.1      16.1
+Driver A   urban / mixed             5.2       8.5      11.7      13.4      16.5
+Driver D   dense urban               5.3       9.6      10.9      18.2      19.6
+───────────────────────────────────────────────────────────────────────────────
+benchmark                          under 10% of distance travelled" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#e8f0fe;strokeColor=#4d7fb3;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="70" y="130" width="1470" height="250" as="geometry"/></mxCell>
+        <mxCell id="5 ·t3" value="WHY ONLY DRIVER E MEETS 1 km
+
+drift  =  | v₀ − v̄ |  ⁄  v̄
+
+1 · Every driver's speed wanders by a SIMILAR
+    absolute amount (5.0–6.9 km/h) — but E
+    divides it by 79.5 km/h, others by 41–51.
+    relative swing:  E 6.1%   vs   A/B/D 14–15%
+
+2 · A distance benchmark is a TIME benchmark.
+    1 km takes E 62 s, driver D 103 s.
+
+3 · Stops break velocity-hold. E stops 8.4%
+    of the time, urban drivers 12–15%." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#fffbe6;strokeColor=#c9a227;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="70" y="410" width="700" height="290" as="geometry"/></mxCell>
+        <mxCell id="5 ·t4" value="PHYSICAL LIMIT AT 10 Hz
+
+required accuracy   0.028 m/s² on mean accel
+random noise        0.020 m/s²      ✓ fine
+bias                does NOT average out
+
+gravity leak sets the wall:
+     θ  =  0.028 / 9.81  =  0.16°  of pitch
+
+ALIASING — signal 0–2 Hz, vibration 10–100 Hz
+folds into 0–5 Hz. Contaminated, not noisy:
+no filter can separate them. 248 Hz can." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" vertex="1" parent="1"><mxGeometry x="810" y="410" width="730" height="290" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

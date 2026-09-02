@@ -1,0 +1,11 @@
+# IDR — Intelligent Dead Reckoning · evaluation requirements
+# Versions are PINNED deliberately: scikit-learn does not guarantee that a model
+# pickled by one version loads correctly in another. A mismatch can fail loudly
+# or, worse, load and predict subtly wrong. Install exactly these.
+numpy==2.5.2
+pandas==3.0.5
+scipy==1.18.1
+scikit-learn==1.9.0
+matplotlib==3.11.1
+joblib==1.5.3
+pyarrow==25.0.1
