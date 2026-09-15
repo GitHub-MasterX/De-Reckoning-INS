@@ -31,6 +31,7 @@ To look at or run round 1 exactly: `git switch --detach round-1`, then `git swit
 | `analysis/landmark_usable.py` | which of those landmarks the car actually showed (turned at, stopped at) |
 | `analysis/osm_junctions.py` | every road junction along the routes, and the turns possible there |
 | `analysis/snap_recheck.py` | simulates snapping under `run_evaluation.py`'s blackout rules |
+| `analysis/tunnel_lengths.py` | lengths of the mapped road tunnels in the dataset area |
 | `out/` | result tables and the console output of each run |
 
 ## Running (from the repo root)

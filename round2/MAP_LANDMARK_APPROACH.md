@@ -34,6 +34,11 @@ Round 1 was cleared on the ~10% result. For round 2:
 > 10 Hz replication gives E **6.5%**; E's individual sessions range from 3.0% to 26.1%. D's figure
 > comes from a single session.
 
+> **Update 2026-09-16 — by driving condition (step 1, `out/step1_run.txt`).** Coasting, distance error at 1 km on
+> the test drivers D and E: slow (under 40 km/h) 25.6%, mixed (40–50) 18.3%, **50–70 km/h — the problem statement's
+> condition — 14.5%**, fast (70+) 3.5%. Round 1's "E ≈ 10%" came mostly from fast motorway driving. The real
+> round-2 target is the 50–70 km/h group, where 87% of 1 km blackouts contain a real turn.
+
 ---
 
 ## 2 · The idea
@@ -650,8 +655,9 @@ All in `run_evaluation.py` at tag `round-1` (unchanged; round-1 results stand as
 
 **Done:** landmark tag counts (§12), usable landmarks (§12.2), junction density (§13), snap audit (§14).
 
-**Decisions — taken 2026-09-16, recorded in `DECISIONS.md`:** session-weighted median as the headline
-(every-blackout median alongside); 2D position error as the main metric, distance error alongside; a
+**Decisions — taken 2026-09-16, recorded in `DECISIONS.md`:** results reported by driving condition (average
+speed: slow, mixed, 50–70 km/h, fast), every blackout equal inside a group, with real-turn context from the
+landmark-spacing idea; 2D position error as the main metric, distance error alongside; a
 `moving` and a `stopgo` blackout set; tune on A and B, test once on D and E; step 5 built as a
 road-constrained particle filter; no new model training.
 

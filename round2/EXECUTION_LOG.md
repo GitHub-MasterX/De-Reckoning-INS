@@ -108,5 +108,33 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   history required, weighting) — not the method. Round-2 methods are compared with the round-2 baseline only.
 - **Difficulty — session weighting is unstable for E.** E's session-weighted median is 9.8% at 500 m but 7.3% at
   1 km. At 500 m, six E sessions with fewer than 20 blackouts (38 blackouts in total; one is a single blackout at
-  66.7%) carry 43% of E's weight; at 1 km most of them have no valid blackout. Proposed fix, awaiting a decision:
-  a session enters the session-weighted median only with at least 20 blackouts at that checkpoint.
+  66.7%) carry 43% of E's weight; at 1 km most of them have no valid blackout. Resolved differently — see
+  entry 11: results are now reported by driving condition.
+
+## 10 · `analysis/tunnel_lengths.py` — how long real tunnels are — 2026-09-16
+
+- **Why:** the proposal to size blackouts by the average tunnel length needed the real lengths.
+- **Run:** a few seconds, from the OSM landmark cache (dataset area only). Output `out/tunnel_lengths_run.txt`.
+- **Result:** 1,185 tunnel ways → 1,009 tunnels. Median 15 m, mean 56 m, 90th percentile 90 m. 13 are at least
+  500 m long, 5 at least 1 km. The longest mapped value (4.9 km) was not checked.
+- **Finding:** most mapped road tunnels are short underpasses, so tunnel length was not adopted as a blackout
+  length; the 1 km checkpoint is longer than almost every real tunnel in the region.
+
+## 11 · Step 1 re-run — results by driving condition — 2026-09-16
+
+- **Why:** decision change in `DECISIONS.md` — group blackouts by average speed (slow under 40 km/h, mixed 40–50,
+  ps_60 50–70, fast 70+), every blackout equal inside a group; add real-turn context from the landmark-spacing idea.
+- **Run:** 3 s. The same 4,265 start points, now with context columns. Output `out/step1_run.txt`.
+- **Moving 1 km blackouts per group, A+B | D+E:** slow 172 | 98 · mixed 144 | 177 · ps_60 214 | 407 · fast 168 | 1,739.
+  A and B supply 214 blackouts at 50–70 km/h from 9 sessions — enough to tune on.
+- **Coast, distance error, A+B | D+E:**
+  - 1 km — slow 21.0 | 25.6% · mixed 14.1 | 18.3% · ps_60 14.0 | 14.5% · fast 4.5 | 3.5%
+  - 50 m — slow 12.1 | 10.9% · mixed 2.9 | 4.1% · ps_60 1.6 | 2.3% · fast 0.6 | 0.7%
+- **Landmark context at 1 km, all drivers:** median real turns — slow 4, mixed 3, ps_60 2, fast 0; blackouts with
+  no turn — 1 / 3 / 13 / 70%; last turn to the 1 km mark — 117 / 194 / 270 / 1,001 m.
+- **Findings:**
+  1. The problem statement's own condition (50–70 km/h) drifts about 14% at 1 km by coasting. Round 1's low figure
+     for E came mostly from fast motorway driving, which coasts at 3.5–4.5%.
+  2. Slow driving fails even the 50 m benchmark by coasting (10.9–12.1%).
+  3. 87% of 50–70 km/h blackouts contain a real turn, the last a median 270 m before the 1 km mark — room for landmark
+     corrections exactly where they are needed. Fast blackouts rarely have one, but coast well already.

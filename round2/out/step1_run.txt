@@ -16,6 +16,15 @@
   stopgo       1000 m       2,641 (12)          358 (3)          968 (6)          185 (1)
 
 ====================================================================================================
+1b · DRIVING CONDITIONS — valid blackouts per group:  tuning A+B  |  test D+E   (sessions)
+====================================================================================================
+  group     km/h                   moving 50 m                 moving 1000 m                 stopgo 1000 m
+  slow      0-40         474 (10)  |  273 (16)            172 (9)  |  98 (9)          743 (9)  |  404 (13)
+  mixed    40-50          303 (9)  |  263 (15)          144 (9)  |  177 (11)          184 (9)  |  239 (12)
+  ps_60    50-70          322 (9)  |  477 (13)           214 (9)  |  407 (9)           231 (9)  |  440 (9)
+  fast       70+        226 (7)  |  1,852 (11)         168 (6)  |  1,739 (8)         168 (6)  |  1,743 (8)
+
+====================================================================================================
 2 · ROUND-1 REPRODUCTION — round-1's blackouts (eval_cache.npz, same random draws), same formula
 ====================================================================================================
   driver    distance   round 1 (committed)   reproduced  blackouts
@@ -53,49 +62,66 @@
   (a chord is shorter than its arc) and scaled by the path/speed ratio of section 3.
 
 ====================================================================================================
-5 · REFERENCE — coast (speed at blackout start held), DISTANCE error, round-2 rules, moving set
+5 · REFERENCE — coast (speed at blackout start held), DISTANCE error, moving set
 ====================================================================================================
-  Distance only: heading is not modelled until step 3. Round-1 equivalents are in section 2.
+  Distance only: heading is not modelled until step 3. Every blackout counts equally inside a group.
 
-  checkpoint                    driver E                  driver B                  driver A                  driver D
-                every / session-weighted  every / session-weighted  every / session-weighted  every / session-weighted
-       50 m                   1.0% / 2.0%               2.8% / 2.7%               2.8% / 3.5%               3.4% / 3.4%
-      100 m                   1.6% / 4.0%               3.9% / 3.8%               4.6% / 5.5%               5.1% / 5.3%
-      200 m                   2.4% / 5.6%               7.1% / 7.8%               6.7% / 6.4%             10.9% / 10.9%
-      500 m                   3.9% / 9.8%             12.8% / 14.4%              9.8% / 10.1%             14.1% / 14.1%
-     1000 m                   4.8% / 7.3%             14.8% / 16.0%             12.3% / 12.9%             19.3% / 19.3%
+  5a · by driving condition — median drift (blackouts)
+  group     km/h  checkpoint          A+B (tuning)            D+E (test)
+  slow      0-40        50 m           12.1% (474)           10.9% (273)
+  slow      0-40      1000 m           21.0% (172)            25.6% (98)
+  mixed    40-50        50 m            2.9% (303)            4.1% (263)
+  mixed    40-50      1000 m           14.1% (144)           18.3% (177)
+  ps_60    50-70        50 m            1.6% (322)            2.3% (477)
+  ps_60    50-70      1000 m           14.0% (214)           14.5% (407)
+  fast       70+        50 m            0.6% (226)          0.7% (1,852)
+  fast       70+      1000 m            4.5% (168)          3.5% (1,739)
+
+  5b · by driver — median drift, every blackout equal
+  checkpoint      driver E    driver B    driver A    driver D
+       50 m           1.0%        2.8%        2.8%        3.4%
+      100 m           1.6%        3.9%        4.6%        5.2%
+      200 m           2.4%        7.1%        6.7%       10.9%
+      500 m           3.9%       12.8%        9.8%       14.1%
+     1000 m           4.8%       14.8%       12.3%       19.3%
+
+  5c · landmark context at 1 km — real turns >= 15° in the vehicle GPS course (reporting only), all drivers
+                                                        slow     mixed     ps_60      fast
+  blackouts                                              270       321       621     1,907
+  median real turns inside the 1 km                        4         3         2         0
+  share with no turn at all                               1%        3%       13%       70%
+  median distance, last turn -> 1 km mark              117 m     194 m     270 m    1001 m
+  With no turn, the distance counts from where GPS was lost. From step 5, drift is broken down by it.
 
 ====================================================================================================
-6 · SESSIONS — valid moving blackouts and coast distance error, per session
+6 · SESSIONS — moving blackouts and coast distance error; the route's median gap between real turns
 ====================================================================================================
-  In the session-weighted median every session carries equal weight, however few blackouts it has.
-
-  driver  drive    session    km  km/h      50 m: n · median     500 m: n · median    1000 m: n · median
-  E       Vfa01          0    19    59           50 ·   1.8%           42 ·   8.2%           35 ·  10.2%
-  E       Vfa02          0   163    87          634 ·   0.6%          621 ·   2.3%          609 ·   2.7%
-  E       Vta16          0    14    43           35 ·   3.8%           29 ·   9.8%           25 ·  10.5%
-  E       Vta17          1     3    32            2 ·   3.9%             0 ·     -             0 ·     -
-  E       Vta1a          0    40    57          149 ·   1.9%          143 ·  11.9%          137 ·  14.8%
-  E       Vta2           0    11    36           26 ·   3.2%           17 ·  23.2%           10 ·  30.8%
-  E       Vta28          0     4    34            4 ·   2.0%            2 ·  17.8%             0 ·     -
-  E       Vta29          0    26    39           92 ·   3.8%           74 ·  15.9%           59 ·  16.9%
-  E       Vta30          0    12    25           25 ·   2.3%            8 ·   8.4%            3 ·   7.3%
-  E       Vta8           0     3    33            3 ·   5.5%            1 ·  66.7%             0 ·     -
-  E       Vtb2           0     4    27            3 ·   5.0%             0 ·     -             0 ·     -
-  E       Vtb5           0   111    62          430 ·   1.0%          414 ·   5.0%          397 ·   6.2%
-  E       Vw11           0     6    43           13 ·   1.2%            9 ·   4.1%            6 ·   5.1%
-  E       Vw2            0    99    67          377 ·   0.9%          352 ·   3.0%          333 ·   3.6%
-  E       Vw3            0     5    46            3 ·   3.0%            1 ·  29.6%             0 ·     -
-  E       Vw4            0   214    61          832 ·   1.0%          772 ·   4.5%          724 ·   5.7%
-  B       M              0    39    32          137 ·   4.7%           96 ·  20.4%           67 ·  15.2%
-  B       M              1    12    45           33 ·   2.1%           27 ·  15.6%           21 ·  25.7%
-  B       M              2    55    38          193 ·   2.1%          138 ·   8.6%           95 ·  13.4%
-  A       S1             0    38    26          129 ·   5.1%           73 ·  12.3%           39 ·  20.0%
-  A       S2             1    75    29          271 ·   4.3%          180 ·  14.4%          124 ·  17.9%
-  A       S3a            0    26    38           88 ·   2.1%           73 ·   7.2%           62 ·  10.5%
-  A       S3b            1     3    20            4 ·  13.0%             0 ·     -             0 ·     -
-  A       S3c            0    44    42          154 ·   1.4%          124 ·   6.5%           97 ·   4.0%
-  A       S4             0    28    28           94 ·   5.2%           58 ·  16.1%           31 ·  14.6%
-  A       S4             1    58    40          222 ·   1.9%          191 ·   8.5%          162 ·  11.9%
-  D       Y1             3    55    30          187 ·   3.4%          123 ·  14.1%           83 ·  19.3%
-[    2s] done
+  driver  drive    session    km  km/h  turn gap      50 m: n · median     500 m: n · median    1000 m: n · median
+  E       Vfa01          0    19    59     384 m           50 ·   1.8%           42 ·   8.2%           35 ·  10.2%
+  E       Vfa02          0   163    87     729 m          634 ·   0.6%          621 ·   2.3%          609 ·   2.7%
+  E       Vta16          0    14    43     230 m           35 ·   3.8%           29 ·   9.8%           25 ·  10.5%
+  E       Vta17          1     3    32     191 m            2 ·   3.9%             0 ·     -             0 ·     -
+  E       Vta1a          0    40    57     328 m          149 ·   1.9%          143 ·  11.9%          137 ·  14.8%
+  E       Vta2           0    11    36     239 m           26 ·   3.2%           17 ·  23.2%           10 ·  30.8%
+  E       Vta28          0     4    34     193 m            4 ·   2.0%            2 ·  17.8%             0 ·     -
+  E       Vta29          0    26    39     227 m           92 ·   3.8%           74 ·  15.9%           59 ·  16.9%
+  E       Vta30          0    12    25     152 m           25 ·   2.3%            8 ·   8.4%            3 ·   7.3%
+  E       Vta8           0     3    33     365 m            3 ·   5.5%            1 ·  66.7%             0 ·     -
+  E       Vtb2           0     4    27     229 m            3 ·   5.0%             0 ·     -             0 ·     -
+  E       Vtb5           0   111    62     308 m          430 ·   1.0%          414 ·   5.0%          397 ·   6.2%
+  E       Vw11           0     6    43     305 m           13 ·   1.2%            9 ·   4.1%            6 ·   5.1%
+  E       Vw2            0    99    67     270 m          377 ·   0.9%          352 ·   3.0%          333 ·   3.6%
+  E       Vw3            0     5    46     376 m            3 ·   3.0%            1 ·  29.6%             0 ·     -
+  E       Vw4            0   214    61     310 m          832 ·   1.0%          772 ·   4.5%          724 ·   5.7%
+  B       M              0    39    32     212 m          137 ·   4.7%           96 ·  20.4%           67 ·  15.2%
+  B       M              1    12    45     372 m           33 ·   2.1%           27 ·  15.6%           21 ·  25.7%
+  B       M              2    55    38     236 m          193 ·   2.1%          138 ·   8.6%           95 ·  13.4%
+  A       S1             0    38    26     175 m          129 ·   5.1%           73 ·  12.3%           39 ·  20.0%
+  A       S2             1    75    29     178 m          271 ·   4.3%          180 ·  14.4%          124 ·  17.9%
+  A       S3a            0    26    38     250 m           88 ·   2.1%           73 ·   7.2%           62 ·  10.5%
+  A       S3b            1     3    20     143 m            4 ·  13.0%             0 ·     -             0 ·     -
+  A       S3c            0    44    42     192 m          154 ·   1.4%          124 ·   6.5%           97 ·   4.0%
+  A       S4             0    28    28     241 m           94 ·   5.2%           58 ·  16.1%           31 ·  14.6%
+  A       S4             1    58    40     279 m          222 ·   1.9%          191 ·   8.5%          162 ·  11.9%
+  D       Y1             3    55    30     196 m          187 ·   3.4%          123 ·  14.1%           83 ·  19.3%
+[    3s] done

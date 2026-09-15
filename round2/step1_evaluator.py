@@ -1,10 +1,11 @@
 """Round 2 · Step 1 — build the fixed blackout list and check the scoring before any method uses it.
 
-  1  blackout list          -> round2/out/blackouts.parquet
+  1  blackout list          -> round2/out/blackouts.parquet; counts per driver and per driving condition
   2  round-1 reproduction   round-1's own blackouts through the same formula must give round-1's numbers
   3  ground truth           vehicle path length against vehicle speed over the same stretch
   4  scorer self-test       a distance-only estimate placed on the true path
-  5  reference              coast distance error under the round-2 rules
+  5  reference              coast distance error by driving condition and by driver, plus landmark context
+  6  sessions               per session: blackouts, coast error, the route's spacing between real turns
 
 Rules: round2/DECISIONS.md.  Run from the repo root:  .venv/bin/python3 round2/step1_evaluator.py"""
 import warnings; warnings.filterwarnings("ignore")
@@ -16,13 +17,17 @@ import pandas as pd
 R2 = Path(__file__).resolve().parent
 ROOT = R2.parent
 sys.path.insert(0, str(R2))
-from core import sessions, blackouts, scoring
+from core import sessions, blackouts, context, scoring
 from core.geo import enu
 
 T0 = time.time()
 ORDER = ["E", "B", "A", "D"]
+TUNE, TEST = ["A", "B"], ["D", "E"]
+GROUPS = [name for _, _, name in context.BANDS]
 def log(m): print(f"[{time.time()-T0:5.0f}s] {m}", flush=True)
 def head(t): print(f"\n{'='*100}\n{t}\n{'='*100}")
+def nsess(g): return g.groupby(["drive", "session"]).ngroups
+def band_label(lo, hi): return f"{lo:g}+" if np.isinf(hi) else f"{lo:g}-{hi:g}"
 
 # ───────────────────────── 1 · blackout list ─────────────────────────
 SESS, parts = {}, []
@@ -45,8 +50,18 @@ for sset in ("moving", "stopgo"):
         cells = []
         for D in ORDER:
             g = BL[(BL.driver == D) & BL[f"{sset}_{c}"]]
-            cells.append(f"{len(g):,} ({g.groupby(['drive', 'session']).ngroups})")
+            cells.append(f"{len(g):,} ({nsess(g)})")
         print(f"  {sset:<8}{c:>9} m" + "".join(f"{x:>17}" for x in cells))
+
+head("1b · DRIVING CONDITIONS — valid blackouts per group:  tuning A+B  |  test D+E   (sessions)")
+print(f"  {'group':<7}{'km/h':>7}" + "".join(f"{lab:>30}" for lab in ("moving 50 m", "moving 1000 m", "stopgo 1000 m")))
+for lo, hi, name in context.BANDS:
+    cells = []
+    for sset, c in (("moving", 50), ("moving", 1000), ("stopgo", 1000)):
+        g = BL[BL[f"{sset}_{c}"] & (BL[f"band_{c}"] == name)]
+        a, b = g[g.driver.isin(TUNE)], g[g.driver.isin(TEST)]
+        cells.append(f"{len(a):,} ({nsess(a)})  |  {len(b):,} ({nsess(b)})")
+    print(f"  {name:<7}{band_label(lo, hi):>7}" + "".join(f"{x:>30}" for x in cells))
 
 # ───────────────────────── 2 · round-1 reproduction ─────────────────────────
 head("2 · ROUND-1 REPRODUCTION — round-1's blackouts (eval_cache.npz, same random draws), same formula")
@@ -126,37 +141,57 @@ print("\n  On the true path the 2D error can only be the distance error, shorten
 print("  (a chord is shorter than its arc) and scaled by the path/speed ratio of section 3.")
 
 # ───────────────────────── 5 · reference ─────────────────────────
-head("5 · REFERENCE — coast (speed at blackout start held), DISTANCE error, round-2 rules, moving set")
-print("  Distance only: heading is not modelled until step 3. Round-1 equivalents are in section 2.\n")
+head("5 · REFERENCE — coast (speed at blackout start held), DISTANCE error, moving set")
+print("  Distance only: heading is not modelled until step 3. Every blackout counts equally inside a group.")
 refrows = []
 for c in blackouts.CHECKPOINTS:
     for b in BL[BL[f"moving_{c}"]].itertuples(index=False):
         S = SESS[(b.drive, b.session)]
         i, j = b.row_start, getattr(b, f"end_{c}")
         td = S.dist[j] - S.dist[i]
-        refrows.append((b.driver, b.drive, b.session, c, 100*abs(S.v[i]*(S.t[j] - S.t[i]) - td)/td))
-R = pd.DataFrame(refrows, columns=["driver", "drive", "session", "checkpoint", "err"])
-print(f"  {'checkpoint':<12}" + "".join(f"{'driver ' + D:>26}" for D in ORDER))
-print(f"  {'':<12}" + "".join(f"{'every / session-weighted':>26}" for D in ORDER))
+        refrows.append((b.driver, b.drive, b.session, c, getattr(b, f"band_{c}"), getattr(b, f"turns_{c}"),
+                        getattr(b, f"since_turn_m_{c}"), 100*abs(S.v[i]*(S.t[j] - S.t[i]) - td)/td))
+R = pd.DataFrame(refrows, columns=["driver", "drive", "session", "checkpoint", "band", "turns", "since", "err"])
+
+print("\n  5a · by driving condition — median drift (blackouts)")
+print(f"  {'group':<7}{'km/h':>7}{'checkpoint':>12}{'A+B (tuning)':>22}{'D+E (test)':>22}")
+for lo, hi, name in context.BANDS:
+    for c in (50, 1000):
+        cells = []
+        for who in (TUNE, TEST):
+            q = R[(R.band == name) & (R.checkpoint == c) & R.driver.isin(who)]
+            cells.append(f"{q.err.median():.1f}% ({len(q):,})" if len(q) else "-")
+        print(f"  {name:<7}{band_label(lo, hi):>7}{c:>10} m" + "".join(f"{x:>22}" for x in cells))
+
+print("\n  5b · by driver — median drift, every blackout equal")
+print(f"  {'checkpoint':<12}" + "".join(f"{'driver ' + D:>12}" for D in ORDER))
 for c in blackouts.CHECKPOINTS:
-    cells = []
-    for D in ORDER:
-        q = R[(R.driver == D) & (R.checkpoint == c)]
-        cells.append(f"{scoring.wmedian(q.err):.1f}% / {scoring.wmedian(q.err, scoring.session_weights(q)):.1f}%")
-    print(f"  {c:>7} m    " + "".join(f"{x:>26}" for x in cells))
+    print(f"  {c:>7} m   " + "".join(f"{R[(R.driver == D) & (R.checkpoint == c)].err.median():>11.1f}%" for D in ORDER))
+
+print("\n  5c · landmark context at 1 km — real turns >= 15° in the vehicle GPS course (reporting only), all drivers")
+q1 = R[R.checkpoint == 1000]
+print(f"  {'':<48}" + "".join(f"{nm:>10}" for nm in GROUPS))
+for label, fn in (("blackouts", lambda x: f"{len(x):,}"),
+                  ("median real turns inside the 1 km", lambda x: f"{x.turns.median():.0f}"),
+                  ("share with no turn at all", lambda x: f"{100*(x.turns == 0).mean():.0f}%"),
+                  ("median distance, last turn -> 1 km mark", lambda x: f"{x.since.median():.0f} m")):
+    print(f"  {label:<48}" + "".join(f"{(fn(q1[q1.band == nm]) if (q1.band == nm).any() else '-'):>10}"
+                                      for nm in GROUPS))
+print("  With no turn, the distance counts from where GPS was lost. From step 5, drift is broken down by it.")
 
 # ───────────────────────── 6 · sessions ─────────────────────────
-head("6 · SESSIONS — valid moving blackouts and coast distance error, per session")
-print("  In the session-weighted median every session carries equal weight, however few blackouts it has.\n")
-print(f"  {'driver':<8}{'drive':<8}{'session':>8}{'km':>6}{'km/h':>6}"
+head("6 · SESSIONS — moving blackouts and coast distance error; the route's median gap between real turns")
+print(f"  {'driver':<8}{'drive':<8}{'session':>8}{'km':>6}{'km/h':>6}{'turn gap':>10}"
       + "".join(f"{f'{c} m: n · median':>22}" for c in (50, 500, 1000)))
 for D in ORDER:
     for (drive, session), _ in BL[BL.driver == D].groupby(["drive", "session"]):
         S = SESS[(drive, session)]
+        tt = context.real_turns(S)
+        gap = f"{np.median(np.diff(S.dist[tt])):.0f} m" if len(tt) > 1 else "-"
         cells = []
         for c in (50, 500, 1000):
             q = R[(R.drive == drive) & (R.session == session) & (R.checkpoint == c)]
             cells.append(f"{len(q):>5} · {q.err.median():5.1f}%" if len(q) else f"{0:>5} ·     -")
-        print(f"  {D:<8}{drive:<8}{session:>8}{S.dist[-1]/1000:>6.0f}{3.6*S.v.mean():>6.0f}"
+        print(f"  {D:<8}{drive:<8}{session:>8}{S.dist[-1]/1000:>6.0f}{3.6*S.v.mean():>6.0f}{gap:>10}"
               + "".join(f"{x:>22}" for x in cells))
 log("done")

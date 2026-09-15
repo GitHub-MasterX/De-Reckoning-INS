@@ -1,4 +1,5 @@
-"""Scoring for every round-2 method: 2D position error and distance error, as % of true distance travelled."""
+"""Scoring for every round-2 method: 2D position error and distance error, as % of true distance travelled.
+Results are reported per driving-condition group, every blackout counting equally (round2/DECISIONS.md)."""
 import numpy as np
 from .geo import enu
 
@@ -14,15 +15,3 @@ def errors(S, i, j, est_east, est_north, est_dist):
     Estimated east/north are metres from the last fix before the blackout."""
     east, north, dist = truth_at(S, i, j)
     return 100*np.hypot(est_east - east, est_north - north)/dist, 100*abs(est_dist - dist)/dist
-
-
-def wmedian(x, w=None):
-    """Median; with weights, the weighted median (inverted CDF)."""
-    x = np.asarray(x, float)
-    w = np.ones(len(x)) if w is None else np.asarray(w, float)
-    return float(np.quantile(x, 0.5, weights=w, method="inverted_cdf"))
-
-
-def session_weights(df):
-    """Weight per blackout so that each (drive, session) carries equal total weight."""
-    return 1.0/df.groupby(["drive", "session"])["drive"].transform("size").to_numpy()
