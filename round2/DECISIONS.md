@@ -73,3 +73,17 @@ blackouts). "Driver E" was only ever standing in for a driving condition.
 **Tunnel context, kept for the write-up.** Of 1,009 mapped road tunnels in the dataset area, 13 are at least
 500 m long and 5 at least 1 km (`analysis/tunnel_lengths.py`). The 1 km checkpoint is longer than almost
 every real tunnel in the region, which makes it a demanding test.
+
+---
+
+## 2026-09-16 · Step 2 — start state and gyro calibration
+
+| Rule | Value | Why |
+|---|---|---|
+| **Start state** | the last GNSS fix at the blackout start row: position, course, speed | what a phone has when GNSS drops |
+| **Engine input** | `core/engine_input.py` packs the start state, the calibration and the phone data from the start onward — nothing else | later steps cannot read the vehicle track |
+| **Calibration data** | GNSS course and phone gyro from **before** the start only | fitted while GNSS still worked |
+| **Turn-rate model** | turn = scale × (gyro · axis) − bias | the phones under-report turning by a constant factor: driver E's phone reports about 54% of it (scale 1.84), A and B about 95% |
+| **Method** | **window fit** — axis, scale and bias fitted on turning accumulated over 10 s windows of all history (`Calibrator.at_windows`) | chosen on A+B only: median heading error at 1 km 4.9°, against 7.4° for the 10 Hz rate fit and 6.2° with a recent-bias median |
+| **Fallback** | the 10 Hz rate fit, scale 1, when history holds fewer than 3 turning windows | an engine uses what it has; 2% of A+B starts, none of D+E |
+| **Sign check** | wrong sign counted only on blackouts whose true turn is at least 30° | on straight roads only noise is left; the first run's 3–26% "wrong sign" was that artefact |

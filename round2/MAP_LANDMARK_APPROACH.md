@@ -662,15 +662,18 @@ landmark-spacing idea; 2D position error as the main metric, distance error alon
 road-constrained particle filter; no new model training.
 
 **Then build, in this order:**
-1. **A round-2 evaluator** inside `round2/`, with the decided weighting, 2D error and session counts. The
-   round-1 evaluator stays untouched. — **Done 2026-09-16:** `step1_evaluator.py`, list in
-   `out/blackouts.parquet`, checks in `out/step1_run.txt`.
-2. **2D dead reckoning baseline:** gyro heading plus coast speed.
-3. **Map matcher on the OSM road network:** turn events against junction arms, roundabouts and bends; several
-   hypotheses including "no mapped feature"; gate from the filter's uncertainty.
-4. **Along-road Kalman filter** on position and speed: snaps update both; snaps inconsistent with the speed
-   so far are rejected.
-5. **Tune on A and B; test on D and E** without touching them.
+1. **Round-2 evaluator** — **done 2026-09-16** (`step1_evaluator.py`): fixed blackout list, driving-condition
+   groups, round-1 numbers reproduced exactly.
+2. **Honest start state and gyro calibration** — **done 2026-09-16** (`step2_calibration.py`): calibration from
+   GNSS history only, axis + scale + bias on 10 s windows; median heading error at 1 km 4.9° (A+B) and 6.4°
+   (D+E), better than round 1's car-assisted gyro.
+3. **2D dead reckoning without the map:** gyro heading plus coast speed — the honest baseline.
+4. **Road network from OSM** within 2.5 km of the routes.
+5. **Map matcher:** road-constrained particle filter — hypotheses of road, position and speed, weighted by the gyro
+   heading against the road heading; "no mapped road" fallback.
+6. **Tune on A and B only**, and freeze the settings.
+7. **Test once on D and E.**
+8. **Failure analysis and write-up.**
 
 ---
 

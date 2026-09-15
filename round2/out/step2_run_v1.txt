@@ -1,0 +1,66 @@
+[   11s] 12,795 calibrations at 4,265 start points; 44,896 heading-error records
+
+========================================================================================================
+1 · CALIBRATION FIT — at every start point, from history only
+========================================================================================================
+  variant           split           starts  own fit  fit r (median)  axis data (median)
+  last300           A+B (tuning)     1,373     100%           0.734              4.2 min
+  last300           D+E (test)       2,892     100%           0.176              5.0 min
+  history           A+B (tuning)     1,373     100%           0.769             32.3 min
+  history           D+E (test)       2,892     100%           0.383             50.8 min
+  history_bias_all  A+B (tuning)     1,373     100%           0.769             32.3 min
+  history_bias_all  D+E (test)       2,892     100%           0.383             50.8 min
+
+  start points with no calibration at all (too little moving history): 0
+
+========================================================================================================
+2 · HEADING ERROR at 1000 m, moving set — |gyro turning − true change of course|
+========================================================================================================
+  variant           split          blackouts  median   90th %    > 5°   > 10° wrong sign
+  last300           A+B (tuning)         698    7.8°    33.2°     64%     42%     3.3%
+  last300           D+E (test)         2,421    9.5°    29.2°     71%     48%    14.5%
+  history           A+B (tuning)         698    7.9°    33.6°     63%     41%     3.3%
+  history           D+E (test)         2,421    8.4°    26.6°     67%     43%    12.6%
+  history_bias_all  A+B (tuning)         698    7.4°    31.4°     63%     39%     3.3%
+  history_bias_all  D+E (test)         2,421    7.9°    24.5°     67%     41%    12.6%
+  round1_can_ref    A+B (tuning)         698    6.0°    29.9°     55%     35%     6.2%
+  round1_can_ref    D+E (test)         2,421    9.1°    36.0°     71%     47%    12.7%
+  wrong sign = the calibrated gyro turns opposite to the car (judged only where the car turned)
+
+========================================================================================================
+2 · HEADING ERROR at 200 m, moving set — |gyro turning − true change of course|
+========================================================================================================
+  variant           split          blackouts  median   90th %    > 5°   > 10° wrong sign
+  last300           A+B (tuning)       1,189    2.9°    15.9°     34%     19%    14.2%
+  last300           D+E (test)         2,764    3.3°    13.1°     35%     15%    26.3%
+  history           A+B (tuning)       1,189    2.9°    14.4°     33%     17%    14.3%
+  history           D+E (test)         2,764    3.0°    11.6°     30%     13%    25.7%
+  history_bias_all  A+B (tuning)       1,189    2.8°    15.3°     32%     16%    14.3%
+  history_bias_all  D+E (test)         2,764    3.0°    11.4°     28%     12%    25.7%
+  round1_can_ref    A+B (tuning)       1,189    2.5°    13.1°     30%     14%    15.0%
+  round1_can_ref    D+E (test)         2,764    3.3°    15.2°     33%     15%    25.7%
+  wrong sign = the calibrated gyro turns opposite to the car (judged only where the car turned)
+
+========================================================================================================
+3 · CHOICE — lowest median heading error at 1 km on the tuning drivers A+B (moving set)
+========================================================================================================
+  last300             7.79°
+  history             7.88°
+  history_bias_all    7.36°   <- chosen
+
+  written: round2/out/calibration_choice.txt = history_bias_all
+
+========================================================================================================
+4 · CHOSEN (history_bias_all) vs ROUND-1 REFERENCE — median heading error at 1 km by driving condition
+========================================================================================================
+  group     km/h     set                  A+B (tuning)                    D+E (test)
+                             chosen  |  reference  (n)     chosen  |  reference  (n)
+  slow      0-40  moving        17.0°  |  14.7°  (172)         16.9°  |  19.9°  (98)
+  mixed    40-50  moving          9.9°  |  7.6°  (144)        18.7°  |  17.2°  (177)
+  ps_60    50-70  moving          7.2°  |  5.5°  (214)        11.4°  |  16.4°  (407)
+  fast       70+  moving          3.0°  |  2.7°  (168)        6.7°  |  7.9°  (1,739)
+  slow      0-40  stopgo        19.2°  |  15.4°  (743)        22.3°  |  21.8°  (404)
+  mixed    40-50  stopgo         10.9°  |  7.7°  (184)        18.5°  |  17.2°  (239)
+  ps_60    50-70  stopgo          7.1°  |  5.6°  (231)        11.6°  |  16.4°  (440)
+  fast       70+  stopgo          3.0°  |  2.7°  (168)        6.7°  |  7.8°  (1,743)
+[   12s] done

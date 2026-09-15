@@ -1,0 +1,67 @@
+[    6s] 12,795 calibrations at 4,265 start points; 44,896 heading-error records
+
+==========================================================================================================
+1 · CALIBRATION FIT — at every start point, from history only
+==========================================================================================================
+  variant             split           starts  own fit   fit r  scale (median)   scale 10-90%  turn windows
+  rate                A+B (tuning)     1,373     100%   0.769            1.00    1.00-1.00             0
+  rate                D+E (test)       2,892     100%   0.383            1.00    1.00-1.00             0
+  window              A+B (tuning)     1,373      98%   0.997            1.05    1.00-1.11            42
+  window              D+E (test)       2,892     100%   0.970            1.84    1.63-1.94            27
+  window_recent_bias  A+B (tuning)     1,373      98%   0.997            1.05    1.00-1.11            42
+  window_recent_bias  D+E (test)       2,892     100%   0.970            1.84    1.63-1.94            27
+
+  start points with no calibration at all: 0
+  scale = true turn per unit of gyro turn; 1.00 would mean the phone reports turns fully
+
+==========================================================================================================
+2 · HEADING ERROR at 1000 m, moving set — |gyro turning − true change of course|
+==========================================================================================================
+  variant             split          blackouts  median   90th %    > 5°   > 10°  wrong sign
+  rate                A+B (tuning)         698    7.4°    31.4°     63%     39%      0.0%
+  rate                D+E (test)         2,421    7.9°    24.5°     67%     41%      0.6%
+  window              A+B (tuning)         698    4.9°    16.2°     49%     21%      0.0%
+  window              D+E (test)         2,421    6.4°    17.6°     59%     31%      0.6%
+  window_recent_bias  A+B (tuning)         698    6.2°    21.2°     58%     31%      0.9%
+  window_recent_bias  D+E (test)         2,421    7.9°    22.7°     67%     41%      2.5%
+  round1_can_ref      A+B (tuning)         698    6.0°    29.9°     55%     35%      0.3%
+  round1_can_ref      D+E (test)         2,421    9.1°    36.0°     71%     47%      4.2%
+  wrong sign = gyro turned the opposite way, counted on blackouts whose true turn is at least 30°
+
+==========================================================================================================
+2 · HEADING ERROR at 200 m, moving set — |gyro turning − true change of course|
+==========================================================================================================
+  variant             split          blackouts  median   90th %    > 5°   > 10°  wrong sign
+  rate                A+B (tuning)       1,189    2.8°    15.3°     32%     16%      0.0%
+  rate                D+E (test)         2,764    3.0°    11.4°     28%     12%      0.4%
+  window              A+B (tuning)       1,189    2.1°     7.3°     19%      4%      0.0%
+  window              D+E (test)         2,764    3.1°     8.9°     28%      8%      0.0%
+  window_recent_bias  A+B (tuning)       1,189    2.2°     7.6°     21%      5%      0.0%
+  window_recent_bias  D+E (test)         2,764    3.3°     9.4°     33%      9%      0.0%
+  round1_can_ref      A+B (tuning)       1,189    2.5°    13.1°     30%     14%      0.0%
+  round1_can_ref      D+E (test)         2,764    3.3°    15.2°     33%     15%      2.9%
+  wrong sign = gyro turned the opposite way, counted on blackouts whose true turn is at least 30°
+
+==========================================================================================================
+3 · CHOICE — lowest median heading error at 1 km on the tuning drivers A+B (moving set)
+==========================================================================================================
+  rate                  7.36°
+  window                4.91°   <- chosen
+  window_recent_bias    6.24°
+
+  written: round2/out/calibration_choice.txt = window
+
+==========================================================================================================
+4 · CHOSEN (window) vs ROUND-1 REFERENCE — median heading error at 1 km by driving condition
+==========================================================================================================
+  group     km/h     set                   A+B (tuning)                     D+E (test)
+                              chosen  |  reference  (n)      chosen  |  reference  (n)
+  slow      0-40  moving          8.4°  |  14.7°  (172)           8.9°  |  19.9°  (98)
+  mixed    40-50  moving           6.6°  |  7.6°  (144)          8.8°  |  17.2°  (177)
+  ps_60    50-70  moving           4.1°  |  5.5°  (214)          8.5°  |  16.4°  (407)
+  fast       70+  moving           2.4°  |  2.7°  (168)         5.8°  |  7.9°  (1,739)
+  slow      0-40  stopgo         10.5°  |  15.4°  (743)         10.3°  |  21.8°  (404)
+  mixed    40-50  stopgo           6.6°  |  7.7°  (184)          9.2°  |  17.2°  (239)
+  ps_60    50-70  stopgo           4.2°  |  5.6°  (231)          8.6°  |  16.4°  (440)
+  fast       70+  stopgo           2.4°  |  2.7°  (168)         5.8°  |  7.8°  (1,743)
+[    7s] done

@@ -1,0 +1,23 @@
+1 · SCALE — blackouts with a true turn of at least 60°: gyro turn ÷ true turn (median)
+  A+B: n=246   rate calibration 0.878   round-1 reference 0.893
+  D+E: n=179   rate calibration 0.575   round-1 reference 0.620
+
+2 · SIGN — blackouts with a true turn of at least 30°: gyro turn has the opposite sign
+  A+B: n=352   rate calibration 0.0%   reference 0.3%
+  D+E: n=520   rate calibration 0.6%   reference 4.2%
+
+3 · GROWTH ON STRAIGHT BLACKOUTS (total turning < 20°): median |error| by duration
+  A+B: 0-45 s: 2.2° (n=68)   45-60 s: 4.0° (n=5)   60-90 s: -   90-1e+09 s: -
+  D+E: 0-45 s: 4.8° (n=681)   45-60 s: 4.3° (n=95)   60-90 s: -   90-1e+09 s: -
+
+4 · ERROR BY TOTAL TURNING in the blackout: median |error|, rate calibration | reference
+  A+B: 0-20°: 2.3|1.2° (n=73)   20-90°: 4.9|4.2° (n=143)   90-270°: 7.1|6.1° (n=255)   270-1e+09°: 18.7|14.2° (n=227)
+  D+E: 0-20°: 4.8|6.0° (n=776)   20-90°: 9.1|9.7° (n=1014)   90-270°: 12.6|17.4° (n=456)   270-1e+09°: 28.5|26.9° (n=175)
+
+5 · TIMING — median |error| when the gyro is shifted against the GPS (+ = gyro later)
+  A+B: -2.0 s: 8.78°   -1.0 s: 7.89°   -0.5 s: 7.56°   +0.0 s: 7.36°   +0.5 s: 7.58°   +1.0 s: 8.02°   +2.0 s: 8.95°
+  D+E: -2.0 s: 7.91°   -1.0 s: 8.00°   -0.5 s: 7.99°   +0.0 s: 7.94°   +0.5 s: 7.78°   +1.0 s: 8.15°   +2.0 s: 8.25°
+
+6 · HIGH-FREQUENCY JITTER in the 10 Hz turn rate (moving samples, minus its own 2 s average)
+  A+B: jitter std median 2.09 °/s  ->  random-walk heading error if it were white noise: median 5.3°  (compare the straight blackouts above)
+  D+E: jitter std median 3.78 °/s  ->  random-walk heading error if it were white noise: median 8.0°  (compare the straight blackouts above)

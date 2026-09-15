@@ -138,3 +138,43 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   2. Slow driving fails even the 50 m benchmark by coasting (10.9–12.1%).
   3. 87% of 50–70 km/h blackouts contain a real turn, the last a median 270 m before the 1 km mark — room for landmark
      corrections exactly where they are needed. Fast blackouts rarely have one, but coast well already.
+
+## 12 · Step 2, first run — 10 Hz rate calibration — 2026-09-16
+
+- **Why:** replace round 1's car-assisted gyro (axis fitted to the CAN yaw rate, bias from stops found in the true
+  speed) with a calibration fitted on GNSS history before each blackout.
+- **Run:** 12 s. Output `out/step2_run_v1.txt`.
+- **Result:** three rate-fit variants — last 300 s; axis from all history; axis and bias from all history. Median
+  heading error at 1 km, A+B | D+E: 7.8 | 9.5°, 7.9 | 8.4°, 7.4 | 7.9°. No better than round 1's reference (6.0 | 9.1°).
+- **Difficulty:** its "wrong sign" column (3–26%) was wrong — sign was judged by correlation over whole blackouts,
+  including straight roads where only noise is left.
+
+## 13 · Diagnosis — where the heading error comes from — 2026-09-16
+
+- **Scripts:** `analysis/heading_error_sources.py`, `analysis/gyro_scale.py`, `analysis/gyro_columns.py`; output in
+  `out/` under the same names. Seconds each.
+- **Sign is fine:** 0–0.6% wrong on blackouts with a true turn of at least 30°.
+- **Timing is fine:** shifting the gyro ±2 s against the GPS does not reduce the error.
+- **The phones under-report turning.** On turns of at least 60° the gyro reports 88% (A+B) and 58% (D+E) of the
+  real turn, and round 1's reference does the same. Over 3, 10 and 30 s windows the share stays at 81–83% (A+B) and
+  62–65% (D+E) — a constant scale, not filtering. Driver E's phone reports 49–59% in every one of its sessions.
+- **Error grows with turning,** not time: A+B 2.3° (under 20° of turning in the blackout) to 18.7° (over 270°);
+  D+E 4.8° to 28.5°.
+- **10 Hz jitter** is 2.1 °/s (A+B) and 3.8 °/s (D+E). Fitting the axis on turning accumulated over 10 s windows
+  raises the fit correlation from 0.18–0.96 to 0.89–1.00 per session.
+- **E's raw gyro** has no flat, duplicated or stuck axis, but vibrates heavily: 14–29 °/s on Y, with Y and Z
+  anti-correlated (−0.80 to −0.91) — a strong wobble. What causes the 55% scale is still unknown.
+
+## 14 · Step 2, second run — window calibration — 2026-09-16
+
+- **Why:** calibrate the scale, and fit the axis on accumulated turning instead of the jittery rate.
+- **Run:** 7 s. Output `out/step2_run.txt`; `out/calibration.parquet`, `out/heading_errors.parquet`,
+  `out/calibration_choice.txt`.
+- **Fit:** correlation 0.997 (A+B) and 0.970 (D+E); scale median 1.05 (A+B) and 1.84 (D+E).
+- **Heading error at 1 km, moving, A+B | D+E:** window 4.9 | 6.4° (90th percentile 16.2 | 17.6°); rate 7.4 | 7.9°;
+  round 1's car-assisted reference 6.0 | 9.1°. At 200 m: window 2.1 | 3.1°. Wrong sign on real turns: 0.0 | 0.6%.
+- **Chosen on A+B:** window (4.91° against 7.36° and 6.24°).
+- **By condition, D+E at 1 km:** slow 8.9°, mixed 8.8°, 50–70 km/h 8.5°, fast 5.8° — reference 19.9 / 17.2 / 16.4 / 7.9°.
+- **Result:** the honest calibration beats round 1's car-assisted gyro on both splits.
+- **Still open:** 8.5° of heading error after 1 km at 50–70 km/h (driver E) would push an unmatched estimate sideways by
+  tens of metres. Step 3 measures that; step 5's road matching is meant to remove it.
