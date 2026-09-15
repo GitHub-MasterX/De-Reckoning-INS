@@ -667,7 +667,9 @@ road-constrained particle filter; no new model training.
 2. **Honest start state and gyro calibration** — **done 2026-09-16** (`step2_calibration.py`): calibration from
    GNSS history only, axis + scale + bias on 10 s windows; median heading error at 1 km 4.9° (A+B) and 6.4°
    (D+E), better than round 1's car-assisted gyro.
-3. **2D dead reckoning without the map:** gyro heading plus coast speed — the honest baseline.
+3. **2D dead reckoning without the map** — **done 2026-09-16** (`step3_deadreckoning.py`): at 50–70 km/h on D+E the
+   2D error is 4.1% at 50 m and 19.8% at 1 km (speed alone 14.2%, heading alone 8.5%) — the number the map must bring
+   below 10%.
 4. **Road network from OSM** within 2.5 km of the routes.
 5. **Map matcher:** road-constrained particle filter — hypotheses of road, position and speed, weighted by the gyro
    heading against the road heading; "no mapped road" fallback.

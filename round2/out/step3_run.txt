@@ -1,0 +1,74 @@
+[   13s] calibration: window; 4,129 start points; 160,184 error records -> round2/out/dr_errors.parquet
+
+================================================================================================================
+1 · MOTION CLASSIFIER ON HONEST INPUT — every labelled 2 s window of every session, model never saw the driver
+================================================================================================================
+  batch features vs the feature contract (300 windows): largest difference 0.00e+00
+
+  split         input                               windows  accuracy  stationary recall  stationary precision
+  A+B (tuning)  raw phone gyro (engine)              74,983     99.0%              93.1%                 96.7%
+  A+B (tuning)  gyro minus truth-found bias (round 1)   74,983     99.0%              93.1%                 96.7%
+  D+E (test)    raw phone gyro (engine)              95,878     99.6%              93.2%                 99.1%
+  D+E (test)    gyro minus truth-found bias (round 1)   95,878     99.6%              93.2%                 99.1%
+
+================================================================================================================
+2 · ENGINE — 2D POSITION ERROR by driving condition, moving set   (median · share within the PS 10% · blackouts)
+================================================================================================================
+  group     km/h  checkpoint                            A+B (tuning)                              D+E (test)
+  slow      0-40        50 m                12.8%  pass 42%  (n=474)                13.0%  pass 40%  (n=273)
+  slow      0-40      1000 m                18.4%  pass 20%  (n=172)                 26.2%  pass 11%  (n=98)
+  mixed    40-50        50 m                 4.2%  pass 88%  (n=303)                 6.0%  pass 78%  (n=263)
+  mixed    40-50      1000 m                16.8%  pass 29%  (n=144)                22.9%  pass 18%  (n=177)
+  ps_60    50-70        50 m                 2.4%  pass 93%  (n=322)                 4.1%  pass 90%  (n=477)
+  ps_60    50-70      1000 m                14.1%  pass 39%  (n=214)                19.8%  pass 18%  (n=407)
+  fast       70+        50 m                1.2%  pass 100%  (n=226)              1.9%  pass 100%  (n=1,852)
+  fast       70+      1000 m                 7.3%  pass 64%  (n=168)               8.3%  pass 60%  (n=1,739)
+
+================================================================================================================
+3 · ENGINE — 2D POSITION ERROR by driving condition, stop-and-go set   (median · share within the PS 10% · blackouts)
+================================================================================================================
+  group     km/h  checkpoint                            A+B (tuning)                              D+E (test)
+  slow      0-40        50 m                14.2%  pass 38%  (n=519)                14.7%  pass 36%  (n=299)
+  slow      0-40      1000 m                21.2%  pass 16%  (n=743)                28.3%  pass 10%  (n=404)
+  mixed    40-50        50 m                 4.2%  pass 88%  (n=303)                 6.0%  pass 78%  (n=263)
+  mixed    40-50      1000 m                19.1%  pass 25%  (n=184)                24.8%  pass 15%  (n=239)
+  ps_60    50-70        50 m                 2.4%  pass 93%  (n=323)                 4.1%  pass 90%  (n=477)
+  ps_60    50-70      1000 m                14.1%  pass 39%  (n=231)                20.1%  pass 17%  (n=440)
+  fast       70+        50 m                1.2%  pass 100%  (n=226)              1.9%  pass 100%  (n=1,852)
+  fast       70+      1000 m                 7.3%  pass 64%  (n=168)               8.3%  pass 61%  (n=1,743)
+
+================================================================================================================
+4 · WHERE THE 2D ERROR COMES FROM — moving set, 1 km, median 2D position error
+================================================================================================================
+  engine            : gyro heading + held GNSS speed with ZUPT
+  true heading      : the engine's speed with the true heading  -> what the speed alone costs
+  true speed        : the true speed with the engine's heading  -> what the heading alone costs
+  distance error    : the engine's distance travelled against the true distance
+
+  group     km/h          split  blackouts    engine  true heading  true speed  distance error  median error
+  slow      0-40            A+B        172     18.4%         14.3%        5.3%           21.0%         184 m
+  slow      0-40            D+E         98     26.2%         19.0%        7.8%           25.5%         262 m
+  mixed    40-50            A+B        144     16.8%         12.5%        4.7%           14.1%         168 m
+  mixed    40-50            D+E        177     22.9%         16.8%        7.5%           18.3%         229 m
+  ps_60    50-70            A+B        214     14.1%         12.8%        3.8%           14.0%         141 m
+  ps_60    50-70            D+E        407     19.8%         14.2%        8.5%           14.5%         198 m
+  fast       70+            A+B        168      7.3%          4.5%        2.4%            4.5%          74 m
+  fast       70+            D+E      1,739      8.3%          3.5%        5.7%            3.5%          83 m
+
+================================================================================================================
+5 · WHAT THE ZUPT DOES — median 2D position error at 1 km, with ZUPT | without
+================================================================================================================
+  set                         A+B (tuning)                    D+E (test)
+  moving                   13.8%  |  13.9%               10.3%  |  10.3%
+  stopgo                   17.6%  |  21.4%               11.5%  |  11.7%
+
+================================================================================================================
+6 · PER DRIVER — engine, moving set, median 2D position error | distance error (every blackout equal)
+================================================================================================================
+  checkpoint              driver E            driver B            driver A            driver D
+       50 m           2.5% |  1.0%        3.8% |  2.8%        4.2% |  2.8%        5.0% |  3.4%
+      100 m           3.5% |  1.6%        5.2% |  3.9%        6.0% |  4.5%        6.8% |  5.2%
+      200 m           5.0% |  2.4%        8.6% |  7.1%        8.4% |  6.7%       11.5% | 10.9%
+      500 m           7.7% |  3.9%       13.7% | 12.9%       11.4% |  9.8%       13.1% | 13.8%
+     1000 m          10.2% |  4.8%       15.4% | 14.8%       13.1% | 12.3%       15.2% | 19.4%
+[   13s] done

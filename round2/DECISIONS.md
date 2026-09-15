@@ -87,3 +87,15 @@ every real tunnel in the region, which makes it a demanding test.
 | **Method** | **window fit** — axis, scale and bias fitted on turning accumulated over 10 s windows of all history (`Calibrator.at_windows`) | chosen on A+B only: median heading error at 1 km 4.9°, against 7.4° for the 10 Hz rate fit and 6.2° with a recent-bias median |
 | **Fallback** | the 10 Hz rate fit, scale 1, when history holds fewer than 3 turning windows | an engine uses what it has; 2% of A+B starts, none of D+E |
 | **Sign check** | wrong sign counted only on blackouts whose true turn is at least 30° | on straight roads only noise is left; the first run's 3–26% "wrong sign" was that artefact |
+
+---
+
+## 2026-09-16 · Step 3 — map-free 2D baseline
+
+| Rule | Value | Why |
+|---|---|---|
+| **Engine** | heading = last GNSS course + calibrated gyro turning; speed = last GNSS speed, held, and zero while the motion classifier says stationary; position integrated on the phone clock (`core/deadreckoning.py`) | the simplest honest engine — the number the map has to beat |
+| **Stationary detection** | round-1 motion classifier, each driver scored by the model trained without them (`{driver}_holdout`), fed the raw phone gyro | round 1 removed gyro bias using stops found in the true speed; dropping that changed nothing (accuracy 99.0% A+B, 99.6% D+E either way) |
+| **Feature contract** | `core/motion.py` computes the 26 features in batch | checked identical to `idr/features.py` |
+| **ZUPT always on** | also on the moving set | the engine cannot know whether a blackout will contain stops; on the moving set it cost nothing |
+| **Diagnostics** | the engine's speed with the true heading, and the true speed with the engine's heading — reporting only | splits the 2D error into its speed and heading parts |

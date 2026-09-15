@@ -25,7 +25,8 @@ To look at or run round 1 exactly: `git switch --detach round-1`, then `git swit
 | `DECISIONS.md` | the settled rules: weighting, metric, blackout sets, train/test split, design |
 | `step1_evaluator.py` | step 1 — builds the fixed blackout list and checks the scoring |
 | `step2_calibration.py` | step 2 — gyro calibration from GNSS history only, and the heading error it leaves |
-| `core/` | shared round-2 code: session loading, geodesy, blackout list, driving-condition context, gyro calibration, engine input, scoring |
+| `step3_deadreckoning.py` | step 3 — map-free 2D dead reckoning, the honest baseline, and where its error comes from |
+| `core/` | shared round-2 code: session loading, geodesy, blackout list, driving-condition context, gyro calibration, engine input, motion classifier, dead reckoning, scoring |
 | `analysis/heading_error_sources.py`, `gyro_scale.py`, `gyro_columns.py` | step-2 diagnosis: why gyro heading drifts (scale, jitter, vibration) |
 | `get_osm_map.sh` | downloads the England map (1.6 GB) into `data/osm/` with a progress bar and MD5 check |
 | `requirements.txt` | round-1 environment + `osmium` |
@@ -44,6 +45,7 @@ Needs `data/clean/` (round-1 cleaning), the map, and about 5 GB of free RAM for 
 .venv/bin/pip install -r round2/requirements.txt
 .venv/bin/python3 round2/step1_evaluator.py                     # step 1, a few seconds
 .venv/bin/python3 round2/step2_calibration.py                   # step 2, seconds (needs step 1)
+.venv/bin/python3 round2/step3_deadreckoning.py                 # step 3, seconds (needs steps 1-2)
 round2/get_osm_map.sh                                           # once, 1.6 GB
 .venv/bin/python3 round2/analysis/osm_landmarks.py              # 91 s
 .venv/bin/python3 round2/analysis/landmark_usable.py            # needs osm_landmarks.py

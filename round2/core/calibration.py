@@ -137,3 +137,12 @@ class Calibrator:
         return Calibration(axis=axis, scale=scale, bias=bias, r_fit=_corr(c, xtx, xty, yy, sx, sy, m),
                            fit_s=m*WINDOW_ROWS/FS, turn_windows=int(self.Wturn[m]),
                            method="window" if recent_bias_s is None else "window_recent_bias")
+
+
+def engine_calibration(C, i, variant):
+    """The calibration step 2 chose (round2/out/calibration_choice.txt), with step 2's fallback to the rate fit."""
+    rate = C.at(i, axis_window_s=None, bias_window_s=1e9)
+    if variant == "rate":
+        return rate
+    own = C.at_windows(i) if variant == "window" else C.at_windows(i, recent_bias_s=BIAS_WINDOW_S)
+    return own if own is not None else rate

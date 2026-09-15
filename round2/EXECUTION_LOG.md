@@ -178,3 +178,20 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
 - **Result:** the honest calibration beats round 1's car-assisted gyro on both splits.
 - **Still open:** 8.5° of heading error after 1 km at 50–70 km/h (driver E) would push an unmatched estimate sideways by
   tens of metres. Step 3 measures that; step 5's road matching is meant to remove it.
+
+## 15 · Step 3 — map-free 2D dead reckoning — 2026-09-16
+
+- **Why:** the honest 2D baseline — gyro heading plus held GNSS speed with ZUPT — that the map has to beat.
+- **Run:** 13 s. 4,129 start points, 160,184 error records. Output `out/step3_run.txt`, `out/dr_errors.parquet`.
+- **Classifier on honest input:** the raw gyro and round 1's truth-corrected gyro give the same result — accuracy 99.0%
+  (A+B) and 99.6% (D+E), stationary recall 93%, precision 96.7% and 99.1%. Batch features identical to the contract.
+- **2D position error, moving set, D+E (test) — median · share within 10%:**
+  - 50 m: slow 13.0% · 40%, mixed 6.0% · 78%, **50–70 km/h 4.1% · 90%**, fast 1.9% · 100%
+  - 1 km: slow 26.2% · 11%, mixed 22.9% · 18%, **50–70 km/h 19.8% · 18%**, fast 8.3% · 60%
+- **A+B (tuning), 1 km:** slow 18.4%, mixed 16.8%, 50–70 km/h 14.1%, fast 7.3%.
+- **Where the error comes from, 1 km, D+E:** at 50–70 km/h the engine's 19.8% splits into speed alone 14.2% and heading
+  alone 8.5%. On fast motorways heading dominates (5.7% against 3.5% for speed) — driver E's vibrating phone.
+- **ZUPT:** no cost on the moving set (13.8 vs 13.9% A+B, 10.3 vs 10.3% D+E); on stop-and-go it lowers A+B from 21.4% to 17.6%.
+- **Per driver, 1 km, 2D | distance:** E 10.2 | 4.8%, B 15.4 | 14.8%, A 13.1 | 12.3%, D 15.2 | 19.4%. E's 2D 10.2% equals
+  round 1's distance figure for E only by coincidence; they measure different things.
+- **Target for the map (step 5):** 50–70 km/h at 1 km on D+E, from 19.8% to below 10%.
