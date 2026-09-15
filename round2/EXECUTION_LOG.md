@@ -88,3 +88,25 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   their file paths changed.
 - **Check:** `run_evaluation.py` re-run from the tag in a throwaway checkout — exit 0, every committed
   output identical (CSVs and plots). 1 km drift E 101.8 m, B 161.1 m, D 196.0 m, A 164.9 m, as submitted.
+
+## 9 · Step 1 — round-2 evaluator (`step1_evaluator.py`, `core/`) — 2026-09-16
+
+- **Why:** one fixed list of blackouts and one scoring code for every later step, checked before any method uses it.
+- **Run:** a few seconds (28 sessions, 1,166 km). Output `out/step1_run.txt`; list `out/blackouts.parquet`,
+  4,265 start points. Rules in `DECISIONS.md`: a start every 250 m, at least 300 s of history, checkpoints
+  50–1000 m, `moving` and `stopgo` sets.
+- **Valid 1 km blackouts:** moving — E 2,338 (11 sessions), B 183 (3), A 515 (6), D 83 (1);
+  stopgo — E 2,641 (12), B 358 (3), A 968 (6), D 185 (1).
+- **Checks:**
+  - *Round-1 reproduction:* round-1's own blackouts through the same formula → all 24 numbers and all blackout
+    counts identical.
+  - *Ground truth:* vehicle path length and speed-integrated distance agree to +0.02 … +0.10% (median per driver).
+  - *Scorer self-test:* coast distance placed on the true path gives 2D ÷ distance error of 0.992–1.000.
+- **Reference — coast, distance error, moving set, every / session-weighted:** 1 km E 4.8 / 7.3%, B 14.8 / 16.0%,
+  A 12.3 / 12.9%, D 19.3 / 19.3%; 50 m E 1.0 / 2.0%, B 2.8 / 2.7%, A 2.8 / 3.5%, D 3.4 / 3.4%.
+- **Not comparable with round 1's 10.2 / 16.1 / 16.5 / 19.6%.** The rules changed (starts spaced by distance,
+  history required, weighting) — not the method. Round-2 methods are compared with the round-2 baseline only.
+- **Difficulty — session weighting is unstable for E.** E's session-weighted median is 9.8% at 500 m but 7.3% at
+  1 km. At 500 m, six E sessions with fewer than 20 blackouts (38 blackouts in total; one is a single blackout at
+  66.7%) carry 43% of E's weight; at 1 km most of them have no valid blackout. Proposed fix, awaiting a decision:
+  a session enters the session-weighted median only with at least 20 blackouts at that checkpoint.

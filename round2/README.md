@@ -22,6 +22,9 @@ To look at or run round 1 exactly: `git switch --detach round-1`, then `git swit
 |---|---|
 | `MAP_LANDMARK_APPROACH.md` | the approach: idea, feasibility, OSM results, audit, corrections, next steps |
 | `EXECUTION_LOG.md` | every run: why, how long, what came out, what went wrong |
+| `DECISIONS.md` | the settled rules: weighting, metric, blackout sets, train/test split, design |
+| `step1_evaluator.py` | step 1 — builds the fixed blackout list and checks the scoring |
+| `core/` | shared round-2 code: session loading, geodesy, blackout list, scoring |
 | `get_osm_map.sh` | downloads the England map (1.6 GB) into `data/osm/` with a progress bar and MD5 check |
 | `requirements.txt` | round-1 environment + `osmium` |
 | `analysis/osm_landmarks.py` | landmark tags along the routes: roundabouts, signals, bumps, bridges, … |
@@ -36,6 +39,7 @@ Needs `data/clean/` (round-1 cleaning), the map, and about 5 GB of free RAM for 
 
 ```bash
 .venv/bin/pip install -r round2/requirements.txt
+.venv/bin/python3 round2/step1_evaluator.py                     # step 1, a few seconds
 round2/get_osm_map.sh                                           # once, 1.6 GB
 .venv/bin/python3 round2/analysis/osm_landmarks.py              # 91 s
 .venv/bin/python3 round2/analysis/landmark_usable.py            # needs osm_landmarks.py

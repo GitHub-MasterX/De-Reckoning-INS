@@ -650,14 +650,15 @@ All in `run_evaluation.py` at tag `round-1` (unchanged; round-1 results stand as
 
 **Done:** landmark tag counts (§12), usable landmarks (§12.2), junction density (§13), snap audit (§14).
 
-**Decisions for the team first** — they change the headline numbers:
-- the weighting of the headline median (recommendation in §15.1);
-- whether to add a stop-and-go benchmark next to the all-moving one;
-- reporting 2D position error next to distance error.
+**Decisions — taken 2026-09-16, recorded in `DECISIONS.md`:** session-weighted median as the headline
+(every-blackout median alongside); 2D position error as the main metric, distance error alongside; a
+`moving` and a `stopgo` blackout set; tune on A and B, test once on D and E; step 5 built as a
+road-constrained particle filter; no new model training.
 
 **Then build, in this order:**
 1. **A round-2 evaluator** inside `round2/`, with the decided weighting, 2D error and session counts. The
-   round-1 evaluator stays untouched.
+   round-1 evaluator stays untouched. — **Done 2026-09-16:** `step1_evaluator.py`, list in
+   `out/blackouts.parquet`, checks in `out/step1_run.txt`.
 2. **2D dead reckoning baseline:** gyro heading plus coast speed.
 3. **Map matcher on the OSM road network:** turn events against junction arms, roundabouts and bends; several
    hypotheses including "no mapped feature"; gate from the filter's uncertainty.
