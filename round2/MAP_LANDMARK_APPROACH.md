@@ -670,7 +670,9 @@ road-constrained particle filter; no new model training.
 3. **2D dead reckoning without the map** — **done 2026-09-16** (`step3_deadreckoning.py`): at 50–70 km/h on D+E the
    2D error is 4.1% at 50 m and 19.8% at 1 km (speed alone 14.2%, heading alone 8.5%) — the number the map must bring
    below 10%.
-4. **Road network from OSM** within 2.5 km of the routes.
+4. **Road network from OSM** — **done 2026-09-16** (`step4_roadnetwork.py`): 29,389 km of drivable road around the
+   routes; 99.5% of the true driving lies on a mapped road in an allowed direction (median offset 2 m), and 98.7% of
+   consecutive positions connect through it.
 5. **Map matcher:** road-constrained particle filter — hypotheses of road, position and speed, weighted by the gyro
    heading against the road heading; "no mapped road" fallback.
 6. **Tune on A and B only**, and freeze the settings.

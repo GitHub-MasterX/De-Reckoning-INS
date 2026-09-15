@@ -99,3 +99,16 @@ every real tunnel in the region, which makes it a demanding test.
 | **Feature contract** | `core/motion.py` computes the 26 features in batch | checked identical to `idr/features.py` |
 | **ZUPT always on** | also on the moving set | the engine cannot know whether a blackout will contain stops; on the moving set it cost nothing |
 | **Diagnostics** | the engine's speed with the true heading, and the true speed with the engine's heading — reporting only | splits the 2D error into its speed and heading parts |
+
+---
+
+## 2026-09-16 · Step 4 — road network
+
+| Rule | Value | Why |
+|---|---|---|
+| **Region** | every drivable OSM way with a node within about 2.5 km of a track (map cells of about 1.4 km, 2-cell margin) | a 1 km blackout cannot leave a 1.3 km circle around its start, and the start lies on the track — no leak |
+| **Road classes** | motorway, trunk, primary, secondary, tertiary, unclassified, residential, living street, service, every `_link`, `road`; `area=yes` excluded | everything a car can drive, car parks included |
+| **One-way** | `oneway=yes`, `-1`, `no` as tagged; implied one-way on `highway=motorway` and roundabouts | OSM convention |
+| **Kept for later** | roundabout, bridge, tunnel, layer, private access, car-park aisle, speed limit (tagged on 31% of length) | attributes the filter may use |
+| **Stored** | `data/osm/road_network.npz` (git-ignored, 93 MB): nodes, segments, drivable directions, the directions leaving each node; loaded by `core/roadnet.py` | |
+| **Carried into step 5, to be tuned** | one-way as a strong rule with a small escape chance, not absolute; hypotheses may hop to a road within about 15 m; hypotheses keep their level where roads are stacked | the checks found real one-way conflicts (0.1% of distance, clustered in central Coventry), unconnected hops on the stacked Coventry ring road, and a few links missing from the map |

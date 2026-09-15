@@ -1,0 +1,386 @@
+driver,connected,drive,session,t,lat,lon,hop_m,any_direction,longer_path,level_change,class_from,class_to,reason
+A,False,S1,0.0,159.9,52.40513,-1.517763,7.478147711952446,False,False,False,trunk,trunk_link,hop to a parallel road within 15 m
+A,False,S1,0.0,167.9,52.405618,-1.518687,12.751769786264616,True,False,False,trunk_link,trunk_link,blocked only by a one-way rule
+A,False,S1,0.0,170.9,52.405759,-1.519103,15.920234200418134,False,False,False,trunk_link,secondary,no link in the map
+A,False,S1,0.0,258.9,52.408519,-1.529861,9.456629804727802,True,True,False,secondary,secondary,"drivable, by a longer path under 300 m"
+A,False,S1,0.0,335.9,52.403626,-1.54083,8.640457402882957,True,False,False,tertiary,secondary,blocked only by a one-way rule
+A,False,S1,0.0,360.9,52.404039,-1.54595,8.565566049556676,True,True,False,secondary,secondary,"drivable, by a longer path under 300 m"
+A,False,S1,0.0,955.9,52.415711,-1.59666,14.438893668691179,True,True,False,residential,residential,"drivable, by a longer path under 300 m"
+A,False,S1,0.0,5022.9,52.404084,-1.559807,2.722940394769298,True,True,False,secondary,secondary,"drivable, by a longer path under 300 m"
+A,False,S1,0.0,5093.9,52.40381,-1.557543,3.5828070871423687,True,False,False,secondary,secondary_link,blocked only by a one-way rule
+A,False,S2,1.0,8.0,52.404017,-1.559445,5.112407184506359,True,False,False,secondary_link,service,blocked only by a one-way rule
+A,False,S2,1.0,792.0,52.400843,-1.594979,6.348384007290736,True,True,True,secondary,service,"drivable, by a longer path under 300 m"
+A,False,S2,1.0,2224.0,52.392301,-1.569169,6.78365767886273,True,True,False,tertiary,tertiary,"drivable, by a longer path under 300 m"
+A,False,S2,1.0,2871.0,52.404098,-1.559325,9.809371693591668,True,True,False,secondary,secondary,"drivable, by a longer path under 300 m"
+A,False,S2,1.0,2874.0,52.40403,-1.558791,10.39870155296631,True,False,False,secondary,secondary_link,blocked only by a one-way rule
+A,False,S2,1.0,2898.0,52.403848,-1.556783,5.931163962362302,True,False,False,unclassified,secondary,blocked only by a one-way rule
+A,False,S2,1.0,2996.0,52.403486,-1.548882,6.151234511807842,True,True,False,secondary,unclassified,"drivable, by a longer path under 300 m"
+A,False,S2,1.0,3014.0,52.40428,-1.546459,4.508482470227005,True,True,False,tertiary,secondary,"drivable, by a longer path under 300 m"
+A,False,S2,1.0,3104.0,52.404843,-1.535574,8.084705626228944,True,True,False,secondary_link,secondary,"drivable, by a longer path under 300 m"
+A,False,S2,1.0,3260.0,52.408055,-1.525817,3.043991429081034,True,False,False,unclassified,secondary,blocked only by a one-way rule
+A,False,S2,1.0,3456.0,52.405964,-1.518056,7.3062146680888445,True,False,False,trunk_link,trunk_link,blocked only by a one-way rule
+A,False,S2,1.0,3603.0,52.403332,-1.514606,3.105169844918147,True,False,False,trunk_link,trunk_link,blocked only by a one-way rule
+A,False,S2,1.0,3719.0,52.403131,-1.508343,5.389521673257833,True,True,False,tertiary,tertiary,"drivable, by a longer path under 300 m"
+A,False,S2,1.0,3742.0,52.403837,-1.507726,10.115581871784197,True,False,True,tertiary,trunk_link,blocked only by a one-way rule
+A,False,S2,1.0,3914.0,52.40272,-1.500287,3.344063969298483,True,False,False,tertiary,trunk,blocked only by a one-way rule
+A,False,S2,1.0,4128.0,52.407267,-1.487764,6.8146515413042,True,False,False,trunk,trunk,blocked only by a one-way rule
+A,False,S2,1.0,4344.0,52.414235,-1.471523,5.127825758436851,True,False,False,trunk,residential,blocked only by a one-way rule
+A,False,S2,1.0,4556.0,52.422859,-1.447793,2.1994079845164576,True,True,False,trunk,service,"drivable, by a longer path under 300 m"
+A,False,S2,1.0,4562.0,52.423341,-1.446936,0.6327967241466661,True,False,False,trunk,service,blocked only by a one-way rule
+A,False,S2,1.0,4846.0,52.435446,-1.432814,2.070094873148441,True,False,False,service,trunk,blocked only by a one-way rule
+A,False,S2,1.0,6143.0,52.477223,-1.414259,5.505316511751578,True,True,False,residential,residential,"drivable, by a longer path under 300 m"
+A,False,S2,1.0,7402.0,52.51892,-1.443961,4.176624125623722,True,True,False,primary,primary,"drivable, by a longer path under 300 m"
+A,False,S2,1.0,7448.0,52.518917,-1.441861,5.466307474233217,False,True,False,service,service,"drivable, by a longer path under 300 m"
+A,False,S2,1.0,7449.0,52.51893,-1.441926,23.00121069482115,False,True,False,service,service,"drivable, by a longer path under 300 m"
+A,False,S3a,0.0,46.1,52.405128,-1.499346,15.85018901476354,False,True,False,unclassified,service,"drivable, by a longer path under 300 m"
+A,False,S3a,0.0,57.1,52.405636,-1.497696,21.659218320620084,False,True,False,service,unclassified,"drivable, by a longer path under 300 m"
+A,False,S3a,0.0,126.1,52.407849,-1.49084,6.81556321871218,True,False,False,unclassified,trunk,blocked only by a one-way rule
+A,False,S3a,0.0,151.1,52.407302,-1.487864,7.931882215237472,True,False,False,trunk,trunk,blocked only by a one-way rule
+A,False,S3a,0.0,458.1,52.402564,-1.446852,4.1123202040561,True,True,False,secondary_link,primary,"drivable, by a longer path under 300 m"
+A,False,S3a,0.0,1308.1,52.375374,-1.282478,2.469922346019953,True,False,False,primary,trunk_link,blocked only by a one-way rule
+A,False,S3a,0.0,2470.1,52.37168,-1.254374,5.8100122211356275,True,True,False,tertiary,secondary,"drivable, by a longer path under 300 m"
+A,False,S3c,0.0,685.4,52.390561,-1.254412,5.014767815513086,True,True,False,tertiary,trunk,"drivable, by a longer path under 300 m"
+A,False,S3c,0.0,798.4,52.407187,-1.245842,3.9253124758176767,True,False,False,trunk,trunk,blocked only by a one-way rule
+A,False,S3c,0.0,835.4,52.408809,-1.245421,3.426332856997666,True,False,False,trunk,trunk,blocked only by a one-way rule
+A,False,S3c,0.0,836.4,52.408757,-1.245319,1.6996082376832369,True,False,False,trunk,trunk,blocked only by a one-way rule
+A,False,S3c,0.0,887.4,52.408834,-1.245488,10.75543083685407,True,False,False,trunk,trunk,blocked only by a one-way rule
+A,False,S3c,0.0,927.4,52.408866,-1.245559,8.013917708547673,True,False,False,trunk,trunk,blocked only by a one-way rule
+A,False,S3c,0.0,948.4,52.407466,-1.244908,0.5720066991216902,True,False,False,trunk,motorway_link,blocked only by a one-way rule
+A,False,S3c,0.0,1930.4,52.437141,-1.414227,5.5829164235803335,False,False,False,motorway,motorway_link,hop to a parallel road within 15 m
+A,False,S3c,0.0,1960.4,52.436943,-1.423363,21.83798510214197,False,False,False,motorway_link,motorway_link,no link in the map
+A,False,S3c,0.0,2053.4,52.430257,-1.438096,7.401686073424378,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+A,False,S3c,0.0,2975.4,52.408427,-1.494658,2.8677312251194595,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+A,False,S3c,0.0,3061.4,52.40676,-1.502276,7.459331798986719,False,False,False,service,service,hop to a parallel road within 15 m
+A,False,S3c,0.0,3063.4,52.406785,-1.502549,22.400988734994677,False,False,False,service,tertiary,no link in the map
+A,False,S3c,0.0,3128.4,52.405603,-1.506526,24.34955006836032,False,True,False,service,service,"drivable, by a longer path under 300 m"
+A,False,S3c,0.0,3211.4,52.405386,-1.512135,10.58711149985264,False,True,False,service,service,"drivable, by a longer path under 300 m"
+A,False,S3c,0.0,3213.4,52.405245,-1.512291,22.877213300626607,False,False,False,service,service,no link in the map
+A,False,S3c,0.0,3293.4,52.40858,-1.51483,16.5501227893314,False,False,False,tertiary,service,no link in the map
+A,False,S3c,0.0,3294.4,52.40864,-1.514754,16.989668573472176,False,False,False,service,tertiary,no link in the map
+A,False,S3c,0.0,3295.4,52.408708,-1.514676,15.435589009195265,False,False,False,tertiary,service,no link in the map
+A,False,S3c,0.0,3297.4,52.408829,-1.514491,19.23438292995956,False,False,False,service,tertiary,no link in the map
+A,False,S3c,0.0,3309.4,52.409493,-1.513537,15.3318356575718,True,True,False,tertiary,service,"drivable, by a longer path under 300 m"
+A,False,S3c,0.0,3310.4,52.409547,-1.513469,17.464740908233956,False,True,False,service,tertiary,"drivable, by a longer path under 300 m"
+A,False,S3c,0.0,3391.4,52.412782,-1.50935,8.19711805778308,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+A,False,S3c,0.0,3407.4,52.412228,-1.512261,3.0587163924972005,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+A,False,S3c,0.0,3409.4,52.41211,-1.512734,7.314080847006229,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+A,False,S3c,0.0,3416.4,52.41167,-1.514432,18.349369656149054,False,False,True,trunk_link,trunk,different level (bridge or tunnel)
+A,False,S3c,0.0,3422.4,52.411247,-1.515805,4.654900733060438,False,False,False,trunk,trunk_link,hop to a parallel road within 15 m
+A,False,S3c,0.0,3433.4,52.410018,-1.518017,16.493423291009538,False,False,False,trunk_link,trunk,no link in the map
+A,False,S3c,0.0,3536.4,52.405337,-1.502373,4.972583547668382,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+A,False,S3c,0.0,3539.4,52.405794,-1.502258,4.399694023525154,False,False,True,trunk,service,different level (bridge or tunnel)
+A,False,S3c,0.0,3542.4,52.406268,-1.502232,10.410436842252302,False,False,True,service,trunk,different level (bridge or tunnel)
+A,False,S3c,0.0,3623.4,52.413211,-1.50946,2.7935635590797467,True,True,False,trunk,secondary,"drivable, by a longer path under 300 m"
+A,False,S3c,0.0,3629.4,52.413483,-1.508915,17.3670713082444,False,False,False,secondary,service,no link in the map
+A,False,S3c,0.0,3639.4,52.412416,-1.507601,26.494450937812008,False,False,False,service,trunk,no link in the map
+A,False,S3c,0.0,3646.4,52.411625,-1.506312,21.910505859704216,False,False,False,trunk_link,trunk,no link in the map
+A,False,S3c,0.0,3653.4,52.410864,-1.505003,8.077222472434412,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+A,False,S3c,0.0,3654.4,52.410754,-1.504811,6.368874363929567,False,False,True,trunk_link,service,different level (bridge or tunnel)
+A,False,S3c,0.0,3655.4,52.410645,-1.504619,8.71761431270616,False,False,True,service,trunk_link,different level (bridge or tunnel)
+A,False,S3c,0.0,3657.4,52.410432,-1.50424,9.288259262613604,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+A,False,S3c,0.0,3662.4,52.409827,-1.503303,18.978800647863086,False,False,True,trunk_link,service,different level (bridge or tunnel)
+A,False,S3c,0.0,3668.4,52.408963,-1.502519,12.522757767561275,False,False,True,service,trunk,different level (bridge or tunnel)
+A,False,S3c,0.0,3684.4,52.406523,-1.502149,5.095773168631686,False,False,True,trunk,service,different level (bridge or tunnel)
+A,False,S3c,0.0,3685.4,52.406376,-1.502138,12.774116971723183,False,False,True,service,trunk,different level (bridge or tunnel)
+A,False,S3c,0.0,3867.4,52.413438,-1.508865,16.109511884611635,False,False,False,secondary,service,no link in the map
+A,False,S3c,0.0,3868.4,52.413311,-1.508757,9.10237796712591,False,False,False,service,trunk,hop to a parallel road within 15 m
+A,False,S3c,0.0,3870.4,52.413059,-1.508525,10.258382868512347,False,False,False,trunk,service,hop to a parallel road within 15 m
+A,False,S3c,0.0,3875.4,52.412498,-1.507766,11.59102242413546,False,False,False,service,trunk,hop to a parallel road within 15 m
+A,False,S3c,0.0,3884.4,52.411616,-1.506279,21.790755654931647,False,False,False,trunk_link,trunk,no link in the map
+A,False,S3c,0.0,3891.4,52.410945,-1.505101,10.530242110398518,False,False,False,trunk,trunk_link,hop to a parallel road within 15 m
+A,False,S3c,0.0,3896.4,52.410433,-1.504199,10.749461428147592,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+A,False,S3c,0.0,3904.4,52.409459,-1.502861,4.690502000390906,False,False,True,trunk_link,service,different level (bridge or tunnel)
+A,False,S3c,0.0,3909.4,52.408721,-1.502384,19.907646586659684,False,False,True,service,trunk,different level (bridge or tunnel)
+A,False,S3c,0.0,3923.4,52.406613,-1.502095,0.6990356308205947,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+A,False,S3c,0.0,3926.4,52.406209,-1.502011,13.180728451127983,False,False,True,trunk,service,different level (bridge or tunnel)
+A,False,S3c,0.0,3927.4,52.406076,-1.501989,7.669977588439705,False,False,True,service,trunk_link,different level (bridge or tunnel)
+A,False,S3c,0.0,4052.4,52.405119,-1.499247,8.756980809505388,False,True,False,unclassified,service,"drivable, by a longer path under 300 m"
+A,False,S3c,0.0,4061.4,52.40558,-1.497756,16.331823391969696,False,True,True,service,unclassified,"drivable, by a longer path under 300 m"
+A,False,S4,0.0,203.4,52.394198,-1.504065,11.579385254159513,True,False,False,service,tertiary,blocked only by a one-way rule
+A,False,S4,0.0,445.4,52.379841,-1.515625,2.681816292910763,True,False,False,trunk,trunk,blocked only by a one-way rule
+A,False,S4,0.0,1335.4,52.383684,-1.527814,23.464215247645363,True,False,False,tertiary,trunk,blocked only by a one-way rule
+A,False,S4,0.0,2481.4,52.418341,-1.559877,3.4474857927794877,True,True,False,service,service,"drivable, by a longer path under 300 m"
+A,False,S4,0.0,3103.4,52.421176,-1.541476,1.249490135585286,True,True,False,residential,residential,"drivable, by a longer path under 300 m"
+A,False,S4,1.0,514.0,52.421568,-1.535068,7.002307486229833,False,True,False,service,unclassified,"drivable, by a longer path under 300 m"
+A,False,S4,1.0,1247.0,52.429744,-1.53918,6.904504666997114,True,True,False,unclassified,service,"drivable, by a longer path under 300 m"
+A,False,S4,1.0,1763.0,52.423888,-1.523095,2.896722774967807,True,True,False,secondary,tertiary,"drivable, by a longer path under 300 m"
+A,False,S4,1.0,2470.0,52.393048,-1.55118,8.135549048914555,True,True,False,trunk,residential,"drivable, by a longer path under 300 m"
+A,False,S4,1.0,2502.0,52.39014,-1.546009,17.20837328700322,False,False,False,service,trunk,no link in the map
+A,False,S4,1.0,2691.0,52.380044,-1.515812,12.275580038429203,False,True,False,trunk,residential,"drivable, by a longer path under 300 m"
+A,False,S4,1.0,2694.0,52.379829,-1.515309,15.474877645702422,False,True,False,residential,trunk,"drivable, by a longer path under 300 m"
+A,False,S4,1.0,2731.0,52.378135,-1.503166,24.23811092159961,False,False,True,trunk_link,trunk,different level (bridge or tunnel)
+A,False,S4,1.0,2751.0,52.377672,-1.495846,20.331053085720743,False,False,True,trunk,trunk_link,different level (bridge or tunnel)
+A,False,S4,1.0,2795.0,52.377818,-1.480449,4.433812203344382,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+A,False,S4,1.0,2819.0,52.379391,-1.472134,14.66219877286294,False,False,False,trunk_link,trunk,hop to a parallel road within 15 m
+A,False,S4,1.0,2856.0,52.380283,-1.461276,3.0767995764062035,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+A,False,S4,1.0,2869.0,52.38198,-1.457437,2.9962891617222223,True,False,False,service,trunk,blocked only by a one-way rule
+A,False,S4,1.0,2875.0,52.3825,-1.45532,2.5896065941784947,True,False,False,trunk,service,blocked only by a one-way rule
+A,False,S4,1.0,2922.0,52.38919,-1.440137,11.456807571490454,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+A,False,S4,1.0,2925.0,52.389689,-1.439332,2.213749623106394,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+A,False,S4,1.0,2944.0,52.392997,-1.434616,2.0710035813450633,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+A,False,S4,1.0,2957.0,52.394891,-1.43255,4.395561855493669,False,False,False,trunk,trunk_link,hop to a parallel road within 15 m
+A,False,S4,1.0,3018.0,52.396559,-1.431443,6.060546715846032,False,False,False,trunk_link,trunk,hop to a parallel road within 15 m
+A,False,S4,1.0,3085.0,52.410069,-1.437541,7.414024445659008,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+A,False,S4,1.0,3166.0,52.400258,-1.430672,6.1944751473776085,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+A,False,S4,1.0,3184.0,52.39658,-1.43111,4.903046113664131,False,False,False,trunk,trunk_link,hop to a parallel road within 15 m
+A,False,S4,1.0,3193.0,52.395651,-1.431388,9.247318166212045,True,True,False,primary,trunk_link,"drivable, by a longer path under 300 m"
+A,False,S4,1.0,3195.0,52.395469,-1.431678,7.767998819604524,False,False,False,trunk_link,trunk,hop to a parallel road within 15 m
+A,False,S4,1.0,3207.0,52.393511,-1.433711,14.634735748412325,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+A,False,S4,1.0,3234.0,52.388505,-1.440932,2.2110414452153386,True,False,False,trunk,service,blocked only by a one-way rule
+A,False,S4,1.0,3491.0,52.37977,-1.516561,7.685133537879009,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+A,False,S4,1.0,3678.0,52.392788,-1.551815,6.687758560619822,True,False,False,trunk,trunk,blocked only by a one-way rule
+A,False,S4,1.0,3679.0,52.392879,-1.551858,12.431712760219156,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+B,False,M,0.0,13.2,52.402815,-1.50262,8.77238636528636,True,True,False,tertiary,tertiary,"drivable, by a longer path under 300 m"
+B,False,M,0.0,60.2,52.402565,-1.501048,5.05707784570981,True,True,False,tertiary,tertiary,"drivable, by a longer path under 300 m"
+B,False,M,0.0,116.2,52.402519,-1.501017,6.207436109087073,True,True,False,tertiary,tertiary,"drivable, by a longer path under 300 m"
+B,False,M,0.0,126.2,52.402516,-1.501021,2.5116358126267437,True,True,False,tertiary,tertiary,"drivable, by a longer path under 300 m"
+B,False,M,0.0,279.2,52.404439,-1.504837,1.0471955760419658,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+B,False,M,0.0,420.2,52.414505,-1.514878,12.156424832090616,True,False,False,secondary,secondary,blocked only by a one-way rule
+B,False,M,0.0,1216.2,52.448942,-1.520035,17.370510683704254,False,True,False,service,residential,"drivable, by a longer path under 300 m"
+B,False,M,0.0,2275.2,52.435748,-1.531946,8.07735045938315,True,True,False,secondary,secondary,"drivable, by a longer path under 300 m"
+B,False,M,0.0,3234.2,52.425336,-1.569297,1.6324707734335862,True,True,False,tertiary,residential,"drivable, by a longer path under 300 m"
+B,False,M,0.0,3292.2,52.42234,-1.569199,2.790515208058685,True,False,False,trunk,trunk,blocked only by a one-way rule
+B,False,M,0.0,4080.2,52.40409,-1.559647,11.486895554350138,True,True,False,secondary,secondary,"drivable, by a longer path under 300 m"
+B,False,M,0.0,4187.2,52.403807,-1.557516,3.40372934219691,True,False,False,secondary,secondary_link,blocked only by a one-way rule
+B,False,M,0.0,4337.2,52.393127,-1.551475,3.834528072163658,True,True,False,residential,trunk,"drivable, by a longer path under 300 m"
+B,False,M,0.0,4372.2,52.390157,-1.54606,17.38959617964768,False,False,False,service,trunk,no link in the map
+B,False,M,0.0,4375.2,52.389941,-1.5454,13.796978221136063,True,False,False,trunk,service,blocked only by a one-way rule
+B,False,M,1.0,200.0,52.380145,-1.516385,3.455183922781504,True,True,False,secondary,trunk,"drivable, by a longer path under 300 m"
+B,False,M,1.0,202.0,52.380171,-1.516159,9.015966159125732,True,True,False,trunk,secondary,"drivable, by a longer path under 300 m"
+B,False,M,1.0,206.0,52.379959,-1.515697,7.1397540884237625,False,True,False,trunk,residential,"drivable, by a longer path under 300 m"
+B,False,M,1.0,207.0,52.379891,-1.515567,11.09272784734714,False,True,False,residential,trunk,"drivable, by a longer path under 300 m"
+B,False,M,1.0,229.0,52.378879,-1.50952,20.06637533157684,True,False,True,tertiary,trunk,blocked only by a one-way rule
+B,False,M,1.0,238.0,52.378494,-1.506743,5.28573974741338,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+B,False,M,1.0,283.0,52.377506,-1.493333,2.2997223402439353,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+B,False,M,1.0,325.0,52.377811,-1.480489,2.9390536612125726,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+B,False,M,1.0,575.0,52.366082,-1.447288,5.829911848793386,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+B,False,M,1.0,645.0,52.358285,-1.439092,7.276993807485567,True,True,False,trunk,primary,"drivable, by a longer path under 300 m"
+B,False,M,2.0,1050.5,52.366144,-1.447777,10.866444632963999,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+B,False,M,2.0,1082.5,52.37083,-1.453362,2.756976860297449,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+B,False,M,2.0,1159.5,52.366136,-1.447776,9.616112425773478,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+B,False,M,2.0,1193.5,52.370869,-1.45345,1.844062256046083,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+B,False,M,2.0,1311.5,52.377795,-1.465837,3.363201085298108,True,False,False,tertiary,trunk,blocked only by a one-way rule
+B,False,M,2.0,1325.5,52.378661,-1.466816,4.447380223283124,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+B,False,M,2.0,1383.5,52.383478,-1.472187,1.0124486489289959,False,True,False,secondary,service,"drivable, by a longer path under 300 m"
+B,False,M,2.0,1882.5,52.390146,-1.482495,3.567763036461522,True,False,False,primary,primary,blocked only by a one-way rule
+B,False,M,2.0,1883.5,52.390145,-1.482606,4.525380265645126,True,True,False,primary,primary,"drivable, by a longer path under 300 m"
+B,False,M,2.0,1924.5,52.391349,-1.489871,9.006874730793214,True,False,False,primary,trunk,blocked only by a one-way rule
+B,False,M,2.0,1947.5,52.391676,-1.492515,12.55673879934247,True,False,False,trunk,trunk,blocked only by a one-way rule
+B,False,M,2.0,1958.5,52.392579,-1.494116,10.738073193117181,False,False,False,trunk,tertiary,hop to a parallel road within 15 m
+B,False,M,2.0,2401.5,52.408766,-1.492828,2.051739211220499,True,False,False,trunk,trunk,blocked only by a one-way rule
+B,False,M,2.0,2426.5,52.408341,-1.491549,0.5261663090638128,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+B,False,M,2.0,2583.5,52.423319,-1.486743,3.495315205259393,True,False,False,trunk,tertiary_link,blocked only by a one-way rule
+B,False,M,2.0,2689.5,52.430084,-1.48632,3.6885694673373,True,True,False,trunk,secondary,"drivable, by a longer path under 300 m"
+B,False,M,2.0,3237.5,52.44909,-1.50115,7.31685686520548,True,False,False,unclassified,tertiary,blocked only by a one-way rule
+B,False,M,2.0,3676.5,52.45831,-1.484602,4.825080210027504,True,False,False,secondary,secondary,blocked only by a one-way rule
+B,False,M,2.0,5446.5,52.436221,-1.475379,6.946581546476246,True,True,False,secondary,secondary,"drivable, by a longer path under 300 m"
+B,False,M,2.0,5602.5,52.426959,-1.485355,2.2122625865573156,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+B,False,M,2.0,5660.5,52.417809,-1.486868,12.560309655496143,True,False,False,unclassified,trunk,blocked only by a one-way rule
+B,False,M,2.0,5662.5,52.41742,-1.486863,18.039432654291097,True,False,False,trunk,unclassified,blocked only by a one-way rule
+B,False,M,2.0,5691.5,52.411822,-1.487496,16.42322736589247,False,False,False,trunk,residential,no link in the map
+B,False,M,2.0,5692.5,52.411631,-1.487546,6.6492945426132835,False,False,False,residential,trunk,hop to a parallel road within 15 m
+B,False,M,2.0,5727.5,52.407244,-1.487746,0.4332457464926393,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+B,False,M,2.0,5848.5,52.40787,-1.500557,5.873042819042195,True,False,True,trunk_link,trunk_link,blocked only by a one-way rule
+B,False,M,2.0,5863.5,52.406541,-1.502009,3.375814576352943,False,False,True,trunk_link,service,different level (bridge or tunnel)
+B,False,M,2.0,5864.5,52.406376,-1.50202,14.560833154264367,False,False,True,service,trunk,different level (bridge or tunnel)
+B,False,M,2.0,5869.5,52.405567,-1.502044,10.689375534666926,False,False,False,trunk_link,trunk,hop to a parallel road within 15 m
+B,False,M,2.0,5985.5,52.409658,-1.519197,4.834583654960178,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+B,False,M,2.0,6105.5,52.41316,-1.529597,5.697838108168475,False,True,False,trunk,service,"drivable, by a longer path under 300 m"
+B,False,M,2.0,6106.5,52.413156,-1.529686,15.993363196671451,False,True,False,service,service,"drivable, by a longer path under 300 m"
+D,False,Y1,3.0,134.0,52.412055,-1.507191,5.901512741699084,True,False,True,trunk_link,trunk,blocked only by a one-way rule
+D,False,Y1,3.0,151.0,52.410702,-1.504783,4.735973783785765,False,False,True,trunk,service,different level (bridge or tunnel)
+D,False,Y1,3.0,152.0,52.410604,-1.504607,10.900870823500089,False,False,True,service,trunk_link,different level (bridge or tunnel)
+D,False,Y1,3.0,154.0,52.410405,-1.504247,10.021459658418562,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+D,False,Y1,3.0,159.0,52.409902,-1.503431,6.150436825545818,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+D,False,Y1,3.0,160.0,52.409797,-1.503287,2.977144848356215,False,False,True,trunk,service,different level (bridge or tunnel)
+D,False,Y1,3.0,164.0,52.409332,-1.502774,2.4257015711109022,False,False,True,service,trunk,different level (bridge or tunnel)
+D,False,Y1,3.0,165.0,52.409203,-1.502667,16.2158830497944,False,False,True,trunk,service,different level (bridge or tunnel)
+D,False,Y1,3.0,168.0,52.408785,-1.502403,12.030595136344576,False,False,True,service,trunk,different level (bridge or tunnel)
+D,False,Y1,3.0,176.0,52.407598,-1.502132,5.856477736442567,False,False,True,trunk,service,different level (bridge or tunnel)
+D,False,Y1,3.0,181.0,52.406875,-1.502088,8.296729451458942,False,False,True,service,trunk_link,different level (bridge or tunnel)
+D,False,Y1,3.0,186.0,52.406146,-1.50205,4.281152403242093,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+D,False,Y1,3.0,189.0,52.405684,-1.502039,4.18996684648626,False,False,False,trunk_link,trunk,hop to a parallel road within 15 m
+D,False,Y1,3.0,329.0,52.412269,-1.512748,1.7777321115158191,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+D,False,Y1,3.0,655.0,52.423826,-1.503205,9.861400486527904,True,False,False,unclassified,secondary,blocked only by a one-way rule
+D,False,Y1,3.0,1874.0,52.458292,-1.484615,6.4140231499330405,True,False,False,secondary,secondary,blocked only by a one-way rule
+D,False,Y1,3.0,1886.0,52.457686,-1.486109,6.6431445711381345,True,False,False,service,residential,blocked only by a one-way rule
+D,False,Y1,3.0,2787.0,52.427063,-1.485311,19.280876479128214,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+D,False,Y1,3.0,3197.0,52.412134,-1.505164,2.8996103477764743,True,False,False,service,secondary,blocked only by a one-way rule
+D,False,Y1,3.0,3210.0,52.410863,-1.504677,11.738264086154105,False,False,True,trunk_link,service,different level (bridge or tunnel)
+D,False,Y1,3.0,3211.0,52.41076,-1.504584,10.116720536370167,False,False,True,service,trunk_link,different level (bridge or tunnel)
+D,False,Y1,3.0,3213.0,52.410578,-1.504342,5.502489896589363,False,False,True,trunk_link,unclassified,different level (bridge or tunnel)
+D,False,Y1,3.0,3214.0,52.410497,-1.504203,7.499721698835747,False,False,True,unclassified,trunk_link,different level (bridge or tunnel)
+D,False,Y1,3.0,3221.0,52.409821,-1.50329,3.040017767708265,False,False,True,trunk_link,service,different level (bridge or tunnel)
+D,False,Y1,3.0,3229.0,52.408746,-1.502383,17.22744822016763,False,False,True,service,trunk,different level (bridge or tunnel)
+D,False,Y1,3.0,3236.0,52.40766,-1.502157,2.7358325926385034,False,False,True,trunk,service,different level (bridge or tunnel)
+D,False,Y1,3.0,3241.0,52.406922,-1.502112,3.0180865621395103,False,False,True,service,trunk,different level (bridge or tunnel)
+D,False,Y1,3.0,3468.0,52.411984,-1.507085,4.594213228714881,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+D,False,Y1,3.0,3482.0,52.410726,-1.504837,4.309208996083336,False,False,True,trunk,service,different level (bridge or tunnel)
+D,False,Y1,3.0,3483.0,52.410632,-1.504668,5.124767811685411,False,False,True,service,trunk,different level (bridge or tunnel)
+D,False,Y1,3.0,3491.0,52.409861,-1.503369,12.00644183806742,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+D,False,Y1,3.0,3492.0,52.409744,-1.503212,3.097240431612931,False,False,True,trunk,service,different level (bridge or tunnel)
+D,False,Y1,3.0,3495.0,52.409349,-1.502785,2.584669454927017,False,False,True,service,trunk,different level (bridge or tunnel)
+D,False,Y1,3.0,3496.0,52.409204,-1.502665,18.35143857659267,False,False,True,trunk,service,different level (bridge or tunnel)
+D,False,Y1,3.0,3499.0,52.408729,-1.502381,20.346739024866338,False,False,True,service,trunk,different level (bridge or tunnel)
+D,False,Y1,3.0,3505.0,52.407713,-1.502153,17.132229282675375,False,False,True,trunk,service,different level (bridge or tunnel)
+D,False,Y1,3.0,3510.0,52.406923,-1.502099,2.894152524882528,False,False,True,service,trunk,different level (bridge or tunnel)
+D,False,Y1,3.0,3512.0,52.406647,-1.502083,1.0715498640415602,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+D,False,Y1,3.0,3653.0,52.407065,-1.48745,3.303954821519361,True,False,False,primary,trunk,blocked only by a one-way rule
+D,False,Y1,3.0,4156.0,52.398257,-1.483805,3.5949267291105396,True,True,False,tertiary,tertiary,"drivable, by a longer path under 300 m"
+D,False,Y1,3.0,4288.0,52.4065,-1.487801,1.8791008264256042,True,True,False,secondary,trunk,"drivable, by a longer path under 300 m"
+D,False,Y1,3.0,4304.0,52.407269,-1.487798,4.854434995658072,True,False,False,trunk,trunk,blocked only by a one-way rule
+D,False,Y1,3.0,4588.0,52.408329,-1.495259,7.394030943365919,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+D,False,Y1,3.0,4621.0,52.4078,-1.500262,3.834148351509858,True,False,False,trunk_link,trunk_link,blocked only by a one-way rule
+D,False,Y1,3.0,4638.0,52.406491,-1.501989,6.043774328516913,False,False,True,trunk_link,service,different level (bridge or tunnel)
+D,False,Y1,3.0,4639.0,52.406343,-1.502013,16.499552164273048,False,False,True,service,trunk_link,different level (bridge or tunnel)
+D,False,Y1,3.0,4643.0,52.405694,-1.50204,4.226501195864846,False,False,False,trunk_link,trunk,hop to a parallel road within 15 m
+D,False,Y1,3.0,4741.0,52.409038,-1.519271,9.256173019538176,False,False,False,trunk,trunk_link,hop to a parallel road within 15 m
+D,False,Y1,3.0,4750.0,52.409712,-1.519163,10.337751946911283,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+D,False,Y1,3.0,5513.9,52.416983,-1.535243,1.3231881446059686,True,True,False,residential,residential,"drivable, by a longer path under 300 m"
+E,False,Vfa02,0.0,353.0,52.745662,-1.451827,7.133403995082455,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+E,False,Vfa02,0.0,390.0,52.752482,-1.443518,1.5474157359152054,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+E,False,Vfa02,0.0,449.0,52.765068,-1.430617,3.828700238756648,True,False,False,service,trunk,blocked only by a one-way rule
+E,False,Vfa02,0.0,455.0,52.766383,-1.429076,2.3914510957249204,True,False,False,trunk,service,blocked only by a one-way rule
+E,False,Vfa02,0.0,628.0,52.798136,-1.386646,4.345856647102072,False,False,False,service,trunk,hop to a parallel road within 15 m
+E,False,Vfa02,0.0,660.0,52.79901,-1.375875,5.628374939653268,False,False,False,trunk_link,trunk,hop to a parallel road within 15 m
+E,False,Vfa02,0.0,869.0,52.813348,-1.309815,1.8789240423373534,True,False,False,trunk,motorway_link,blocked only by a one-way rule
+E,False,Vfa02,0.0,884.0,52.816229,-1.30712,1.462822718956065,False,False,True,motorway_link,motorway_link,different level (bridge or tunnel)
+E,False,Vfa02,0.0,885.0,52.816433,-1.306985,9.153061529278986,False,False,True,motorway_link,motorway_link,different level (bridge or tunnel)
+E,False,Vfa02,0.0,1321.0,52.921078,-1.300113,1.028929387300305,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vfa02,0.0,1635.0,52.984963,-1.241101,5.163807063272031,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,2165.0,53.096725,-1.313938,1.7896161704039713,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,2221.0,53.10672,-1.328014,1.6530636127945613,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vfa02,0.0,2347.0,53.136137,-1.330573,2.84564722420178,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,2365.0,53.140429,-1.331225,19.299889797557242,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vfa02,0.0,2587.0,53.19314,-1.323975,2.0475625535723365,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,2784.0,53.239091,-1.332787,2.767900488098452,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,2832.0,53.250369,-1.328273,2.5479923206278094,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vfa02,0.0,2986.0,53.28207,-1.298045,13.024809866692355,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,3017.0,53.289771,-1.294926,1.393178781105946,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vfa02,0.0,3407.0,53.385184,-1.278702,3.0895493259073565,False,False,True,motorway,motorway,different level (bridge or tunnel)
+E,False,Vfa02,0.0,3408.0,53.385392,-1.278778,20.538109464236285,False,False,True,motorway,motorway,different level (bridge or tunnel)
+E,False,Vfa02,0.0,3496.0,53.397751,-1.300279,1.7021867109687694,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vfa02,0.0,3781.0,53.409236,-1.396927,2.925310703328463,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,3806.0,53.413854,-1.402572,2.1614681136171594,False,False,True,motorway,trunk,different level (bridge or tunnel)
+E,False,Vfa02,0.0,3821.0,53.416608,-1.405677,2.1602640098352435,False,False,True,trunk,motorway,different level (bridge or tunnel)
+E,False,Vfa02,0.0,3844.0,53.421037,-1.409681,2.5417325787748295,False,False,True,motorway,trunk,different level (bridge or tunnel)
+E,False,Vfa02,0.0,3845.0,53.421231,-1.409885,25.140288457288296,False,False,True,trunk,motorway,different level (bridge or tunnel)
+E,False,Vfa02,0.0,3986.0,53.449427,-1.444502,2.7672714022681357,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,4029.0,53.459608,-1.447004,2.126329008034735,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vfa02,0.0,4094.0,53.474122,-1.458021,1.1751205859769667,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,4180.0,53.493105,-1.471815,3.469931042022185,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,4213.0,53.499216,-1.480184,1.828350264538618,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vfa02,0.0,4420.0,53.540453,-1.509024,3.6243910952889733,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,4815.0,53.630765,-1.540502,2.822228488464563,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vfa02,0.0,5195.0,53.713177,-1.541897,4.882252495751769,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,5231.0,53.718318,-1.530153,3.7312850491746654,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vfa02,0.0,5470.0,53.733334,-1.569209,3.1369279938355397,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,5669.0,53.746424,-1.631947,8.775614570842588,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,5952.0,53.737384,-1.724442,7.755761757226825,True,False,False,motorway_link,trunk,blocked only by a one-way rule
+E,False,Vfa02,0.0,6084.0,53.754067,-1.741579,9.620205037723107,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vfa02,0.0,6204.0,53.769264,-1.75297,2.208968557032755,True,False,False,primary_link,primary,blocked only by a one-way rule
+E,False,Vfa02,0.0,6386.0,53.78267,-1.757479,4.4511157122075575,True,False,False,primary_link,primary,blocked only by a one-way rule
+E,False,Vfa02,0.0,6392.0,53.783075,-1.756938,1.3975323086139644,True,False,False,primary,service,blocked only by a one-way rule
+E,False,Vfa02,0.0,6437.0,53.785169,-1.754582,4.890806303615079,True,False,False,primary_link,primary,blocked only by a one-way rule
+E,False,Vfa02,0.0,6470.0,53.788873,-1.75417,3.0726586227559816,True,True,False,primary_link,primary,"drivable, by a longer path under 300 m"
+E,False,Vfa02,0.0,6489.0,53.789259,-1.757046,2.319127062136567,True,True,False,primary,primary,"drivable, by a longer path under 300 m"
+E,False,Vfa02,0.0,6497.0,53.789648,-1.757608,4.163270292621053,True,True,False,primary,primary,"drivable, by a longer path under 300 m"
+E,False,Vfa02,0.0,6625.0,53.789504,-1.768682,21.714151364610323,False,True,False,service,tertiary,"drivable, by a longer path under 300 m"
+E,False,Vta16,0.0,2572.8,53.063058,-1.746202,5.0012753143906785,True,True,False,trunk,tertiary,"drivable, by a longer path under 300 m"
+E,False,Vta17,1.0,3073.6,53.052564,-1.79948,2.7345074822370607,True,True,False,service,unclassified,"drivable, by a longer path under 300 m"
+E,False,Vta1a,0.0,42.0,52.561775,-1.454783,5.984794524335355,True,True,False,service,service,"drivable, by a longer path under 300 m"
+E,False,Vtb5,0.0,3999.2,53.118434,-1.333943,6.946164974553497,False,False,True,motorway,tertiary,different level (bridge or tunnel)
+E,False,Vtb5,0.0,4186.2,53.109061,-1.315379,13.926078276724736,True,False,False,trunk_link,secondary,blocked only by a one-way rule
+E,False,Vtb5,0.0,4835.2,52.9936,-1.231855,13.367918947426373,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vtb5,0.0,4882.2,52.98518,-1.240137,9.721536124519938,False,False,False,motorway,motorway_link,hop to a parallel road within 15 m
+E,False,Vtb5,0.0,4995.2,52.964131,-1.26416,4.137771183573807,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vtb5,0.0,5659.2,52.853679,-1.298624,4.276193801226135,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vtb5,0.0,5686.2,52.84732,-1.295986,3.3873509794075947,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vtb5,0.0,5716.2,52.840793,-1.295497,6.201631632135226,False,False,False,motorway,motorway_link,hop to a parallel road within 15 m
+E,False,Vtb5,0.0,6911.2,52.685655,-1.549686,3.250110443869099,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vtb5,0.0,7524.2,52.598599,-1.617017,8.389723576412866,True,False,False,residential,trunk,blocked only by a one-way rule
+E,False,Vtb5,0.0,7681.2,52.591393,-1.593526,3.0903120678818676,True,True,False,residential,trunk,"drivable, by a longer path under 300 m"
+E,False,Vtb5,0.0,7684.2,52.591268,-1.593064,3.1853224946698675,True,True,False,trunk,residential,"drivable, by a longer path under 300 m"
+E,False,Vtb5,0.0,7887.2,52.580643,-1.552489,8.420806700891674,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+E,False,Vw11,0.0,14328.9,52.211008,-2.163525,6.307637719615011,True,True,False,secondary_link,primary,"drivable, by a longer path under 300 m"
+E,False,Vw2,0.0,595.0,52.535588,-1.401713,9.288506247545813,True,True,False,secondary,secondary,"drivable, by a longer path under 300 m"
+E,False,Vw2,0.0,692.0,52.534077,-1.411666,13.300419227518669,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw2,0.0,1106.0,52.515944,-1.360212,7.232319761037284,True,False,False,motorway_link,trunk,blocked only by a one-way rule
+E,False,Vw2,0.0,1111.0,52.515543,-1.359543,9.086141284932118,True,False,False,trunk,trunk,blocked only by a one-way rule
+E,False,Vw2,0.0,1128.0,52.515209,-1.359497,4.485698935347407,True,False,False,trunk,motorway_link,blocked only by a one-way rule
+E,False,Vw2,0.0,1275.0,52.501618,-1.32463,12.574134182888788,True,False,False,secondary_link,trunk,blocked only by a one-way rule
+E,False,Vw2,0.0,1278.0,52.501334,-1.323879,2.4488800216750177,True,False,False,trunk,secondary_link,blocked only by a one-way rule
+E,False,Vw2,0.0,2223.0,52.358135,-1.169455,10.751232219622803,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw2,0.0,2302.0,52.351136,-1.155546,3.041906628733781,True,False,False,motorway_link,trunk,blocked only by a one-way rule
+E,False,Vw2,0.0,2311.0,52.351329,-1.153929,11.1261173385669,True,False,False,trunk,motorway_link,blocked only by a one-way rule
+E,False,Vw2,0.0,2316.0,52.350991,-1.153404,6.152303888766475,True,False,False,primary,trunk,blocked only by a one-way rule
+E,False,Vw2,0.0,2323.0,52.35042,-1.15372,9.264344408145414,True,False,False,trunk,motorway_link,blocked only by a one-way rule
+E,False,Vw2,0.0,2451.0,52.322801,-1.138594,2.3912099570406005,True,False,False,motorway,motorway,blocked only by a one-way rule
+E,False,Vw2,0.0,4208.0,52.056916,-0.695032,1.970457128675764,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vw2,0.0,4615.0,52.02594,-0.606832,5.491448715032041,False,False,False,trunk,trunk,hop to a parallel road within 15 m
+E,False,Vw2,0.0,5044.0,52.033445,-0.683616,13.666719707508504,True,False,False,unclassified,trunk,blocked only by a one-way rule
+E,False,Vw2,0.0,5061.0,52.033675,-0.688078,9.071124685047423,True,False,False,unclassified,trunk,blocked only by a one-way rule
+E,False,Vw2,0.0,5172.0,52.030372,-0.709053,4.622822970031013,True,False,False,service,trunk,blocked only by a one-way rule
+E,False,Vw2,0.0,5215.0,52.025918,-0.719978,8.313823035593057,True,False,False,tertiary,trunk,blocked only by a one-way rule
+E,False,Vw2,0.0,5265.0,52.025565,-0.73128,2.5011918482045945,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw3,0.0,5395.3,52.028726,-0.743194,3.618964544928593,True,True,False,tertiary_link,tertiary,"drivable, by a longer path under 300 m"
+E,False,Vw3,0.0,5486.3,52.03593,-0.736036,7.781300317189186,True,False,False,secondary,secondary,blocked only by a one-way rule
+E,False,Vw3,0.0,5488.3,52.03593,-0.735762,5.338420051080087,True,True,False,tertiary,secondary,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,691.4,52.037252,-0.772138,19.943804183682882,False,True,False,service,tertiary,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,698.4,52.037659,-0.772589,17.570714432120997,False,True,False,tertiary,service,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,714.4,52.039084,-0.774139,22.06976113514872,False,True,False,service,primary_link,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,742.4,52.039542,-0.775419,11.844526306359288,True,False,False,primary_link,primary,blocked only by a one-way rule
+E,False,Vw4,0.0,750.4,52.040107,-0.775508,3.1340831140222614,True,False,False,tertiary,primary,blocked only by a one-way rule
+E,False,Vw4,0.0,772.4,52.040354,-0.774353,8.656561867642836,True,False,False,primary,primary,blocked only by a one-way rule
+E,False,Vw4,0.0,1041.4,52.046471,-0.758066,2.45361468777935,True,True,False,unclassified,primary,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,1320.4,52.044768,-0.734286,2.6006441190233724,True,False,False,tertiary,tertiary,blocked only by a one-way rule
+E,False,Vw4,0.0,1565.4,52.052795,-0.711241,5.470416124376188,True,True,False,unclassified,tertiary,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,1608.4,52.048178,-0.706417,11.505533420767529,True,False,False,service,trunk,blocked only by a one-way rule
+E,False,Vw4,0.0,1621.4,52.046992,-0.703008,13.856043391971939,True,False,False,unclassified,trunk,blocked only by a one-way rule
+E,False,Vw4,0.0,1676.4,52.040701,-0.693819,0.7385235011227838,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,1754.4,52.033527,-0.692187,7.714939467552203,True,False,False,trunk,trunk,blocked only by a one-way rule
+E,False,Vw4,0.0,1918.4,52.020735,-0.701957,8.054078226075422,True,True,False,tertiary_link,tertiary,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,2157.4,52.004371,-0.724298,4.191485388563481,True,False,False,service,tertiary,blocked only by a one-way rule
+E,False,Vw4,0.0,2167.4,52.004228,-0.725854,2.5679918401517834,True,False,False,tertiary,secondary,blocked only by a one-way rule
+E,False,Vw4,0.0,2189.4,52.004306,-0.729889,8.234082874778426,True,False,False,tertiary_link,tertiary,blocked only by a one-way rule
+E,False,Vw4,0.0,2208.4,52.00559,-0.733635,12.438618418384692,True,False,False,tertiary,service,blocked only by a one-way rule
+E,False,Vw4,0.0,2231.4,52.006498,-0.735352,4.038386325596117,True,True,False,tertiary,tertiary,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,2335.4,52.010751,-0.753241,4.597431302787808,True,False,False,tertiary,trunk,blocked only by a one-way rule
+E,False,Vw4,0.0,2441.4,51.997917,-0.772479,11.181142785472732,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,2807.4,51.983026,-0.868414,6.8098850884677375,True,True,False,secondary,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,3335.4,51.995256,-1.00729,7.352037320139114,True,True,False,service,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,3959.4,51.992832,-1.163891,24.507631026224036,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+E,False,Vw4,0.0,3961.4,51.992389,-1.164363,3.033083980421222,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+E,False,Vw4,0.0,4000.4,51.982723,-1.174998,28.559045103267728,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+E,False,Vw4,0.0,4051.4,51.971754,-1.192286,1.666226968394207,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+E,False,Vw4,0.0,4168.4,51.949128,-1.203984,8.11578865361031,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,5455.4,52.219731,-1.507964,0.4475824655848905,True,False,False,motorway,motorway_link,blocked only by a one-way rule
+E,False,Vw4,0.0,5736.4,52.25786,-1.606995,5.3733542786224735,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vw4,0.0,6333.4,52.345112,-1.795747,3.3135452650062946,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vw4,0.0,6401.4,52.347323,-1.820256,0.89901140186918,True,False,False,motorway,motorway,blocked only by a one-way rule
+E,False,Vw4,0.0,6556.4,52.354782,-1.879739,4.127133955234283,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vw4,0.0,6989.4,52.355269,-2.041145,17.056125995660764,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vw4,0.0,7010.4,52.355766,-2.048654,15.595888746469694,True,False,False,motorway,service,blocked only by a one-way rule
+E,False,Vw4,0.0,7032.4,52.355554,-2.057004,4.12940844812271,True,False,False,motorway_link,motorway,blocked only by a one-way rule
+E,False,Vw4,0.0,7039.4,52.355092,-2.05964,21.553493361419328,True,False,False,motorway_link,motorway_link,blocked only by a one-way rule
+E,False,Vw4,0.0,7054.4,52.353907,-2.064736,2.725404779560969,False,False,True,motorway_link,motorway_link,different level (bridge or tunnel)
+E,False,Vw4,0.0,7055.4,52.353827,-2.065078,7.170374712651201,False,False,True,motorway_link,motorway_link,different level (bridge or tunnel)
+E,False,Vw4,0.0,7630.4,52.27465,-2.160886,2.3256037643148906,True,False,False,primary,tertiary,blocked only by a one-way rule
+E,False,Vw4,0.0,8480.4,52.364832,-2.238927,2.7417240590167005,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,8573.4,52.370511,-2.245677,7.581398245559874,True,True,False,trunk,tertiary,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,8575.4,52.370642,-2.245721,1.7121391637540075,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,8805.4,52.385579,-2.244384,8.211616919975217,True,False,False,trunk,unclassified,blocked only by a one-way rule
+E,False,Vw4,0.0,8838.4,52.38902,-2.245092,5.514385312262941,True,True,False,unclassified,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,9043.4,52.38857,-2.251265,3.0522714864626104,True,False,False,unclassified,unclassified,blocked only by a one-way rule
+E,False,Vw4,0.0,9141.4,52.390272,-2.249794,6.13529233754842,True,False,False,residential,trunk,blocked only by a one-way rule
+E,False,Vw4,0.0,9314.4,52.379954,-2.250268,3.4147264342831476,True,False,False,trunk,trunk,blocked only by a one-way rule
+E,False,Vw4,0.0,9413.4,52.370851,-2.245554,7.654187810953453,True,True,False,trunk,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,9806.4,52.324139,-2.231731,8.255048756370957,True,True,False,tertiary_link,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,9881.4,52.314578,-2.233444,2.731175489193879,True,True,False,unclassified,trunk,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,9902.4,52.311342,-2.231227,6.992497264933885,True,False,False,service,trunk,blocked only by a one-way rule
+E,False,Vw4,0.0,10086.4,52.278272,-2.228417,8.727761450945005,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+E,False,Vw4,0.0,10112.4,52.273688,-2.225962,3.9590142036841005,True,False,False,trunk_link,trunk,blocked only by a one-way rule
+E,False,Vw4,0.0,10128.4,52.270475,-2.225448,4.110543413966244,True,False,False,trunk,trunk_link,blocked only by a one-way rule
+E,False,Vw4,0.0,10593.4,52.207105,-2.226974,8.323524262653917,True,True,False,primary,primary,"drivable, by a longer path under 300 m"
+E,False,Vw4,0.0,10841.4,52.19428,-2.219326,3.3786414394320827,True,False,False,unclassified,primary,blocked only by a one-way rule
+E,False,Vw4,0.0,11093.4,52.189282,-2.220135,7.107059130892433,True,True,False,primary,primary,"drivable, by a longer path under 300 m"

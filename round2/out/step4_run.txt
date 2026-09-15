@@ -1,0 +1,106 @@
+[    1s] 28 sessions loaded
+[    1s] reusing data/osm/road_network.npz (build log: round2/out/step4_build_run.txt)
+[    2s] network loaded and indexed
+
+========================================================================================================
+2 · THE NETWORK
+========================================================================================================
+  nodes 1,315,332 · segments 1,365,205 · drivable directions 2,549,969 · 29,389 km of road
+  one-way 13% of length · roundabouts 206 km · private or no access 7% · car-park aisles and driveways 9% · speed limit tagged 31%
+
+  road class             km   share
+  service             9,280   31.6%
+  residential         8,393   28.6%
+  unclassified        3,810   13.0%
+  tertiary            2,931   10.0%
+  trunk               1,514    5.2%
+  secondary           1,204    4.1%
+  motorway              952    3.2%
+  primary               949    3.2%
+  motorway_link         159    0.5%
+  trunk_link            106    0.4%
+  living_street          55    0.2%
+  primary_link           16    0.1%
+  tertiary_link          13    0.0%
+  secondary_link          5    0.0%
+  road                    1    0.0%
+[    4s] 78,081 track points matched, 29,843 edge changes checked
+
+========================================================================================================
+3 · TRUE TRACKS AGAINST THE NETWORK — one point per second while moving, shares of distance driven (road within 20 m, direction within 30°)
+========================================================================================================
+  on road       a road within 20 m, running within 30° of the car's direction, drivable that way
+  one-way       such a road exists, but its one-way tag forbids the car's direction
+  not aligned   a road within 20 m, but none running the car's way (mostly inside junctions and sharp turns)
+  off network   no mapped drivable road within 20 m
+
+  driver       km  on road   within 10 m  one-way  not aligned  off network  median offset
+  E           733    99.8%         99.2%     0.0%         0.1%         0.1%          1.9 m
+  B           105    99.6%         98.8%     0.0%         0.3%         0.0%          2.0 m
+  A           269    98.8%         97.6%     0.3%         0.6%         0.3%          2.2 m
+  D            55    97.8%         96.7%     1.0%         0.7%         0.4%          2.0 m
+  all       1,161    99.5%         98.7%     0.1%         0.2%         0.1%          2.0 m
+
+  road class under the car (share of on-road distance)
+  driver        motorway         trunk       primary     secondary      tertiary   residential       service motorway_link    other
+  E                44.0%         30.7%          6.4%          4.6%          7.4%          0.4%          0.6%          1.6%     4.3%
+  B                 0.0%         28.3%          3.9%         21.6%         28.6%          7.4%          0.4%          0.0%     9.8%
+  A                 4.3%         23.0%         10.1%         15.0%         16.5%         21.7%          1.6%          0.6%     7.2%
+  D                 0.0%         23.3%          0.9%         23.4%         24.7%         18.0%          1.5%          0.0%     8.2%
+
+  stretches of at least 10 s not on an allowed road: per 100 km, and their share of distance
+  E          0.4 per 100 km     0.1% of distance   mostly: off_network 2, not_aligned 1
+  B          0.0 per 100 km     0.0% of distance
+  A          2.6 per 100 km     0.4% of distance   mostly: off_network 4, oneway_conflict 3
+  D          1.8 per 100 km     1.6% of distance   mostly: oneway_conflict 1
+
+  longest ten (round2/out/roadnet_gaps.csv has all):
+driver drive  session  t_start  seconds  metres       lat       lon          mostly
+     D    Y1        3    219.0       55     878 52.404117 -1.507824 oneway_conflict
+     E Vfa02        0   6566.0       47     440 53.791640 -1.760622     off_network
+     A   S3c        0   3749.4       15     260 52.403978 -1.514344 oneway_conflict
+     A   S3c        0   3726.4       14     247 52.403710 -1.509267 oneway_conflict
+     A   S3c        0   3254.4       25     222 52.405646 -1.515504 oneway_conflict
+     A   S3c        0   4146.4       40     177 52.406484 -1.501566     off_network
+     E Vfa02        0   6512.0       15     119 53.791133 -1.758066     not_aligned
+     A   S3c        0   3216.4       17     114 52.405042 -1.512514     off_network
+     A    S2        1   6009.0       19      98 52.480140 -1.413581     off_network
+     E  Vtb2        0    527.0       21      92 53.170946 -1.675011     off_network
+
+========================================================================================================
+4 · CAN THE NETWORK CARRY THE TRUE ROUTES — consecutive on-road points on different drivable directions, one second apart
+========================================================================================================
+  connected = the second is reachable from the first along drivable directions within 2 s of driving + 50 m
+
+  driver    changes  connected  not connected per 100 km
+  E          14,310      99.0%                      20.1
+  B           3,995      98.6%                      54.4
+  A           9,262      98.6%                      48.8
+  D           2,276      97.8%                      91.2
+  all        29,843      98.7%                      33.2
+
+========================================================================================================
+4b · WHY SOME ARE NOT CONNECTED — first matching reason, in this order
+========================================================================================================
+  reason                                   driver E   driver B   driver A   driver D      all
+  drivable, by a longer path under 300 m        25%        47%        32%         8%      29%
+  blocked only by a one-way rule                64%        40%        35%        34%      47%
+  different level (bridge or tunnel)             7%         4%        11%        52%      14%
+  hop to a parallel road within 15 m             3%         5%        10%         6%       6%
+  no link in the map                             0%         4%        11%         0%       4%
+  not connected (count)                         147         57        131         50      385
+
+  median distance of the hop: 6.1 m
+
+  where they cluster (rounded to about 100 m; round2/out/roadnet_disconnected.csv has all):
+               count drivers                             main_reason
+lat3   lon3                                                         
+52.406 -1.502     12     ABD      different level (bridge or tunnel)
+52.411 -1.505     10      AD      different level (bridge or tunnel)
+52.407 -1.502      8     ABD      different level (bridge or tunnel)
+52.380 -1.516      6      AB  drivable, by a longer path under 300 m
+52.410 -1.503      6      AD      different level (bridge or tunnel)
+52.413 -1.509      6       A  drivable, by a longer path under 300 m
+52.409 -1.503      6      AD      different level (bridge or tunnel)
+52.410 -1.504      4      AD          blocked only by a one-way rule
+[    4s] done

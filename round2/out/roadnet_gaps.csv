@@ -1,0 +1,12 @@
+driver,drive,session,t_start,seconds,metres,lat,lon,mostly
+D,Y1,3,219.0,55,878,52.404117,-1.507824,oneway_conflict
+E,Vfa02,0,6566.0,47,440,53.79164,-1.760622,off_network
+A,S3c,0,3749.4,15,260,52.403978,-1.514344,oneway_conflict
+A,S3c,0,3726.4,14,247,52.40371,-1.509267,oneway_conflict
+A,S3c,0,3254.4,25,222,52.405646,-1.515504,oneway_conflict
+A,S3c,0,4146.4,40,177,52.406484,-1.501566,off_network
+E,Vfa02,0,6512.0,15,119,53.791133,-1.758066,not_aligned
+A,S3c,0,3216.4,17,114,52.405042,-1.512514,off_network
+A,S2,1,6009.0,19,98,52.48014,-1.413581,off_network
+E,Vtb2,0,527.0,21,92,53.170946,-1.675011,off_network
+A,S2,1,6035.0,16,86,52.48081,-1.413014,off_network

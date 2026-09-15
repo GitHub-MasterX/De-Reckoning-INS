@@ -195,3 +195,27 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
 - **Per driver, 1 km, 2D | distance:** E 10.2 | 4.8%, B 15.4 | 14.8%, A 13.1 | 12.3%, D 15.2 | 19.4%. E's 2D 10.2% equals
   round 1's distance figure for E only by coincidence; they measure different things.
 - **Target for the map (step 5):** 50–70 km/h at 1 km on D+E, from 19.8% to below 10%.
+
+## 16 · Step 4 — road network from OSM — 2026-09-16
+
+- **Why:** the network the step-5 filter drives on, checked against where the cars really drove.
+- **Build run:** 126 s, peak 4.9 GB. 3,933,596 drivable ways in England, 257,567 kept near the routes. Output
+  `data/osm/road_network.npz` (git-ignored, 93 MB); log `out/step4_build_run.txt`.
+- **Network:** 1,315,332 nodes, 1,365,205 segments, 2,549,969 drivable directions, 29,389 km of road — 32% service roads,
+  29% residential; 13% of length one-way; 206 km of roundabouts; speed limit tagged on 31%.
+- **Check runs:** `--reuse`, 4 s. Output `out/step4_run.txt`, `out/roadnet_check.csv`, `out/roadnet_gaps.csv`,
+  `out/roadnet_disconnected.csv`.
+- **True tracks on the network** (one point per second while moving, share of distance): on a road in an allowed
+  direction 99.5% (E 99.8%, B 99.6%, A 98.8%, D 97.8%), within 10 m 98.7%, median offset 2.0 m; one-way conflicts
+  0.1% (D 1.0%); off the network 0.1%.
+- **Roads driven:** E 44% motorway and 31% trunk; B, A and D mostly trunk, secondary, tertiary and residential.
+- **Stretches of 10 s or more off an allowed road:** 0–2.6 per 100 km. The longest are one-way conflicts in central
+  Coventry (D 878 m, A up to 260 m) and 440 m off the map in Bradford (E).
+- **Connectivity:** 98.7% of consecutive on-road points (1 s apart, on different drivable directions) connect within
+  2 s of driving + 50 m. Of the 385 that do not: 29% are drivable by a longer path under 300 m, 47% are blocked only
+  by a one-way rule, 14% change level on stacked roads (half of D's, on the Coventry ring road), 6% hop to a parallel
+  road within 15 m, 4% cross a link missing from the map. Median hop 6.1 m.
+- **Difficulty:** the first ordering of reasons tested the one-way rule before the longer path, so it over-counted
+  one-way blocks (70%); reordered.
+- **Carried into step 5:** one-way strong but not absolute, short hops to nearby roads allowed, hypotheses keep their
+  level on stacked roads.
