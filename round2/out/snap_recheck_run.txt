@@ -1,0 +1,32 @@
+28 sessions · 1 km blackouts, same rules as run_evaluation.py · bends >= 15 deg
+
+  median drift at 1 km                                              every blackout (length-weighted)         <=200 per session (run_evaluation.py)
+                                                                    drv E      drv B      drv A      drv D      drv E      drv B      drv A      drv D
+  blackouts                                                        14,962      2,057      4,926      1,103      2,335        600      1,261        200
+  coast - run_evaluation.py (reference)                                                                         10.2%      16.1%      16.5%      19.6%
+  blackouts with a usable real bend (causal)                          53%        91%        86%       100%        73%        90%        88%       100%
+  coast (no map)                                                     6.5%      14.7%      16.6%      16.4%      10.9%      15.3%      17.1%      15.9%
+  §3.3 ceiling formula, on these blackouts                           7.6%       3.3%       3.5%       2.8%       3.2%       3.6%       3.0%       2.8%
+  perfect snaps · speed kept from blackout start                     4.6%       5.5%       5.9%       4.1%       5.4%       6.4%       5.6%       3.3%
+  perfect snaps · speed from the last two anchors                    3.9%       3.7%       4.1%       3.1%       3.9%       4.0%       3.8%       3.0%
+  perfect snaps · speed averaged since blackout start                4.0%       3.5%       4.1%       2.9%       4.2%       3.8%       3.7%       2.7%
+  phone turns · route map · gate 30% · speed re-estimated            6.1%      10.1%      11.9%       8.5%       9.3%      10.8%      10.7%       7.2%
+  phone turns · route map · gate 50% · speed re-estimated            6.1%       8.2%       8.3%       7.0%       9.1%       8.3%       7.6%       6.0%
+  phone turns · route map · gate 50% · speed kept                    6.0%       8.2%       8.4%       6.1%       9.1%       9.5%       8.2%       4.4%
+  phone turns · + OSM junctions · gate 30% · re-estimated            6.3%      11.6%      13.9%      11.3%       9.6%      11.7%      12.7%       8.9%
+  phone turns · + OSM junctions · gate 50% · re-estimated            6.3%      10.1%      10.5%       9.2%       9.6%       9.2%      10.1%       8.2%
+  phone turns · + OSM junctions · gate 50% · speed kept              6.0%       9.8%      11.2%      10.3%       9.0%      10.7%      11.4%       6.7%
+
+  snaps per blackout · right bend / wrong candidate / false detection
+  phone turns · route map · gate 30% · speed re-estimated       0.32 · 81/10/8%  1.57 · 89/7/4%  1.57 · 88/9/3%  2.31 · 89/7/3%
+  phone turns · route map · gate 50% · speed re-estimated       0.39 · 77/12/10%  1.87 · 92/5/4%  1.94 · 90/6/3%  2.76 · 88/7/4%
+  phone turns · route map · gate 50% · speed kept               0.39 · 77/13/10%  1.87 · 89/7/4%  1.98 · 90/7/3%  2.81 · 90/6/4%
+  phone turns · + OSM junctions · gate 30% · re-estimated       0.38 · 66/25/9%  1.61 · 77/18/5%  1.77 · 68/27/5%  2.65 · 67/29/4%
+  phone turns · + OSM junctions · gate 50% · re-estimated       0.46 · 61/28/11%  1.86 · 79/16/4%  2.07 · 72/22/6%  2.99 · 71/25/4%
+  phone turns · + OSM junctions · gate 50% · speed kept         0.46 · 62/27/11%  1.87 · 78/18/5%  2.08 · 71/23/5%  3.00 · 69/27/4%
+
+  sessions: blackouts per session (min / median / max) · per-session median coast drift (min / median / max)
+  driver E: 15 sessions · 70 / 316 / 4236 blackouts · 3.0 / 13.1 / 26.1 %
+  driver B: 3 sessions · 236 / 767 / 1054 blackouts · 14.2 / 15.2 / 15.8 %
+  driver A: 7 sessions · 61 / 637 / 1321 blackouts · 10.8 / 17.5 / 27.6 %
+  driver D: 1 sessions · 1103 / 1103 / 1103 blackouts · 16.4 / 16.4 / 16.4 %

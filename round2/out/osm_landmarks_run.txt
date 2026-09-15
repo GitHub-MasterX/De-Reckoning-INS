@@ -1,0 +1,61 @@
+[    1s] 28 sessions, 1162 km of track, 232,464 route points
+[    1s] bbox lon -2.274..-0.583  lat 51.926..53.813
+[    1s] scanning england-latest.osm.pbf ...
+[   11s]   1 M tagged objects reached Python, 83,260 landmarks kept
+[   30s]   2 M tagged objects reached Python, 179,293 landmarks kept
+[   70s] scan done: 2,299,879 tagged objects reached Python; 198,339 landmarks in the dataset area; ways with missing node locations: 0
+[   70s] peak memory 4.8 GB
+[   87s] 187,346 physical landmark features (15,649 roundabout ways merged into 4,656 roundabouts)
+[   91s] 4,550 landmark passes matched
+
+========================================================================================================
+OSM LANDMARKS ALONG THE IO-VNBD ROUTES   ·   passes per km driven  |  % of 1 km blackouts containing one
+========================================================================================================
+                                         driver E           driver B           driver A           driver D
+  km of track                                 731                105                271                 55
+
+  TURN  (gyro)
+    junction=roundabout            0.26/km   20%     0.56/km   43%     0.42/km   31%     0.78/km   51%
+    highway=mini_roundabout        0.01/km    1%     0.13/km    8%     0.13/km    9%     0.16/km    7%
+    highway=turning_circle         0.00/km    0%     0.02/km    2%     0.03/km    3%     0.04/km    4%
+    → any of the above             0.27/km   21%     0.71/km   52%     0.58/km   41%     0.97/km   56%
+
+  STOP  (classifier)
+    highway=traffic_signals        0.36/km   10%     1.37/km   39%     1.30/km   37%     1.46/km   47%
+    highway=stop                   0.00/km    0%     0.00/km    0%     0.01/km    1%     0.02/km    2%
+    highway=give_way               0.17/km    6%     0.11/km   10%     0.25/km   13%     0.14/km   11%
+    railway=level_crossing         0.00/km    0%     0.00/km    0%     0.00/km    0%     0.02/km    2%
+    barrier=toll_booth             0.00/km    0%     0.00/km    0%     0.00/km    0%     0.00/km    0%
+    barrier=lift_gate              0.01/km    0%     0.01/km    1%     0.01/km    1%     0.02/km    2%
+    → any of the above             0.54/km   14%     1.50/km   47%     1.57/km   43%     1.66/km   55%
+
+  JOLT  (accelerometer)
+    traffic_calming=*              0.03/km    2%     0.25/km    5%     0.19/km    9%     0.09/km    7%
+    barrier=cattle_grid            0.02/km    1%     0.00/km    0%     0.00/km    0%     0.00/km    0%
+    → any of the above             0.05/km    3%     0.25/km    5%     0.19/km    9%     0.09/km    7%
+
+  HIGHWAY
+    highway=motorway_junction      0.13/km   12%     0.21/km   11%     0.20/km   11%     0.67/km   21%
+    tunnel=yes                     0.01/km    1%     0.08/km    2%     0.01/km    1%     0.11/km    4%
+    bridge=yes                     0.66/km   33%     0.89/km   38%     0.70/km   24%     2.11/km   41%
+    → any of the above             0.79/km   39%     1.17/km   39%     0.92/km   27%     2.89/km   42%
+
+  OTHER
+    highway=crossing               0.63/km   14%     1.94/km   47%     3.24/km   61%     2.76/km   69%
+    highway=speed_camera           0.04/km    4%     0.08/km    6%     0.10/km    8%     0.09/km    4%
+    highway=milestone              0.00/km    0%     0.00/km    0%     0.00/km    0%     0.00/km    0%
+    → any of the above             0.68/km   18%     2.02/km   49%     3.34/km   63%     2.85/km   69%
+
+  ANY STRONG (turn/stop/jolt)      0.86/km   30%   2.46/km   73%   2.35/km   64%   2.72/km   81%
+  ANY STRONG + HIGHWAY             1.65/km   55%   3.63/km   84%   3.26/km   72%   5.61/km   86%
+
+  traffic_calming breakdown (all drivers): bump 29, hump 28, island 17, table 16, choker 6, chicane 5, rumble_strip 3, cushion 2
+
+  CROSS-CHECK against motion signatures from the vehicle GPS course (MAP_LANDMARK_APPROACH.md §3.4)
+    driver E: roundabouts OSM 0.27/km   vs   detected from motion 0.25/km
+    driver B: roundabouts OSM 0.70/km   vs   detected from motion 0.93/km
+    driver A: roundabouts OSM 0.56/km   vs   detected from motion 1.35/km
+    driver D: roundabouts OSM 0.94/km   vs   detected from motion 1.52/km
+[   91s] wrote out/landmarks_along_routes.csv, data/osm/landmark_passes.parquet, data/osm/landmarks_iovnbd.parquet
+
+[exited with code 0]

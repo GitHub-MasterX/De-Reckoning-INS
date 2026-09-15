@@ -1,0 +1,23 @@
+               total        used        free      shared  buff/cache   available
+Mem:              14           1          10           0           3          12
+[    1s] 28 sessions, 1162 km of track, 2,783 map cells kept
+[   20s]   500,000 drivable ways seen, 27,142 near the routes, 246,586 node refs
+[   30s]   1,000,000 drivable ways seen, 71,512 near the routes, 594,974 node refs
+[   42s]   1,500,000 drivable ways seen, 106,526 near the routes, 847,613 node refs
+[   58s]   2,000,000 drivable ways seen, 139,456 near the routes, 1,042,961 node refs
+[   69s]   2,500,000 drivable ways seen, 173,545 near the routes, 1,225,885 node refs
+[   79s]   3,000,000 drivable ways seen, 204,249 near the routes, 1,389,333 node refs
+[   93s]   3,500,000 drivable ways seen, 234,351 near the routes, 1,525,253 node refs
+[  106s] scan done: 3,933,596 drivable ways, 257,567 near the routes, 1,622,779 node refs, 0 with missing locations; peak memory 4.6 GB
+[  107s] 221,035 junction nodes in the kept cells; 6,569 within 10 m of a track
+[  107s] 8,685 junction passes written
+
+JUNCTIONS ON THE DRIVEN ROUTES   (OSM nodes within 10 m of the track, merged within 25 m)
+
+  driver      km   junctions/km (median gap)  excl. service roads   with a LEFT turn option   with a RIGHT turn option
+  E          731            2.9 /km ( 104 m)       2.0 /km ( 126 m)         1.6 /km, every  142 m         1.7 /km, every  140 m
+  B          105            8.7 /km (  73 m)       6.1 /km (  93 m)         5.6 /km, every   96 m         5.5 /km, every  100 m
+  A          271            9.0 /km (  70 m)       6.4 /km (  90 m)         5.7 /km, every   95 m         6.0 /km, every   95 m
+  D           55           11.3 /km (  66 m)       8.0 /km (  87 m)         7.1 /km, every  101 m         7.7 /km, every   86 m
+
+[exited with code 0]

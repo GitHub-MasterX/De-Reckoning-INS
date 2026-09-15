@@ -1,0 +1,23 @@
+1 · ROUNDABOUTS — motion signature vs OpenStreetMap
+
+  driver  motion events/km    on an OSM roundabout (≤25 m / ≤50 m)   OSM roundabouts seen by motion   speed: on / off OSM
+  E                   0.25                             32% /  36%                              40%           34 / 31 km/h
+  B                   0.93                             26% /  33%                              47%           35 / 28 km/h
+  A                   1.35                             11% /  16%                              60%           29 / 25 km/h
+  D                   1.52                             18% /  24%                              58%           32 / 25 km/h
+
+2 · STOPS — is a mapped stop feature an actual stop?
+
+  driver  signal passes  …with a stop   all stop-tag passes w/ stop  stops/km   stops explained by a mapped feature
+  E                 263           29%                           21%      0.22                                   38%
+  B                 144           31%                           29%      0.60                                   43%
+  A                 352           27%                           24%      0.58                                   38%
+  D                  81           48%                           42%      0.67                                   51%
+
+3 · 1 km BLACKOUTS CONTAINING A LANDMARK
+
+  driver    strong OSM landmark present    USABLE (seen / actually stopped)
+  E                                 30%                                 11%
+  B                                 73%                                 40%
+  A                                 64%                                 38%
+  D                                 81%                                 54%
