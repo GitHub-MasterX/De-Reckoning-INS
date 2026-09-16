@@ -133,6 +133,31 @@ for D in ORDER:
 print("\n  a driver's figures mostly reflect this mix: E is nearly all fast motorway with no turns to match,")
 print("  D is mostly slow and mixed driving with three turns in a kilometre")
 
+# ───────────────────────── 6 · side by side with round 1 ─────────────────────────
+head("6 · SIDE BY SIDE WITH ROUND 1 — progress read on round 1's own metric")
+R1 = pd.read_csv(R2.parent/"out/drift_all_drivers.csv")
+print("  Round 1 scored DISTANCE TRAVELLED error. Round 2 scores 2D POSITION, and also records distance error, so the")
+print("  middle columns compare like with like. Two things differ and should be said aloud when this is shown:")
+print("    · the blackout sets are not the same — round 1 started one every 2 s and sampled at most 200 per session,")
+print("      round 2 starts one every 250 m and requires 5 minutes of history before each")
+print("    · round 1's engine had no heading at all; 2D position was never scored")
+print("  The controlled comparison — identical blackouts, same metric — is 'round 2 no map' against 'with map'.\n")
+print(f"  {'':<8}{'':>10}{'round 1':>12}{'round 2':>12}{'round 2':>12}{'round 2':>15}")
+print(f"  {'driver':<8}{'distance':>10}{'coast':>12}{'no map':>12}{'with map':>12}{'with map, 2D':>15}")
+print(f"  {'':<8}{'':>10}{'distance':>12}{'distance':>12}{'distance':>12}{'position':>15}")
+for D in ORDER:
+    for c in (50, 1000):
+        r1 = R1[(R1.driver == D) & (R1.dist_m == c)]
+        s = P[(P.driver == D) & (P.set == "moving") & (P.checkpoint == c)]
+        if not len(s) or not len(r1):
+            continue
+        rows.append(dict(driver=D, role=ROLE[D], set="round1_vs_round2", distance_m=c, blackouts=len(s),
+                         baseline_pct=s.base_dist.median(), filter_pct=s.pf_dist.median(),
+                         baseline_pass=float(r1.coast.iloc[0]), filter_pass=s.pf_pos.median(),
+                         verdict=verdict(s.pf_dist.median())))
+        print(f"  {D:<8}{c:>8} m{float(r1.coast.iloc[0]):>11.1f}%{s.base_dist.median():>11.1f}%"
+              f"{s.pf_dist.median():>11.1f}%{s.pf_pos.median():>14.1f}%")
+
 pd.DataFrame(rows).round(2).to_csv(R2/"out/round2_results.csv", index=False)
 
 # ───────────────────────── plot ─────────────────────────

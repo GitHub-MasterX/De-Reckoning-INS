@@ -136,6 +136,30 @@ In metres at 1 km: E 95.4, B 49.5, A 54.8, D 30.5 — all inside the 100 m targe
 **Where the map earns its keep:** within 250 m of a real turn, 1 km drift falls from 17.7% to 5.0%. Over 750 m since the
 last turn it rises from 8.2% to 11.2% — nothing pins the guesses along a straight road.
 
+### Against round 1, on round 1's own metric
+
+Round 1 scored distance travelled. Round 2 records that too, so progress can be read like for like at 1 km:
+
+| Driver | Round 1, coast | Round 2, no map | Round 2, with map | Round 2, with map (2D) |
+|---|---|---|---|---|
+| E | 10.2% | 4.8% | 9.4% | 9.5% |
+| B | 16.1% | 14.8% | **5.1%** | 5.0% |
+| A | 16.5% | 12.3% | **5.4%** | 5.5% |
+| D | 19.6% | 19.4% | **3.7%** | 3.0% |
+
+Three things must be said whenever this table is shown:
+
+1. **The blackout sets differ.** Round 1 started one every 2 s and capped each session at 200; round 2 starts one every
+   250 m and needs five minutes of history first. The middle column is the bridge — round 1's kind of engine, measured
+   on round 2's blackouts.
+2. **For driver E the map makes the distance error worse**, 4.8% → 9.4% on identical blackouts. E's apparent gain
+   against round 1 comes from the change of blackout set, not from the map: E is nearly all motorway, the one
+   condition where the map loses.
+3. **The defensible claim is the controlled pair** — identical blackouts, same metric, no map against with map:
+   B 14.8 → 5.1%, A 12.3 → 5.4%, D 19.4 → 3.7%, and in the problem statement's own 50–70 km/h band 19.8 → 5.7% in 2D.
+
+`run_round2_evaluation.py` prints this table as section 6, so it never has to be assembled by hand.
+
 ---
 
 ## 8 · What fails, and why
@@ -161,7 +185,9 @@ Where it wins, a third of the gains land essentially on the spot (1.5% against 1
 2. **Per-driver numbers mostly reflect what each driver drove** — E's kilometres are 74% fast motorway with no turns;
    D's are 47% slow with three turns.
 3. **D is a single session** (83 blackouts at 1 km), the least robust row anywhere.
-4. **Round-1 and round-2 numbers are not comparable**: round 1 scored distance travelled, round 2 scores 2D position.
+4. **Round 1 and round 2 can be compared, but only on distance error** (§7), never round 1's distance figure against
+   round 2's 2D figure. And on that shared metric the map *costs* driver E (4.8% → 9.4%), so E must not be presented
+   as evidence that the map works.
 5. **Slow driving still fails at short range** (13.0% at 50 m) and **fast motorway fails at 1 km** (10.03%).
 6. **No AI was added in round 2.** The map matcher is an algorithm; the only trained model is round 1's motion
    classifier, reused unchanged. The problem statement lists "UKF + Hidden Markov Map Matching" as an acceptable

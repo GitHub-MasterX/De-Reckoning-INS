@@ -327,3 +327,17 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
 - **The dead-reckoning fallback never fired** in the sample, matching step 7's zero re-seeds per blackout: the map
   always had something to say, even when it said the wrong thing.
 - **Written up:** `ROUND2_REPORT.md` — goal, what was built, results, failures, caveats, what is open for round 3.
+
+## 22 · Round 1 against round 2, on one metric — 2026-09-16
+
+- **Why:** show progress side by side without putting distance-travelled error next to 2D position error.
+- **What:** `run_round2_evaluation.py` gained section 6 — round 1's coast (distance error), round 2's map-free baseline
+  (distance error, on round 2's blackouts), the filter's distance error, and its 2D error. Also
+  `PROJECT_SUMMARY.md`, which covers both rounds end to end.
+- **At 1 km** (round 1 → round 2 no map → round 2 with map → 2D with map): E 10.2 → 4.8 → 9.4 → 9.5%;
+  B 16.1 → 14.8 → 5.1 → 5.0%; A 16.5 → 12.3 → 5.4 → 5.5%; D 19.6 → 19.4 → 3.7 → 3.0%.
+- **Finding to carry into any presentation:** on identical blackouts the map makes driver E's distance error **worse**
+  (4.8% → 9.4%). E's apparent gain against round 1 is the blackout selection changing, not the map — E is nearly all
+  motorway, the one condition where the map loses. B, A and D improve three- to five-fold on identical blackouts.
+- **The defensible progress claim** is therefore the controlled pair (same blackouts, no map against with map), not
+  round 1 against round 2.
