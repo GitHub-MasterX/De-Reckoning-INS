@@ -32,6 +32,7 @@ To look at or run round 1 exactly: `git switch --detach round-1`, then `git swit
 | `step7_test.py` | step 7 — runs the frozen filter once on the test drivers D and E |
 | `run_round2_evaluation.py` | round-2 results in one command: per driver, per distance, per condition (reads step 7's output) |
 | `step8_failures.py` | step 8 — why the filter fails when it fails, and the pictures of it |
+| `PROJECT_SUMMARY.md` | **both rounds end to end**: the problem, the dataset, round 1, round 2, the numbers, the caveats, what is open |
 | `ROUND2_REPORT.md` | the round-2 report: what was built, the results, the failures, what is open |
 | `core/` | shared round-2 code: session loading, geodesy, blackout list, driving-condition context, gyro calibration, engine input, motion classifier, dead reckoning, road network, scoring |
 | `analysis/heading_error_sources.py`, `gyro_scale.py`, `gyro_columns.py` | step-2 diagnosis: why gyro heading drifts (scale, jitter, vibration) |
