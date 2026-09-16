@@ -392,3 +392,37 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   today, so its speed-limit weight is almost inactive there. Not measured: how close the mapped roads lie to where cars
   drive, and which roads are missing. Both need drives (step 4 §3).
 - **Memory:** the checks peak at 8 GB.
+
+## 24 · The round-2 engine live on a phone — 2026-09-16
+
+- **Why:** test the engine on a modern phone (Samsung Galaxy M17 5G, SM-M176B, Android 16) with its own sensors, and
+  switch GPS off by hand to make blackouts.
+- **What was on the phone:** an app build whose source was not on this machine. Pulled and decompiled (backup and
+  decompiled classes in `round2/phone_backup/`, untracked). Its "Live ML" mode used a fixed threshold rule rather than
+  the trained classifier, a 0.2 s window, raw phone z-gyro with turns in the wrong direction, a speed that stayed at
+  zero after the first stop, network fixes with no speed or course, and had never been granted location permission.
+- **The phone itself:** STMicroelectronics LSM6DSV accelerometer and gyroscope, 250 Hz, uncalibrated streams too.
+- **Ported to Kotlin** (`round2/android/app/src/main/java/com/sih2026/nav/live/engine/`, untracked app folder): the stop
+  classifier (trees exported from `deploy_all`, unchanged), gyro calibration (window fit, rate fallback), dead
+  reckoning, the road network and the particle filter with the frozen step-6 settings, plus a live orchestrator.
+- **Tested against Python on the laptop (JVM unit tests, all passing):**
+  - classifier, 1,000 IO-VNBD windows: all 26 features bit-identical in every window, 1,000/1,000 decisions equal;
+  - calibration, 20 histories: same method in all, gaps below 1e-12;
+  - dead reckoning, 105,299 rows over 150 blackouts: largest gap 7e-13 m;
+  - particle filter, 150 blackouts x 2 seeds: median 2D drift at 1 km 6.0% / 5.5% against Python's 6.2% / 6.4%
+    (different random numbers, so only distributions can agree); where Python's two seeds agree exactly, the port
+    agrees to 2e-14 points;
+  - live orchestrator on 8 whole sessions: with a fix on every row it reproduces Python's calibration and map-free
+    position 1 km into the blackout to 3e-10 m; with 1 Hz fixes, gyro scale within 1% and drift within Python's
+    seed spread.
+- **On the phone:** installed next to the old app as `com.sih2026.nav.live` ("SIH Nav Live"). Measured: accelerometer
+  and gyroscope 248 Hz, magnetometer 124 Hz, engine rows 10.0 Hz, stop classifier stationary on 97% of rows for a
+  phone lying still (the first 2 s have no window yet), road network loaded from phone storage, 82 MB Java heap.
+  Live mode pauses when the app leaves the screen. GPS was not tested: the phone was indoors.
+- **Road networks on the phone:** cut from the Tamil Nadu network for Chennai, Coimbatore, Madurai, Salem and
+  Tiruchirappalli (widened to 10.60-11.15 N, 78.45-79.05 E after the phone's last known position fell north of the
+  first box).
+- **Every drive is recorded** raw (all sensor events at full rate, every GPS fix including those hidden during a
+  blackout, blackout switches, the engine's 10 Hz output) to `Android/data/com.sih2026.nav.live/files/drives/`.
+- **Not changed:** the engine's logic and settings. In slow town driving the held start speed still runs ahead of
+  the car and can lock the filter onto the wrong junction.

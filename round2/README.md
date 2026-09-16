@@ -40,6 +40,9 @@ To look at or run round 1 exactly: `git switch --detach round-1`, then `git swit
 | `get_tn_map.sh` | downloads the Tamil Nadu map (130 MB, openstreetmap.fr) into `data/osm/`; checks the size and reads every object |
 | `tn_roadnetwork.py` | the Tamil Nadu road network (`data/osm/road_network_tn.npz`) by step 4's rules, measured against England on what the filter uses, map faults and tagged landmarks |
 | `analysis/roadnet_build_check.py` | proves `core/roadnet_build.py` rebuilds step 4's England network array for array |
+| `phone/export_motion_model.py` | round 1's `deploy_all` stop classifier as a tree file for the Android app, plus 1,000 windows scikit-learn scored, for the app's tests |
+| `phone/export_roadnet.py` | a road network cut to a box, in the binary layout the app loads (`data/osm/phone/NAME.roadnet.bin`) |
+| `phone/export_engine_fixture.py`, `phone/export_session_fixture.py` | Python engine reference runs the app's Kotlin port is tested against (calibration, dead reckoning, filter, whole sessions) |
 | `requirements.txt` | round-1 environment + `osmium` |
 | `analysis/osm_landmarks.py` | landmark tags along the routes: roundabouts, signals, bumps, bridges, â€¦ |
 | `analysis/landmark_usable.py` | which of those landmarks the car actually showed (turned at, stopped at) |
@@ -67,6 +70,11 @@ round2/get_tn_map.sh                                            # once, 130 MB â
 .venv/bin/python3 round2/step8_failures.py                      # step 8, why it fails, and the pictures
 .venv/bin/python3 round2/tn_roadnetwork.py                      # Tamil Nadu network, ~2.5 min, ~8 GB RAM (--reuse: 50 s)
 .venv/bin/python3 round2/analysis/roadnet_build_check.py        # the shared build against step 4, ~1 min, 5 GB RAM
+.venv/bin/python3 round2/phone/export_motion_model.py           # phone: classifier trees + test windows
+.venv/bin/python3 round2/phone/export_roadnet.py --box S,W,N,E --name NAME   # phone: a road network for an area
+.venv/bin/python3 round2/phone/export_engine_fixture.py         # phone: reference runs (needs the England map built)
+.venv/bin/python3 round2/phone/export_session_fixture.py        # phone: whole-session reference runs
+# then, in round2/android:  gradle testDebugUnitTest  (the Kotlin engine against all of the above)
 .venv/bin/python3 round2/analysis/osm_landmarks.py              # 91 s
 .venv/bin/python3 round2/analysis/landmark_usable.py            # needs osm_landmarks.py
 .venv/bin/python3 round2/analysis/osm_junctions.py              # 107 s
