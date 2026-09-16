@@ -34,9 +34,12 @@ To look at or run round 1 exactly: `git switch --detach round-1`, then `git swit
 | `step8_failures.py` | step 8 — why the filter fails when it fails, and the pictures of it |
 | `PROJECT_SUMMARY.md` | **both rounds end to end**: the problem, the dataset, round 1, round 2, the numbers, the caveats, what is open |
 | `ROUND2_REPORT.md` | the round-2 report: what was built, the results, the failures, what is open |
-| `core/` | shared round-2 code: session loading, geodesy, blackout list, driving-condition context, gyro calibration, engine input, motion classifier, dead reckoning, road network, scoring |
+| `core/` | shared round-2 code: session loading, geodesy, blackout list, driving-condition context, gyro calibration, engine input, motion classifier, dead reckoning, road network and its build, scoring |
 | `analysis/heading_error_sources.py`, `gyro_scale.py`, `gyro_columns.py` | step-2 diagnosis: why gyro heading drifts (scale, jitter, vibration) |
 | `get_osm_map.sh` | downloads the England map (1.6 GB) into `data/osm/` with a progress bar and MD5 check |
+| `get_tn_map.sh` | downloads the Tamil Nadu map (130 MB, openstreetmap.fr) into `data/osm/`; checks the size and reads every object |
+| `tn_roadnetwork.py` | the Tamil Nadu road network (`data/osm/road_network_tn.npz`) by step 4's rules, measured against England on what the filter uses, map faults and tagged landmarks |
+| `analysis/roadnet_build_check.py` | proves `core/roadnet_build.py` rebuilds step 4's England network array for array |
 | `requirements.txt` | round-1 environment + `osmium` |
 | `analysis/osm_landmarks.py` | landmark tags along the routes: roundabouts, signals, bumps, bridges, … |
 | `analysis/landmark_usable.py` | which of those landmarks the car actually showed (turned at, stopped at) |
@@ -55,12 +58,15 @@ Needs `data/clean/` (round-1 cleaning), the map, and about 5 GB of free RAM for 
 .venv/bin/python3 round2/step2_calibration.py                   # step 2, seconds (needs step 1)
 .venv/bin/python3 round2/step3_deadreckoning.py                 # step 3, seconds (needs steps 1-2)
 round2/get_osm_map.sh                                           # once, 1.6 GB
+round2/get_tn_map.sh                                            # once, 130 MB — Tamil Nadu
 .venv/bin/python3 round2/step4_roadnetwork.py                   # step 4, ~2 min map scan (--reuse: seconds)
 .venv/bin/python3 round2/step5_particlefilter.py --limit 200    # step 5, tuning drivers only
 .venv/bin/python3 round2/step6_tune.py --limit 120              # step 6, ~1 min, freezes out/pf_params.json
 .venv/bin/python3 round2/step7_test.py                          # step 7, the one frozen run on D and E
 .venv/bin/python3 round2/run_round2_evaluation.py               # the results, per driver and per distance
 .venv/bin/python3 round2/step8_failures.py                      # step 8, why it fails, and the pictures
+.venv/bin/python3 round2/tn_roadnetwork.py                      # Tamil Nadu network, ~2.5 min, ~8 GB RAM (--reuse: 50 s)
+.venv/bin/python3 round2/analysis/roadnet_build_check.py        # the shared build against step 4, ~1 min, 5 GB RAM
 .venv/bin/python3 round2/analysis/osm_landmarks.py              # 91 s
 .venv/bin/python3 round2/analysis/landmark_usable.py            # needs osm_landmarks.py
 .venv/bin/python3 round2/analysis/osm_junctions.py              # 107 s

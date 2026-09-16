@@ -341,3 +341,54 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   motorway, the one condition where the map loses. B, A and D improve three- to five-fold on identical blackouts.
 - **The defensible progress claim** is therefore the controlled pair (same blackouts, no map against with map), not
   round 1 against round 2.
+
+## 23 · Tamil Nadu — the map and its road network — 2026-09-16
+
+- **Why:** new drives will be recorded in Tamil Nadu at the phone's full sensor rate, because IO-VNBD's 10 Hz folds
+  vibration onto the acceleration band. Of the engine's parts, only the road network did not carry over.
+- **Download:** `get_tn_map.sh`. Geofabrik has no state-level file for India (the smallest is southern-zone, 557 MB), so
+  the file is openstreetmap.fr's Tamil Nadu extract: 129,997,319 bytes, built 15 Sep 2026. No MD5 is published, so the
+  script checks the size against the server's and reads every object with osmium: 15,617,778 nodes, 2,211,397 ways
+  (1,021,884 highway ways), 8,476 relations.
+- **Difficulty — the first download was bad, and its check never ran.** osmium picks the file format from the extension
+  and `.part` has none it knows. The file was also 146,416,939 bytes, 16.4 MB too large: a resume appended onto an old
+  partial. Deleted and downloaded fresh; the script now names the format and checks the size before reading.
+- **Shared build:** step 4's network build moved into `core/roadnet_build.py`; `step4_roadnetwork.py` itself is
+  unchanged. `analysis/roadnet_build_check.py` rebuilt England with the module: all 23 arrays identical in values and
+  types, with the same 3,933,596 drivable ways seen and 257,567 kept (`out/roadnet_build_check_run.txt`).
+- **Build:** every drivable way in the file, 971,961 (180 more have nodes outside the extract and are dropped) →
+  350,308 km, 7,871,036 nodes, 8,371,998 segments, 16,475,464 drivable directions; `data/osm/road_network_tn.npz`,
+  548 MB, 90 s. The filter's own loader reads it in 9 s and holds 2.7 GB; 200 of 200 random public road segments are
+  found by its nearest-road search.
+- **Against England** (`tn_roadnetwork.py`, `out/tn_roadnet_run.txt`; England = the route-area network the results were
+  measured on, per 100 km of public road unless stated):
+
+  | | England | Tamil Nadu | Chennai | Coimbatore | Madurai |
+  |---|---|---|---|---|---|
+  | junctions per km | 5.13 | 3.40 | 7.57 | 7.10 | 7.32 |
+  | roundabouts | 8.2 | 0.1 | 0.4 | 0.1 | 0.6 |
+  | one-way, % of length | 13.5 | 4.1 | 11.9 | 5.4 | 11.0 |
+  | speed limit tagged, % of length | 30.7 | 2.0 | 2.8 | 3.1 | 6.5 |
+  | dead ends drawn 0.5–5 m short of a road | 2.0 | 0.2 | 0.8 | 0.3 | 0.0 |
+  | cut off (cannot drive back), % of length | 6.1 | 0.3 | 0.1 | 0.1 | 0.2 |
+  | traffic signals | 24.7 | 0.2 | 3.3 | 1.0 | 1.3 |
+  | pedestrian crossings | 72.1 | 0.3 | 1.5 | 0.7 | 0.7 |
+  | speed bumps and other calming | 28.8 | 0.6 | 1.7 | 2.5 | 0.4 |
+  | stop and give-way signs | 21.8 | 0.0 | 0.0 | 0.0 | 0.0 |
+
+  Roads crossing or touching with no junction node: 0.0–0.4 per 100 km everywhere. England's cut-off share is inflated
+  by its region being cut out around the tracks.
+- **Difficulty — the first fault check was wrong.** It counted any two segments within 0.5 m with no shared node, which
+  includes neighbours on the same road separated by a sub-metre segment: 322 places in England and 1,710 in Tamil Nadu.
+  Fixed: two roads joined to each other along the road within 25 m are not a fault. Checked: of the removed pairs, 81%
+  (England) and 73% (Tamil Nadu) join within 1 m; counting every pair not joined within 5 m as a fault would still give
+  under 0.2 per 100 km in both. The numbers above are from the corrected run.
+- **Found in step 4's build:** a segment shorter than 5 cm is dropped without merging its two nodes, which cuts the road
+  there: 6 places in the England network, 30 in Tamil Nadu (0.02 and 0.01 per 100 km). Left alone: changing it would
+  change the network the round-2 results were measured on.
+- **What it means:** Tamil Nadu's map is as well connected as England's, and its cities have denser junctions. That
+  gives more turns to confirm position at, but also more chances of the wrong-junction lock-on seen in Driver A's slow
+  town drives. Tagged landmarks, roundabouts and speed limits are 10–100× rarer; the filter uses only the speed limits
+  today, so its speed-limit weight is almost inactive there. Not measured: how close the mapped roads lie to where cars
+  drive, and which roads are missing. Both need drives (step 4 §3).
+- **Memory:** the checks peak at 8 GB.

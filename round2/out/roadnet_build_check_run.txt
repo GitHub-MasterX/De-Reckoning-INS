@@ -1,0 +1,9 @@
+[    0s] 28 sessions, 2,783 map cells around the tracks
+[   18s]   1,000,000 drivable ways seen, 71,512 kept, 594,974 node references
+[   34s]   2,000,000 drivable ways seen, 139,456 kept, 1,042,961 node references
+[   47s]   3,000,000 drivable ways seen, 204,249 kept, 1,389,333 node references
+[   62s] scan done: 3,933,596 drivable ways seen, 257,567 kept, 1,622,779 node references, 0 with missing locations; peak memory 4.9 GB
+
+  23 arrays compared with data/osm/road_network.npz
+  EVERY ARRAY IDENTICAL — values and types: the shared build reproduces step 4's England network exactly
+[   73s] done

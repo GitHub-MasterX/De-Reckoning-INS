@@ -213,6 +213,11 @@ Where it wins, a third of the gains land essentially on the spot (1.5% against 1
 4. **Driver E's phone reports about 54% of every real turn** — calibrated out, but not explained.
 5. **The Android app and the edge engine** are not built; the work so far is the engine's logic, proven offline.
 6. **Nothing is pushed to GitHub** — tag `round-1` and branch `round-2` exist only on this machine.
+7. **Own recordings in Tamil Nadu** — IO-VNBD's 10 Hz sampling folds vibration onto the acceleration band, so new
+   drives will be recorded at the phone's full rate. The state's road network is built and checked
+   (`tn_roadnetwork.py`, 350,308 km): junctions and connectivity are as good as England's, but tagged landmarks,
+   roundabouts and speed limits are ten to a hundred times rarer. How close the mapped roads lie to where cars
+   actually drive can only be measured once there are drives.
 
 ---
 

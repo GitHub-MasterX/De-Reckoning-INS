@@ -1,0 +1,102 @@
+[    0s] reusing data/osm/road_network_tn.npz
+[    0s] reusing data/osm/landmarks_tn.parquet
+[   11s] networks loaded: England 3,623,700 pieces in 362 tiles, Tamil Nadu 39,845,351 pieces in 5,551 tiles
+[   11s] England: checking
+[   14s] England: 7 crossings or touches without a node, 391 dead ends short of a road, 178 one-way traps, 1,616 roundabouts, 35,602 of 167,524 tagged landmarks on a public road
+[   14s] Tamil Nadu: checking
+[   38s] Tamil Nadu: 155 crossings or touches without a node, 716 dead ends short of a road, 86 one-way traps, 393 roundabouts, 6,699 of 7,473 tagged landmarks on a public road
+
+================================================================================================================
+2 · THE NETWORK — whole files: England's is the roads around the IO-VNBD routes, Tamil Nadu's the whole state
+================================================================================================================
+  England     1,315,332 nodes ·  1,365,205 segments ·   2,549,969 drivable directions ·   29,389 km of road
+             one-way 13% of length · roundabouts 206 km · private or no access 7% · car-park aisles and driveways 9% · speed limit tagged 31%
+  Tamil Nadu  7,871,036 nodes ·  8,371,998 segments ·  16,475,464 drivable directions ·  350,308 km of road
+             one-way 4% of length · roundabouts 35 km · private or no access 1% · car-park aisles and driveways 0% · speed limit tagged 2%
+
+  road class        England km   share   Tamil Nadu km   share
+  unclassified           3,810   13.0%         124,431   35.5%
+  residential            8,393   28.6%         108,969   31.1%
+  tertiary               2,931   10.0%          59,757   17.1%
+  secondary              1,204    4.1%          17,417    5.0%
+  primary                  949    3.2%          14,487    4.1%
+  service                9,280   31.6%          11,414    3.3%
+  trunk                  1,514    5.2%          10,323    2.9%
+  living_street             55    0.2%           1,895    0.5%
+  road                       1    0.0%             620    0.2%
+  trunk_link               106    0.4%             342    0.1%
+  tertiary_link             13    0.0%             266    0.1%
+  motorway                 952    3.2%             254    0.1%
+  primary_link              16    0.1%              92    0.0%
+  secondary_link             5    0.0%              23    0.0%
+  motorway_link            159    0.5%              19    0.0%
+
+================================================================================================================
+3 · WHAT THE FILTER USES — public roads are every class but service roads, without car parks or private roads
+================================================================================================================
+  junctions     nodes where three or more public-road segments meet, per km: each is a place a turn can pin the car to
+  roundabouts   physical roundabouts per 100 km
+  one-way       share of road length drivable one way only; the filter never lets a guess drive against it
+  speed limit   share of road length with a maxspeed tag; the filter's speed-limit weight needs one
+  bridges       share of road length on a bridge or flyover
+
+  region               road km  public km  junctions  roundabouts   one-way  speed limit   bridges
+                                              per km   per 100 km  % length     % length  % length
+  England (routes)      28,986     19,642       5.13          8.2     13.5%        30.7%      0.5%
+  Tamil Nadu           350,308    337,644       3.40          0.1      4.1%         2.0%      0.4%
+  Chennai               16,418     13,624       7.57          0.4     11.9%         2.8%      0.9%
+  Coimbatore             6,698      6,403       7.10          0.1      5.4%         3.1%      1.0%
+  Madurai                2,872      2,769       7.32          0.6     11.0%         6.5%      1.6%
+  Tiruchirappalli        3,675      3,393       6.42          0.8      7.9%         3.3%      1.1%
+  Salem                  2,065      2,052       6.71          0.1      9.1%         3.0%      1.3%
+
+  England rows cover the 28,986 km of its 29,389 km network inside the England landmark scan's rectangle.
+
+================================================================================================================
+4 · MAP FAULTS THAT BREAK THE FILTER — per 100 km of public road
+================================================================================================================
+  crossing, no node    places where two roads on the same level cross with no shared node: a missing junction —
+                       the car can turn there and the network cannot — or a flyover with no bridge tag
+  touching, no node    places where two roads come within 0.5 m with no shared node: a junction drawn unjoined
+  dead end short       dead ends 0.5–5 m from another road they are not joined to: usually a junction drawn short
+  one-way trap         nodes a guess can drive into but not out of: every guess that enters dies
+  cut off              share of road length outside the largest part where every road can be driven to and back
+  islands              share of road length not joined to the largest part at all
+
+  region              crossing, no node  touching, no node  dead end short  one-way trap   cut off   islands
+                             per 100 km         per 100 km      per 100 km    per 100 km  % length  % length
+  England (routes)                  0.0                0.0             2.0           0.9      6.1%      4.5%
+  Tamil Nadu                        0.0                0.0             0.2           0.0      0.3%      0.3%
+  Chennai                           0.1                0.0             0.8           0.1      0.1%      0.1%
+  Coimbatore                        0.4                0.0             0.3           0.0      0.1%      0.1%
+  Madurai                           0.0                0.1             0.0           0.1      0.2%      0.1%
+  Tiruchirappalli                   0.0                0.1             0.1           0.0      0.2%      0.2%
+  Salem                             0.0                0.0             0.3           0.0      0.0%      0.0%
+
+  across Tamil Nadu, 13 of the 155 places crossing or touching without a node are between two main roads (motorway to tertiary):
+    0.02 m apart  tertiary way 670236449 × tertiary way 670236449   https://www.openstreetmap.org/#map=19/10.573299/78.935305
+    crossing      tertiary way 829098817 × primary way 1530651182   https://www.openstreetmap.org/#map=19/12.146203/79.097409
+    0.01 m apart  tertiary way 213196574 × tertiary way 213198070   https://www.openstreetmap.org/#map=19/11.542490/77.507108
+    crossing      tertiary way 829092463 × primary way 1530651182   https://www.openstreetmap.org/#map=19/12.137459/79.100421
+    0.02 m apart  secondary way 104170109 × primary way 1390424526   https://www.openstreetmap.org/#map=19/11.641628/77.951682
+
+  every Tamil Nadu fault, with its OSM ways and a map link: round2/out/tn_map_faults.csv (957 rows)
+
+================================================================================================================
+5 · TAGGED LANDMARKS — per 100 km of public road, on or within 15 m of one; the filter does not use these today
+================================================================================================================
+  region                     signals   stop/give way       crossings     speed bumps   mini r'abouts level crossings     toll booths
+  England (routes)              24.7            21.8            72.1            28.8             3.5             0.4             0.0
+  Tamil Nadu                     0.2             0.0             0.3             0.6             0.0             0.8             0.1
+  Chennai                        3.3             0.0             1.5             1.7             0.0             0.6             0.1
+  Coimbatore                     1.0             0.0             0.7             2.5             0.0             0.5             0.2
+  Madurai                        1.3             0.0             0.7             0.4             0.0             1.0             0.2
+  Tiruchirappalli                0.4             0.0             0.3             0.8             0.1             2.8             0.0
+  Salem                          0.3             0.0             0.7             0.5             0.0             1.8             0.0
+
+================================================================================================================
+6 · THE FILTER'S LOADER — core/roadnet.RoadNetwork on the Tamil Nadu file
+================================================================================================================
+  loads in 9 s and holds 2.7 GB (18,414,517 points in the nearest-road index)
+  200/200 random public road segments found by the filter's own nearest-road search at their midpoints, driving their allowed way
+[   48s] done
