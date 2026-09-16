@@ -138,14 +138,22 @@ last turn it rises from 8.2% to 11.2% — nothing pins the guesses along a strai
 
 ### Against round 1, on round 1's own metric
 
-Round 1 scored distance travelled. Round 2 records that too, so progress can be read like for like at 1 km:
+Every number here is **drift** — how far the estimate ends from the truth, as a share of the distance driven. The
+column headings are **engines**, meaning whose drift it is. Round 1 scored distance travelled; round 2 records that
+too, so progress reads like for like at 1 km:
 
-| Driver | Round 1, coast | Round 2, no map | Round 2, with map | Round 2, with map (2D) |
-|---|---|---|---|---|
-| E | 10.2% | 4.8% | 9.4% | 9.5% |
-| B | 16.1% | 14.8% | **5.1%** | 5.0% |
-| A | 16.5% | 12.3% | **5.4%** | 5.5% |
-| D | 19.6% | 19.4% | **3.7%** | 3.0% |
+| Driver | Round 1, coast | Round 2, no map | Round 2, with map | Floor: perfect speed | Round 2, with map (2D) |
+|---|---|---|---|---|---|
+| E | 10.2% | 4.8% | 9.4% | 0.9% | 9.5% |
+| B | 16.1% | 14.8% | **5.1%** | 0.9% | 5.0% |
+| A | 16.5% | 12.3% | **5.4%** | 1.5% | 5.5% |
+| D | 19.6% | 19.4% | **3.7%** | 1.2% | 3.0% |
+
+- **coast** — round 1's engine: hold the last GPS speed and keep going, with no heading and no map.
+- **no map** — round 2's engine without the map: gyro heading, held GPS speed, stop detection.
+- **with map** — the same engine with the particle filter on the road network.
+- **floor** — round 1's oracle, the true speed fed in: what any engine would score if the speed estimate were
+  perfect. The gap between "with map" and the floor is what remains to be won, and it is still mostly speed.
 
 Three things must be said whenever this table is shown:
 

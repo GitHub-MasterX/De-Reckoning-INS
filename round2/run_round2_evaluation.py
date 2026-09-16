@@ -136,15 +136,22 @@ print("  D is mostly slow and mixed driving with three turns in a kilometre")
 # ───────────────────────── 6 · side by side with round 1 ─────────────────────────
 head("6 · SIDE BY SIDE WITH ROUND 1 — progress read on round 1's own metric")
 R1 = pd.read_csv(R2.parent/"out/drift_all_drivers.csv")
-print("  Round 1 scored DISTANCE TRAVELLED error. Round 2 scores 2D POSITION, and also records distance error, so the")
-print("  middle columns compare like with like. Two things differ and should be said aloud when this is shown:")
+print("  Every number in this file is DRIFT — how far the estimate ends from the truth, as a share of the distance")
+print("  driven. The column names are ENGINES, meaning whose drift it is:")
+print("    coast     round 1's engine: hold the last GPS speed and keep going (no heading, no map)")
+print("    no map    round 2's engine without the map: gyro heading + held GPS speed + stop detection")
+print("    with map  the same engine with the particle filter on the road network")
+print("    floor     round 1's oracle: the true speed fed in, so only the maths and the 10 Hz sampling remain —")
+print("              what any engine would score if the speed estimate were perfect\n")
+print("  Round 1 scored DISTANCE TRAVELLED drift. Round 2 scores 2D POSITION drift and records distance drift too, so")
+print("  the first four columns compare like with like. Two things differ and should be said aloud when this is shown:")
 print("    · the blackout sets are not the same — round 1 started one every 2 s and sampled at most 200 per session,")
 print("      round 2 starts one every 250 m and requires 5 minutes of history before each")
 print("    · round 1's engine had no heading at all; 2D position was never scored")
-print("  The controlled comparison — identical blackouts, same metric — is 'round 2 no map' against 'with map'.\n")
-print(f"  {'':<8}{'':>10}{'round 1':>12}{'round 2':>12}{'round 2':>12}{'round 2':>15}")
-print(f"  {'driver':<8}{'distance':>10}{'coast':>12}{'no map':>12}{'with map':>12}{'with map, 2D':>15}")
-print(f"  {'':<8}{'':>10}{'distance':>12}{'distance':>12}{'distance':>12}{'position':>15}")
+print("  The controlled comparison — identical blackouts, same metric — is 'no map' against 'with map'.\n")
+print(f"  {'':<8}{'':>10}{'round 1':>12}{'round 2':>12}{'round 2':>12}{'round 1':>10}{'round 2':>15}")
+print(f"  {'driver':<8}{'distance':>10}{'coast':>12}{'no map':>12}{'with map':>12}{'floor':>10}{'with map, 2D':>15}")
+print(f"  {'':<8}{'':>10}{'distance':>12}{'distance':>12}{'distance':>12}{'distance':>10}{'position':>15}")
 for D in ORDER:
     for c in (50, 1000):
         r1 = R1[(R1.driver == D) & (R1.dist_m == c)]
@@ -156,7 +163,7 @@ for D in ORDER:
                          baseline_pass=float(r1.coast.iloc[0]), filter_pass=s.pf_pos.median(),
                          verdict=verdict(s.pf_dist.median())))
         print(f"  {D:<8}{c:>8} m{float(r1.coast.iloc[0]):>11.1f}%{s.base_dist.median():>11.1f}%"
-              f"{s.pf_dist.median():>11.1f}%{s.pf_pos.median():>14.1f}%")
+              f"{s.pf_dist.median():>11.1f}%{float(r1.oracle.iloc[0]):>9.1f}%{s.pf_pos.median():>14.1f}%")
 
 pd.DataFrame(rows).round(2).to_csv(R2/"out/round2_results.csv", index=False)
 

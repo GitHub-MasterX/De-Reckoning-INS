@@ -115,23 +115,31 @@ round 2 · 4,129 blackouts · settings frozen on A+B: q_speed=0.4, sigma_turn_de
 ========================================================================================================
 6 · SIDE BY SIDE WITH ROUND 1 — progress read on round 1's own metric
 ========================================================================================================
-  Round 1 scored DISTANCE TRAVELLED error. Round 2 scores 2D POSITION, and also records distance error, so the
-  middle columns compare like with like. Two things differ and should be said aloud when this is shown:
+  Every number in this file is DRIFT — how far the estimate ends from the truth, as a share of the distance
+  driven. The column names are ENGINES, meaning whose drift it is:
+    coast     round 1's engine: hold the last GPS speed and keep going (no heading, no map)
+    no map    round 2's engine without the map: gyro heading + held GPS speed + stop detection
+    with map  the same engine with the particle filter on the road network
+    floor     round 1's oracle: the true speed fed in, so only the maths and the 10 Hz sampling remain —
+              what any engine would score if the speed estimate were perfect
+
+  Round 1 scored DISTANCE TRAVELLED drift. Round 2 scores 2D POSITION drift and records distance drift too, so
+  the first four columns compare like with like. Two things differ and should be said aloud when this is shown:
     · the blackout sets are not the same — round 1 started one every 2 s and sampled at most 200 per session,
       round 2 starts one every 250 m and requires 5 minutes of history before each
     · round 1's engine had no heading at all; 2D position was never scored
-  The controlled comparison — identical blackouts, same metric — is 'round 2 no map' against 'with map'.
+  The controlled comparison — identical blackouts, same metric — is 'no map' against 'with map'.
 
-                         round 1     round 2     round 2        round 2
-  driver    distance       coast      no map    with map   with map, 2D
-                        distance    distance    distance       position
-  E             50 m        2.6%        1.0%        1.0%           2.5%
-  E           1000 m       10.2%        4.8%        9.4%           9.5%
-  B             50 m        3.2%        2.8%        2.8%           3.8%
-  B           1000 m       16.1%       14.8%        5.1%           5.0%
-  A             50 m        5.2%        2.8%        2.8%           4.2%
-  A           1000 m       16.5%       12.3%        5.4%           5.5%
-  D             50 m        5.3%        3.4%        3.4%           5.0%
-  D           1000 m       19.6%       19.4%        3.7%           3.0%
+                         round 1     round 2     round 2   round 1        round 2
+  driver    distance       coast      no map    with map     floor   with map, 2D
+                        distance    distance    distance  distance       position
+  E             50 m        2.6%        1.0%        1.0%      1.2%           2.5%
+  E           1000 m       10.2%        4.8%        9.4%      0.9%           9.5%
+  B             50 m        3.2%        2.8%        2.8%      1.2%           3.8%
+  B           1000 m       16.1%       14.8%        5.1%      0.9%           5.0%
+  A             50 m        5.2%        2.8%        2.8%      1.7%           4.2%
+  A           1000 m       16.5%       12.3%        5.4%      1.5%           5.5%
+  D             50 m        5.3%        3.4%        3.4%      1.4%           5.0%
+  D           1000 m       19.6%       19.4%        3.7%      1.2%           3.0%
 
 wrote round2/out/round2_results.csv and round2/out/plots/r2_drift_by_driver.png
