@@ -75,6 +75,8 @@ round2/get_tn_map.sh                                            # once, 130 MB â
 .venv/bin/python3 round2/phone/export_engine_fixture.py         # phone: reference runs (needs the England map built)
 .venv/bin/python3 round2/phone/export_session_fixture.py        # phone: whole-session reference runs
 # then, in round2/android:  gradle testDebugUnitTest  (the Kotlin engine against all of the above)
+# replay drives pulled from the phone (adb pull /sdcard/Android/data/com.sih2026.nav.live/files/drives/ <folder>):
+#   gradle testDebugUnitTest --tests '*DriveReplayTest*' -Ddrive=<folder>
 .venv/bin/python3 round2/analysis/osm_landmarks.py              # 91 s
 .venv/bin/python3 round2/analysis/landmark_usable.py            # needs osm_landmarks.py
 .venv/bin/python3 round2/analysis/osm_junctions.py              # 107 s

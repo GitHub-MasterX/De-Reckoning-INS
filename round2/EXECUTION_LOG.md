@@ -426,3 +426,39 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   blackout, blackout switches, the engine's 10 Hz output) to `Android/data/com.sih2026.nav.live/files/drives/`.
 - **Not changed:** the engine's logic and settings. In slow town driving the held start speed still runs ahead of
   the car and can lock the filter onto the wrong junction.
+
+## 25 · A 248 Hz engine next to round 2 — 2026-09-17
+
+- **Why:** the under-40 km/h failure is speed: round 2 holds the last GPS speed, and a car slowing from 61 to 34 km/h
+  leaves the estimate running ahead. At 10 Hz the accelerometer could not help (round 1: vibration folds onto the
+  0–2 Hz vehicle band). The phone samples at 248 Hz, so vibration can be averaged away before the 10 Hz step.
+- **Built** (Kotlin, `round2/android`, untracked):
+  - `ImuStream` — one 10 Hz row per 100 ms with both the sample at the tick (what round 1's classifier and round 2 were
+    built on) and the time-weighted mean of every sample in the interval. Used identically live and in replay.
+  - `Calibration.gravityAxis` — the gyro window fit with the turning axis pinned to gravity. On Android the
+    accelerometer and gyroscope share a frame; the free-axis fit, needed for IO-VNBD's mixed conventions, is
+    undetermined off the vertical when driving only turns, and a speed breaker's pitch could then read as a turn.
+  - `MountCalibration` — the car's up, right and forward axes in the phone frame from GPS history: up from the average
+    accelerometer, right from the accelerometer's swing against speed × turn rate, forward = up × right; scale and
+    offset for each.
+  - `SpeedEstimator` — a Kalman filter on speed and forward bias: forward acceleration between readings, speed =
+    sideways acceleration ÷ turn rate once per second of steady turning, zero speed and a bias reading at stops.
+    Settings are physical first guesses, untuned.
+  - The live engine runs both in every blackout: round 2 unchanged (samples, held speed) and the 248 Hz engine (means,
+    estimated speed; the particle filter's guesses follow the estimated change of speed). A third cursor in the app.
+  - `DriveReplay` — replays a phone recording through the same code and scores it as round 2 scored IO-VNBD: a start
+    every 250 m after 5 min of history above 15 km/h, 1 km blackouts, drift at 50–1000 m against the phone's GPS,
+    plus the stop classifier and the speed estimate against GPS speed.
+- **Tested on simulated drives only** (`SyntheticCar`: tilted mount, gravity, 1.5% slope, biases, noise, 27 Hz engine
+  and 12–90 Hz road vibration, speed breakers, 250 Hz events with jitter, 1 Hz GPS with 2 m noise). This checks the
+  code, not real roads:
+  - mount axes recovered to 0.2–0.4°; 248 Hz gyro scale ×1.008 on an axis 0.4° from vertical (the free-axis fit
+    gave ×2.2 on the same data);
+  - a blackout starting at 61 km/h, braking to 34 km/h, corners every ~100 m, a stop and 8 speed breakers: speed error
+    8.0 m/s held against 1.0 m/s estimated; 2D drift without the map 64.7% (round 2) against 2.5% (248 Hz);
+  - a 7.1 km simulated recording written in the phone's format and replayed: 15 blackouts to 1 km, median drift
+    without the map 5.6% (round 2) against 2.1% (248 Hz); map numbers meaningless there, the simulated route ignores
+    roads.
+- **All earlier port tests still pass unchanged** — round 2's path on the phone is untouched.
+- **Open:** every setting of the speed estimator, and whether real vibration, mounts and roads behave like the
+  simulation. That needs recorded drives, replayed with DriveReplay, tuned on some drives and tested on others.
