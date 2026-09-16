@@ -1,0 +1,8 @@
+{
+  "q_speed": 0.4,
+  "sigma_turn_deg": 10.0,
+  "sigma_abs_deg": 15.0,
+  "dr_blend_m": 100.0,
+  "straight_blend_m": 0.0,
+  "n": 500
+}

@@ -673,10 +673,16 @@ road-constrained particle filter; no new model training.
 4. **Road network from OSM** — **done 2026-09-16** (`step4_roadnetwork.py`): 29,389 km of drivable road around the
    routes; 99.5% of the true driving lies on a mapped road in an allowed direction (median offset 2 m), and 98.7% of
    consecutive positions connect through it.
-5. **Map matcher:** road-constrained particle filter — hypotheses of road, position and speed, weighted by the gyro
-   heading against the road heading; "no mapped road" fallback.
-6. **Tune on A and B only**, and freeze the settings.
-7. **Test once on D and E.**
+5. **Map matcher** — **done 2026-09-16** (`core/particle.py`, `step5_particlefilter.py`): road-constrained particle
+   filter — guesses of road, position and speed, weighed by the gyro's turning against the roads they drive, with a
+   fallback to plain dead reckoning.
+6. **Tune on A and B only, and freeze** — **done 2026-09-16** (`step6_tune.py`): on the tuning subset 50 m 2.5%
+   (baseline 2.5%), 200 m 5.8% (6.8%), 1 km 4.9% (14.3%), with 25% of blackouts worse than no map.
+7. **Test once on D and E** — **done 2026-09-16** (`step7_test.py`): at 1 km on the test drivers, the frozen filter cuts
+   the 2D error from 19.8% to **5.7%** in the problem statement's 50–70 km/h condition (18% → 63% of blackouts within
+   10%), from 26.2% to 6.6% in slow driving and from 22.9% to 9.3% in mixed. On fast motorways it is worse than no map
+   (8.3% → 10.0%), which is where 58% of the test blackouts sit, so the pooled figure moves only 10.3% → 9.4%. At 50 m
+   nothing changes: below 100 m the engine reports plain dead reckoning by design.
 8. **Failure analysis and write-up.**
 
 ---

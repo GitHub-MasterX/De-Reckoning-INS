@@ -1,0 +1,28 @@
+[    2s] 120 blackouts prepared from 9 sessions · 500 particles · 6 settings to try
+  map-free baseline on this subset — 50 m: 2.5% · 200 m: 6.8% · 1000 m: 14.3%
+[    8s]   q_speed=0.25, sigma_turn_deg=10.0, sigma_abs_deg=15.0, dr_blend_m=100.0, straight_blend_m=0.0  ->  50 m 2.5% · 200 m 4.7% · 1 km 7.3% · worse than no map 28%
+[   14s]   q_speed=0.25, sigma_turn_deg=10.0, sigma_abs_deg=15.0, dr_blend_m=100.0, straight_blend_m=150.0  ->  50 m 2.5% · 200 m 4.5% · 1 km 8.7% · worse than no map 17%
+[   19s]   q_speed=0.25, sigma_turn_deg=10.0, sigma_abs_deg=15.0, dr_blend_m=100.0, straight_blend_m=300.0  ->  50 m 2.5% · 200 m 4.7% · 1 km 8.5% · worse than no map 18%
+[   25s]   q_speed=0.4, sigma_turn_deg=10.0, sigma_abs_deg=15.0, dr_blend_m=100.0, straight_blend_m=0.0  ->  50 m 2.5% · 200 m 5.8% · 1 km 4.9% · worse than no map 25%
+[   31s]   q_speed=0.4, sigma_turn_deg=10.0, sigma_abs_deg=15.0, dr_blend_m=100.0, straight_blend_m=150.0  ->  50 m 2.5% · 200 m 5.2% · 1 km 6.8% · worse than no map 14%
+[   37s]   q_speed=0.4, sigma_turn_deg=10.0, sigma_abs_deg=15.0, dr_blend_m=100.0, straight_blend_m=300.0  ->  50 m 2.5% · 200 m 5.8% · 1 km 6.2% · worse than no map 13%
+
+========================================================================================================
+1 · EVERY SETTING TRIED, best 1 km first
+========================================================================================================
+ q_speed  sigma_turn_deg  sigma_abs_deg  dr_blend_m  straight_blend_m  p50_50  p50_200  p50_1000  pass_50  pass_200  pass_1000  worse_1000  ess_1000  seconds
+    0.40            10.0           15.0       100.0               0.0   2.453    5.791     4.900     85.0      72.0       68.0        25.0   426.293    5.720
+    0.40            10.0           15.0       100.0             300.0   2.453    5.791     6.208     85.0      72.0       62.0        13.0   426.293    5.783
+    0.40            10.0           15.0       100.0             150.0   2.453    5.204     6.775     85.0      72.0       63.0        14.0   426.293    5.783
+    0.25            10.0           15.0       100.0               0.0   2.453    4.689     7.350     85.0      70.0       62.0        28.0   423.076    5.668
+    0.25            10.0           15.0       100.0             300.0   2.453    4.689     8.533     85.0      70.0       57.0        18.0   423.076    5.731
+    0.25            10.0           15.0       100.0             150.0   2.453    4.536     8.705     85.0      69.0       56.0        17.0   423.076    5.740
+
+========================================================================================================
+2 · THE CHOICE
+========================================================================================================
+  settings whose 50 m median is within 1 point of the baseline's 2.5%: 6 of 6
+  chosen: q_speed=0.4, sigma_turn_deg=10.0, sigma_abs_deg=15.0, dr_blend_m=100.0, straight_blend_m=0.0, n=500
+  on the tuning subset: 50 m 2.5% (baseline 2.5%) · 200 m 5.8% (6.8%) · 1 km 4.9% (14.3%) · worse than no map at 1 km 25%
+  written: round2/out/pf_params.json
+[   37s] done

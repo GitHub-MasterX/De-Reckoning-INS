@@ -112,3 +112,33 @@ every real tunnel in the region, which makes it a demanding test.
 | **Kept for later** | roundabout, bridge, tunnel, layer, private access, car-park aisle, speed limit (tagged on 31% of length) | attributes the filter may use |
 | **Stored** | `data/osm/road_network.npz` (git-ignored, 93 MB): nodes, segments, drivable directions, the directions leaving each node; loaded by `core/roadnet.py` | |
 | **Carried into step 5, to be tuned** | one-way as a strong rule with a small escape chance, not absolute; hypotheses may hop to a road within about 15 m; hypotheses keep their level where roads are stacked | the checks found real one-way conflicts (0.1% of distance, clustered in central Coventry), unconnected hops on the stacked Coventry ring road, and a few links missing from the map |
+
+---
+
+## 2026-09-16 · Step 5 — the particle filter
+
+| Rule | Value | Why |
+|---|---|---|
+| **A guess** | which drivable direction of which road, how far along it, how fast (`core/particle.py`) | the road network carries the position, so only along-road position and speed are free |
+| **Moving** | every 0.1 s a guess drives on; its speed wanders (`q_speed`); at a junction it takes an exit, favouring the one nearest the gyro's heading (`sigma_choice_deg`) and slightly favouring roads of the same standing | the exit choice is a prior on driver behaviour, not a measurement |
+| **Weighing** | every 2 s: the turning the guess's roads produced against the gyro's turning (`sigma_turn_deg`), the road's direction against the gyro's heading (`sigma_abs_deg`), and a penalty for exceeding a tagged speed limit | this is the turn-matching idea, applied continuously, gentle bends included |
+| **Resampling** | when the effective number of guesses falls below half, with a little jitter added | standard particle filter |
+| **Fallback** | if every guess disagrees for three updates, re-seed around plain dead reckoning; if no road is near the fix at all, report plain dead reckoning | covers car parks, unmapped roads and wrong lock-ons |
+| **Handover from the fix** (`dr_blend_m`) | report plain dead reckoning until 100 m from the fix, then hand over to the map over the next 100 m | right after a fix, dead reckoning beats snapping to a road centreline: every setting without this sat at 7.7% at 50 m against the baseline's 2.5% |
+| **Output** | the weighted centre of the strongest group of guesses | a plain mean would sit between two rival roads |
+
+---
+
+## 2026-09-16 · Step 6 — tuning, on A and B only
+
+**Rule, fixed before any result was seen:** the lowest median 2D error at 1 km, among settings whose 50 m median is
+within 1 point of the map-free baseline; ties to the smaller share of blackouts made worse.
+**Refined once, disclosed:** several settings tied on both ruled numbers, leaving the choice to row order, so the
+200 m median now breaks such ties (`EXECUTION_LOG.md` entry 18).
+
+| | |
+|---|---|
+| **Frozen settings** | `q_speed=0.4`, `sigma_turn_deg=10`, `sigma_abs_deg=15`, `dr_blend_m=100`, `straight_blend_m=0`, 500 guesses — `out/pf_params.json` |
+| **On the tuning subset** | 50 m 2.5% (baseline 2.5%) · 200 m 5.8% (6.8%) · 1 km 4.9% (14.3%) · worse than no map at 1 km: 25% of blackouts |
+| **Disclosed trade-off** | handing back to dead reckoning on long straights (`straight_blend_m=300`) gives a worse median at 1 km (6.2%) but nearly halves the harm (13% of blackouts worse). The pre-stated rule optimises the median, so it was not chosen; worth revisiting if reliability matters more than the median |
+| **Test set** | D and E are read once, in step 7, with these settings; no tuning after that |

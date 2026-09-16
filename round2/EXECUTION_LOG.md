@@ -219,3 +219,63 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   one-way blocks (70%); reordered.
 - **Carried into step 5:** one-way strong but not absolute, short hops to nearby roads allowed, hypotheses keep their
   level on stacked roads.
+
+## 17 · Step 5 — the particle filter — 2026-09-16
+
+- **Why:** the correction itself: guesses of road, position and speed, weighed by how the gyro's turning matches the
+  roads they drive (`core/particle.py`, `step5_particlefilter.py`).
+- **Speed:** about 0.06 s per blackout with 500 guesses — 0.08 ms per simulated second.
+- **First smoke test (12 blackouts, 300 guesses):** 1 km 13.1% → 3.7%, but 50 m 4.4% → 9.6%. The start was scattered by
+  up to 8 m around a fix that is actually good, so the scatter dominated at short range. Tightened the start spread
+  (`sigma_pos0` 8 → 5 m, `sigma_off0` 4 → 1.5 m).
+- **200 blackouts, 500 guesses:** 50 m 3.0% → 7.4%, 200 m 6.9% → 5.2%, 1 km 12.5% → 6.7%; 83 of 200 blackouts came out
+  worse than no map at 1 km.
+- **Where it helps and hurts** (1 km, by distance since the last real turn): within 250 m of a turn 12.5% → 3.7%;
+  500–750 m 15.7% → 20.6%; over 750 m 8.6% → 12.2%. With no turn to pin it down, the guess cloud smears along the road
+  and loses to plain coasting.
+- **Difficulty:** after resampling, the guesses are reordered, and an anchor computed from the pre-resample weights
+  would have paired weights with the wrong guesses. Fixed before tuning.
+
+## 18 · Step 6 — tuning on A and B only — 2026-09-16
+
+- **Rule, fixed in the script before any result:** lowest median 2D error at 1 km among settings whose 50 m median is
+  within 1 point of the map-free baseline; ties to the smaller share made worse.
+- **First sweep, 24 settings** (speed wander, speed pull, turn and heading tolerances): every setting sat at about 7.7%
+  at 50 m against the baseline's 2.5%, so **no setting cleared the guard** and the script fell through to the best 1 km
+  result. Disclosed rather than accepted: the cause is structural — a fresh fix beats snapping to a road centreline.
+- **Fix:** a handover distance (`dr_blend_m`) — plain dead reckoning until that far from the fix, then the map.
+- **Second sweep, 16 settings:** 12 cleared the guard. Best 1 km 4.9% with 50 m back to the baseline's 2.5%. Handovers
+  of 100, 200 and 300 m tied on both ruled numbers, so the choice fell to row order; the tie-break now uses the 200 m
+  median (5.8% at 100 m against 6.8% at 300 m). **Disclosed: the tie-break was refined after seeing the tie**, on
+  checkpoints the rule had not ruled on.
+- **Third sweep, 6 settings**, after adding a handover on long straights (coast on from the last map-corrected point):
+  off → 1 km 4.90%, 25% of blackouts worse than no map; 300 m → 6.21%, 13% worse; 150 m → 6.78%, 14% worse. The
+  pre-stated rule optimises the median, so **off** was frozen; the trade-off is recorded in `DECISIONS.md` for a later
+  round, not quietly swapped in.
+- **Frozen:** `q_speed=0.4`, `sigma_turn_deg=10`, `sigma_abs_deg=15`, `dr_blend_m=100`, `straight_blend_m=0`, 500
+  guesses → `out/pf_params.json`; sweep table in `out/tuning.csv`, log in `out/step6_run.txt`.
+
+## 19 · Step 7 — the frozen filter, run once on D and E — 2026-09-16
+
+- **Why:** the single test of the frozen settings on drivers never used for tuning. Nothing was changed afterwards.
+- **Run:** 191 s. 4,262 start points — 2,842 blackouts for D+E from 17 sessions, 1,358 for A+B. Seeded on a road 100% of
+  the time, one failed re-seed. Output `out/step7_run.txt`, `out/test_errors.parquet`.
+- **2D error at 1 km, D+E (test), baseline → filter, with the share within the PS 10%:**
+  - slow (under 40 km/h) 26.2% → **6.6%** (11% → 56%)
+  - mixed (40–50) 22.9% → **9.3%** (18% → 53%)
+  - **50–70 km/h, the problem statement's condition: 19.8% → 5.7%** (18% → 63%)
+  - fast (70+) 8.3% → **10.0%** (60% → 50%) — the only condition where the map hurts
+- **At 50 m nothing changes** (2.6% median, 90% within 5 m): below 100 m from the fix the engine reports plain dead
+  reckoning by design.
+- **Pooled D+E at 1 km:** 10.3% → 9.4%, pass 48% → 53%. The pool is dominated by fast motorway blackouts (1,739 of 2,421),
+  so it hides the gains in every other condition.
+- **Per driver at 1 km, moving:** E 10.2 → 9.5%, B 15.4 → 5.0%, A 13.1 → 5.5%, D 15.2 → 3.0%.
+  Stop-and-go: E 11.1 → 10.0%, B 18.5 → 7.8%, A 17.5 → 8.9%, D 18.2 → 6.2%.
+- **By distance since the last real turn (D+E):** within 250 m 17.7 → 5.0%; 250–500 m 13.8 → 8.1%; 500–750 m 11.7 → 9.5%;
+  over 750 m 8.2 → 11.2%. That last group holds 1,411 of 2,421 blackouts — mostly E's motorway driving — and is where
+  the map loses.
+- **Harm:** 49% of D+E blackouts end worse than no map (median 15.0% against 7.4%); A+B 31%.
+- **Deliberately not acted on:** the straight-road handover (`straight_blend_m=300`) targets exactly the "over 750 m
+  since a turn" case, and on A+B it nearly halved the harm (13% against 25%) for a worse median (6.2% against 4.9%).
+  Changing it now would be tuning on the test set. It is the first candidate for round 3, to be settled on A+B and then
+  tested once more — each further test of D+E weakens what the test means.

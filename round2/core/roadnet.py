@@ -51,6 +51,43 @@ class RoadNetwork:
         self.sample_seg = seg
         self.tree = cKDTree(np.c_[self.sx0[seg] + frac*(self.sx1[seg] - self.sx0[seg]),
                                   self.sy0[seg] + frac*(self.sy1[seg] - self.sy0[seg])])
+        self.edge_len = self.seg_len[self.edge_seg]
+        self.edge_rev = np.where(self.edge_dir > 0, self.seg_edge_bwd[self.edge_seg],
+                                 self.seg_edge_fwd[self.edge_seg])       # the same road driven the other way
+
+    def candidates(self, lat, lon, heading, radius=25.0, max_bearing_deg=60.0):
+        """Every drivable direction within `radius` of one point whose bearing is within `max_bearing_deg` of
+        `heading` (rad): edge ids, distance (m), bearing difference (rad), and how far along the edge the point is (m)."""
+        x, y = xy(lat, lon)
+        near = self.tree.query_ball_point([float(x), float(y)], r=radius + SAMPLE_M/2 + 1.0)
+        empty = (np.empty(0, np.int64), np.empty(0), np.empty(0), np.empty(0))
+        if not near:
+            return empty
+        segs = np.unique(self.sample_seg[np.asarray(near, np.int64)])
+        ax, ay = self.sx0[segs], self.sy0[segs]
+        dx, dy = self.sx1[segs] - ax, self.sy1[segs] - ay
+        t = np.clip(((x - ax)*dx + (y - ay)*dy)/np.maximum(dx*dx + dy*dy, 1e-9), 0.0, 1.0)
+        dist = np.hypot(x - (ax + t*dx), y - (ay + t*dy))
+        keep = dist <= radius
+        segs, t, dist = segs[keep], t[keep], dist[keep]
+        if not len(segs):
+            return empty
+        tol = np.radians(max_bearing_deg)
+        out = []
+        for sign, drivable, edge_of in ((1, self.seg_fwd, self.seg_edge_fwd), (-1, self.seg_bwd, self.seg_edge_bwd)):
+            m = drivable[segs]
+            if not m.any():
+                continue
+            s = segs[m]
+            dpsi = np.abs(wrap(heading - (self.seg_bearing[s] + (0.0 if sign > 0 else np.pi))))
+            ok = dpsi <= tol
+            if not ok.any():
+                continue
+            along = (t[m][ok] if sign > 0 else 1.0 - t[m][ok])*self.seg_len[s][ok]
+            out.append((edge_of[s][ok], dist[m][ok], dpsi[ok], along))
+        if not out:
+            return empty
+        return tuple(np.concatenate([o[k] for o in out]) for k in range(4))
 
     def edge_of(self, seg, dirn):
         """Directed edge id of segment `seg` driven in direction `dirn` (+1 u→v, -1 v→u); -1 if not drivable."""

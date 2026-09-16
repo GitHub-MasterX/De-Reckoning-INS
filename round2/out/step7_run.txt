@@ -1,0 +1,100 @@
+[    1s] settings {'q_speed': 0.4, 'sigma_turn_deg': 10.0, 'sigma_abs_deg': 15.0, 'dr_blend_m': 100.0, 'straight_blend_m': 0.0, 'n': 500} · calibration window · 4,262 start points · network 1,365,205 segments
+[    2s]   M/0 (B) — 0/4,262 start points done
+[   11s]   M/1 (B) — 142/4,262 start points done
+[   13s]   M/2 (B) — 175/4,262 start points done
+[   25s]   S1/0 (A) — 371/4,262 start points done
+[   35s]   S2/1 (A) — 508/4,262 start points done
+[   55s]   S3a/0 (A) — 794/4,262 start points done
+[   60s]   S3b/1 (A) — 884/4,262 start points done
+[   60s]   S3c/0 (A) — 888/4,262 start points done
+[   68s]   S4/0 (A) — 1,047/4,262 start points done
+[   75s]   S4/1 (A) — 1,146/4,262 start points done
+[   86s]   Vfa01/0 (E) — 1,371/4,262 start points done
+[   88s]   Vfa02/0 (E) — 1,421/4,262 start points done
+[  104s]   Vta16/0 (E) — 2,055/4,262 start points done
+[  105s]   Vta17/1 (E) — 2,091/4,262 start points done
+[  105s]   Vta1a/0 (E) — 2,093/4,262 start points done
+[  111s]   Vta2/0 (E) — 2,242/4,262 start points done
+[  113s]   Vta28/0 (E) — 2,268/4,262 start points done
+[  113s]   Vta29/0 (E) — 2,272/4,262 start points done
+[  118s]   Vta30/0 (E) — 2,366/4,262 start points done
+[  120s]   Vta8/0 (E) — 2,392/4,262 start points done
+[  120s]   Vtb2/0 (E) — 2,395/4,262 start points done
+[  120s]   Vtb5/0 (E) — 2,399/4,262 start points done
+[  136s]   Vw11/0 (E) — 2,833/4,262 start points done
+[  136s]   Vw2/0 (E) — 2,846/4,262 start points done
+[  147s]   Vw3/0 (E) — 3,225/4,262 start points done
+[  147s]   Vw4/0 (E) — 3,228/4,262 start points done
+[  178s]   Y1/3 (D) — 4,069/4,262 start points done
+[  191s] 40,046 scored checkpoints from 4,129 blackouts -> round2/out/test_errors.parquet
+
+============================================================================================================
+1 · WHAT RAN
+============================================================================================================
+  settings frozen in step 6 on A+B only: q_speed=0.4, sigma_turn_deg=10.0, sigma_abs_deg=15.0, dr_blend_m=100.0, straight_blend_m=0.0, n=500
+  D+E (test)     2,842 blackouts · 17 sessions · seeded on a road 100% · re-seeds per blackout 0.00 · failed re-seeds 1
+  A+B (tuning)   1,358 blackouts · 10 sessions · seeded on a road 100% · re-seeds per blackout 0.00 · failed re-seeds 0
+
+============================================================================================================
+2 · 2D POSITION ERROR — frozen filter against the step-3 map-free baseline (median · share within the PS 10%)
+============================================================================================================
+
+  D+E (test)
+  group     km/h  checkpoint  blackouts              baseline         particle filter
+  slow      0-40        50 m        273           13.0%   40%             13.0%   40%
+  slow      0-40      1000 m         98           26.2%   11%              6.6%   56%
+  mixed    40-50        50 m        263            6.0%   78%              6.0%   78%
+  mixed    40-50      1000 m        177           22.9%   18%              9.3%   53%
+  ps_60    50-70        50 m        477            4.1%   90%              4.1%   90%
+  ps_60    50-70      1000 m        407           19.8%   18%              5.7%   63%
+  fast       70+        50 m      1,852            1.9%  100%              1.9%  100%
+  fast       70+      1000 m      1,739            8.3%   60%             10.0%   50%
+
+  A+B (tuning)
+  group     km/h  checkpoint  blackouts              baseline         particle filter
+  slow      0-40        50 m        474           12.8%   42%             12.8%   42%
+  slow      0-40      1000 m        172           18.4%   20%              3.4%   65%
+  mixed    40-50        50 m        303            4.2%   88%              4.2%   88%
+  mixed    40-50      1000 m        144           16.8%   29%              4.0%   72%
+  ps_60    50-70        50 m        322            2.4%   93%              2.4%   93%
+  ps_60    50-70      1000 m        214           14.1%   39%              5.6%   63%
+  fast       70+        50 m        226            1.2%  100%              1.2%  100%
+  fast       70+      1000 m        168            7.3%   64%              7.0%   65%
+
+============================================================================================================
+3 · THE PROBLEM STATEMENT'S BENCHMARKS — 5 m over 50 m, 100 m over 1 km (moving set)
+============================================================================================================
+  split           checkpoint  blackouts     baseline: median · pass     filter: median · pass
+  D+E (test)            50 m      2,865                2.6% ·  90%                2.6% ·  90%
+  D+E (test)          1000 m      2,421               10.3% ·  48%                9.4% ·  53%
+  A+B (tuning)          50 m      1,325                4.0% ·  75%                4.0% ·  75%
+  A+B (tuning)        1000 m        698               13.8% ·  38%                5.4% ·  65%
+
+============================================================================================================
+4 · BY DISTANCE SINCE THE LAST REAL TURN (or since GPS was lost) — 1 km, moving set
+============================================================================================================
+  split         distance back     blackouts    baseline    filter
+  D+E (test)    0-250 m                 548       17.7%      5.0%
+  D+E (test)    250-500 m               293       13.8%      8.1%
+  D+E (test)    500-750 m               169       11.7%      9.5%
+  D+E (test)    over 750 m            1,411        8.2%     11.2%
+  A+B (tuning)  0-250 m                 344       15.5%      3.2%
+  A+B (tuning)  250-500 m               119       14.1%      5.3%
+  A+B (tuning)  500-750 m                64       15.9%     15.2%
+  A+B (tuning)  over 750 m              171        8.2%      9.6%
+
+============================================================================================================
+5 · PER DRIVER AND STOP-AND-GO — median 2D position error, baseline | filter
+============================================================================================================
+  set        checkpoint            driver E            driver B            driver A            driver D
+  moving           50 m         2.5% | 2.5%         3.8% | 3.8%         4.2% | 4.2%         5.0% | 5.0%
+  moving         1000 m        10.2% | 9.5%        15.4% | 5.0%        13.1% | 5.5%        15.2% | 3.0%
+  stopgo           50 m         2.5% | 2.5%         3.9% | 3.9%         4.5% | 4.5%         5.2% | 5.2%
+  stopgo         1000 m       11.1% | 10.0%        18.5% | 7.8%        17.5% | 8.9%        18.2% | 6.2%
+
+============================================================================================================
+6 · DIAGNOSTICS
+============================================================================================================
+  D+E (test)    effective guesses 465/500 · from the map (not the fallback) 100% · worse than no map 49% of blackouts (median 15.0% against 7.4%)
+  A+B (tuning)  effective guesses 417/500 · from the map (not the fallback) 100% · worse than no map 31% of blackouts (median 18.4% against 7.7%)
+[  191s] done
