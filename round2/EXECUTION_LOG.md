@@ -298,3 +298,32 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   65% (A), 70% (D).
 - **Condition mix, 1 km blackouts:** E is 74% fast motorway with a median of 0 turns; D is 47% slow and 40% mixed with 3
   turns; A and B sit between. That mix, not driver skill, is what the per-driver numbers mostly reflect.
+
+## 21 · Step 8 — why the filter fails, and the round-2 report — 2026-09-16
+
+- **Why:** name the failure modes rather than leave "49% worse than no map" as a bare number, and write the round up.
+- **Run:** 21 s. `step8_failures.py` re-ran 400 of the 3,119 scored 1 km blackouts **with the whole path recorded**:
+  the 200 worst by margin plus 200 drawn at random. Output `out/step8_run.txt`, `out/failure_cases.csv`,
+  `out/plots/r2_failures.png`.
+- **Sampling caveat, stated everywhere it is quoted:** that sample is deliberately biased towards failures, so its
+  287-of-400 "worse" count is not a rate. The rates are step 7's: 49% of test blackouts, 31% of tuning ones.
+- **Difficulty — the first classifier was wrong.** It called a case "wrong road" only when the OSM way id differed, so a
+  long way that curves away counted as the same road. Its own figure showed a case labelled "along the road" whose path
+  clearly took another branch. Replaced by a geometric test: the estimate is off the route when it ends more than 30 m
+  from the track the car actually drove. The numbers below are from the corrected run; the first run's shares
+  (straight road 53%, wrong road 32%) are superseded.
+- **Second correction, same day:** the along/across split was measured against the heading at the finish line, so an
+  estimate stuck 600 m back along a curving route was filed as "sideways". Replaced by an along-route lag: how far back
+  along the driven track the estimate sits. Numbers below are from that third, final run; the shares of the second run
+  (along 22%, wins "along the road" 41%) are superseded.
+- **Why it loses** (share of the failures · with map · no map): off the route 48% · 29.8% · 9.5% (ending a median 251 m
+  from the driven track); straight road 29% · 23.4% · 6.9%; along the road 23% · 40.5% · 17.0%; on the spot 1% (ties).
+- **By condition, among failures:** fast motorway splits between leaving the route (48%) and sliding along a straight
+  (42%); mixed leaves the route (60%), slow and 50–70 km/h fail mostly by speed error along the route (50% and 44%)
+  with leaving the route close behind (47% and 42%).
+- **Why it wins:** 33% of the improvements are straights (2.8% against 9.5%), 30% land essentially on the spot (1.5%
+  against 15.7%), 23% are still off the route but much closer (6.8% against 15.8%) and 14% are along-route corrections
+  (7.6% against 26.4%).
+- **The dead-reckoning fallback never fired** in the sample, matching step 7's zero re-seeds per blackout: the map
+  always had something to say, even when it said the wrong thing.
+- **Written up:** `ROUND2_REPORT.md` — goal, what was built, results, failures, caveats, what is open for round 3.

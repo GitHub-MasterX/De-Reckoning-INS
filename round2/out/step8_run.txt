@@ -1,0 +1,33 @@
+[    1s] 3,119 blackouts at 1 km · re-running 400 of them (the 200 worst, plus a random sample)
+[   19s] 400 blackouts classified
+
+====================================================================================================
+1 · WHY THE FILTER LOSES — blackouts where it ended worse than no map (1 km, no stops)
+====================================================================================================
+  re-ran 400 blackouts — the worst by margin plus a random sample, so these shares describe the
+  failures, not how often they happen. 287 ended worse than no map, 113 as good or better.
+
+  cause              worse   share   median error   no-map error  median turns  since last turn   off route
+  along the road        65     23%          40.5%          17.0%             2            482 m         2 m
+  off the route        137     48%          29.8%           9.5%             0           1000 m       251 m
+  sideways               3      1%           3.2%           1.4%             1            496 m         3 m
+  straight road         82     29%          23.4%           6.9%             0           1001 m         3 m
+
+  for contrast, the blackouts it improved:
+  cause              count   share   median error   no-map error  median turns  since last turn   off route
+  along the road        16     14%           7.6%          26.4%             2            181 m         2 m
+  off the route         26     23%           6.8%          15.8%             1            325 m        60 m
+  sideways              34     30%           1.5%          15.7%             2            240 m         4 m
+  straight road         37     33%           2.8%           9.5%             0           1001 m         3 m
+
+====================================================================================================
+2 · BY DRIVING CONDITION — share of the re-run blackouts that ended worse, and why
+====================================================================================================
+  group     re-run   worse  along the road   off the route        sideways   straight road
+  fast         223     75%              8%             48%              2%             42%
+  mixed         45     67%             33%             60%              0%              7%
+  ps_60         85     67%             44%             42%              0%             14%
+  slow          47     68%             50%             47%              0%              3%
+
+  drew 5 cases -> round2/out/plots/r2_failures.png
+[   20s] done

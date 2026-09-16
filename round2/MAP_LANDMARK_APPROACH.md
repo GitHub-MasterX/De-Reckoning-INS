@@ -686,7 +686,11 @@ road-constrained particle filter; no new model training.
    Per driver at 1 km with the map: E 9.5%, B 5.0%, A 5.5%, D 3.0% — **every driver is under 10% at every checkpoint**
    from 50 m to 1 km, and in metres 95.4 / 49.5 / 54.8 / 30.5 m against the 100 m target. `run_round2_evaluation.py`
    prints the whole table; the medians pass, while 52–70% of individual blackouts are inside 10%.
-8. **Failure analysis and write-up.**
+8. **Failure analysis and write-up** — **done 2026-09-16** (`step8_failures.py`, `ROUND2_REPORT.md`): of the blackouts
+   the filter loses, 48% end off the driven route entirely (a median 251 m away — a wrong branch or parallel road),
+   29% slide along a straight with no turn to match, 23% are speed errors along the right route and 1% are ties. The
+   dead-reckoning fallback never fired. Where it wins, 30% of the gains land essentially on the spot (1.5% against
+   15.7%) and 33% are straights (2.8% against 9.5%) — the sawtooth working.
 
 ---
 
