@@ -1,0 +1,95 @@
+round 2 · 4,129 blackouts · settings frozen on A+B: q_speed=0.4, sigma_turn_deg=10.0, sigma_abs_deg=15.0, dr_blend_m=100.0, straight_blend_m=0.0, n=500
+2D position error = distance between the estimate and the true position, as a share of the distance driven
+
+==================================================================================================
+1 · PER DRIVER — 2D position error, no stops (median · share within the PS 10%)
+==================================================================================================
+
+  Driver E (test driver) — 2,678 blackouts at 50 m, 2,338 at 1 km
+      distance  blackouts    no map   with map      no map   with map
+          50 m      2,678      2.5%       2.5%         92%        92%
+         100 m      2,649      3.5%       3.5%         85%        86%
+         200 m      2,603      5.0%       3.0%         76%        85%
+         500 m      2,485      7.7%       6.2%         61%        69%
+        1000 m      2,338     10.2%       9.5%         49%        52%
+
+  Driver B (tuning driver) — 363 blackouts at 50 m, 183 at 1 km
+      distance  blackouts    no map   with map      no map   with map
+          50 m        363      3.8%       3.8%         77%        77%
+         100 m        346      5.2%       5.2%         70%        70%
+         200 m        332      8.6%       5.9%         54%        66%
+         500 m        261     13.7%       5.2%         40%        69%
+        1000 m        183     15.4%       5.0%         34%        66%
+
+  Driver A (tuning driver) — 962 blackouts at 50 m, 515 at 1 km
+      distance  blackouts    no map   with map      no map   with map
+          50 m        962      4.2%       4.2%         74%        74%
+         100 m        935      6.0%       5.9%         64%        65%
+         200 m        857      8.4%       5.3%         56%        70%
+         500 m        699     11.4%       5.3%         44%        68%
+        1000 m        515     13.1%       5.5%         40%        65%
+
+  Driver D (test driver) — 187 blackouts at 50 m, 83 at 1 km
+      distance  blackouts    no map   with map      no map   with map
+          50 m        187      5.0%       5.0%         71%        71%
+         100 m        176      6.8%       6.8%         62%        62%
+         200 m        161     11.5%       6.7%         46%        65%
+         500 m        123     13.1%       3.8%         37%        76%
+        1000 m         83     15.2%       3.0%         31%        70%
+
+==================================================================================================
+2 · THE SAME IN METRES — median error, against the problem statement's targets
+==================================================================================================
+  driver                    50 m                 100 m                 200 m                 500 m                1000 m
+               no map | with map     no map | with map     no map | with map     no map | with map     no map | with map
+  E                1.2 m | 1.2 m         3.5 m | 3.5 m        10.1 m | 6.1 m       38.7 m | 30.9 m      102.1 m | 95.4 m
+  B                1.9 m | 1.9 m         5.2 m | 5.2 m       17.1 m | 11.9 m       68.3 m | 26.0 m      153.6 m | 49.5 m
+  A                2.1 m | 2.1 m         6.0 m | 5.9 m       16.7 m | 10.7 m       57.1 m | 26.5 m      130.7 m | 54.8 m
+  D                2.5 m | 2.5 m         6.8 m | 6.8 m       23.0 m | 13.3 m       65.7 m | 18.9 m      151.7 m | 30.5 m
+
+  targets: under 5 m at 50 m, under 100 m at 1 km (both are the same 10% of distance)
+
+==================================================================================================
+3 · PER DRIVING CONDITION — the round-2 headline, test drivers D and E
+==================================================================================================
+  group       km/h   distance  blackouts    no map   with map              within 10%
+  slow        0-40       50 m        273     13.0%      13.0%            40% →  40%
+  slow        0-40      100 m        263     19.3%      18.6%            24% →  25%
+  slow        0-40      200 m        220     24.0%      14.6%            15% →  37%
+  slow        0-40      500 m        163     24.8%       6.6%            13% →  58%
+  slow        0-40     1000 m         98     26.2%       6.6%            11% →  56%
+  mixed      40-50       50 m        263      6.0%       6.0%            78% →  78%
+  mixed      40-50      100 m        239      8.2%       8.2%            61% →  62%
+  mixed      40-50      200 m        253     13.0%       7.4%            38% →  60%
+  mixed      40-50      500 m        221     19.7%       8.0%            19% →  53%
+  mixed      40-50     1000 m        177     22.9%       9.3%            18% →  53%
+  ps_60      50-70       50 m        477      4.1%       4.1%            90% →  90%
+  ps_60      50-70      100 m        475      5.8%       5.7%            75% →  76%
+  ps_60      50-70      200 m        454      9.0%       6.4%            54% →  69%
+  ps_60      50-70      500 m        432     14.3%       7.6%            29% →  58%
+  ps_60      50-70     1000 m        407     19.8%       5.7%            18% →  63%
+  fast         70+       50 m      1,852      1.9%       1.9%           100% → 100%
+  fast         70+      100 m      1,848      2.6%       2.6%            98% →  98%
+  fast         70+      200 m      1,837      3.9%       2.4%            92% →  97%
+  fast         70+      500 m      1,792      6.2%       5.7%            77% →  76%
+  fast         70+     1000 m      1,739      8.3%      10.0%            60% →  50%
+
+==================================================================================================
+4 · STOP-AND-GO BLACKOUTS — stops allowed inside the blackout
+==================================================================================================
+  driver                  50 m               100 m               200 m               500 m              1000 m
+  E                2.5% | 2.5%         3.5% | 3.5%         5.2% | 3.2%         8.4% | 6.6%       11.1% | 10.0%
+  B                3.9% | 3.9%         5.5% | 5.5%        10.3% | 6.2%        15.9% | 6.0%        18.5% | 7.8%
+  A                4.5% | 4.5%         6.8% | 6.7%        10.2% | 6.3%        14.6% | 7.0%        17.5% | 8.9%
+  D                5.2% | 5.2%         7.8% | 7.7%        13.5% | 7.1%        18.6% | 5.3%        18.2% | 6.2%
+
+==================================================================================================
+5 · WHAT EACH DRIVER'S 1 km BLACKOUTS ARE MADE OF — share by driving condition
+==================================================================================================
+  driver          slow       mixed       ps_60        fast   turns in 1 km
+  E                 3%          6%         17%         74%               0
+  B                25%         31%         37%          8%               3
+  A                24%         17%         29%         30%               2
+  D                47%         40%         13%          0%               3
+
+wrote round2/out/round2_results.csv and round2/out/plots/r2_drift_by_driver.png

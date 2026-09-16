@@ -683,6 +683,9 @@ road-constrained particle filter; no new model training.
    10%), from 26.2% to 6.6% in slow driving and from 22.9% to 9.3% in mixed. On fast motorways it is worse than no map
    (8.3% → 10.0%), which is where 58% of the test blackouts sit, so the pooled figure moves only 10.3% → 9.4%. At 50 m
    nothing changes: below 100 m the engine reports plain dead reckoning by design.
+   Per driver at 1 km with the map: E 9.5%, B 5.0%, A 5.5%, D 3.0% — **every driver is under 10% at every checkpoint**
+   from 50 m to 1 km, and in metres 95.4 / 49.5 / 54.8 / 30.5 m against the 100 m target. `run_round2_evaluation.py`
+   prints the whole table; the medians pass, while 52–70% of individual blackouts are inside 10%.
 8. **Failure analysis and write-up.**
 
 ---

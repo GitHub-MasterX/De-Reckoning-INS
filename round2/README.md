@@ -30,6 +30,7 @@ To look at or run round 1 exactly: `git switch --detach round-1`, then `git swit
 | `step5_particlefilter.py` | step 5 — the road-constrained particle filter, tried on the tuning drivers |
 | `step6_tune.py` | step 6 — tunes the filter on A and B only and freezes the settings (`out/pf_params.json`) |
 | `step7_test.py` | step 7 — runs the frozen filter once on the test drivers D and E |
+| `run_round2_evaluation.py` | round-2 results in one command: per driver, per distance, per condition (reads step 7's output) |
 | `core/` | shared round-2 code: session loading, geodesy, blackout list, driving-condition context, gyro calibration, engine input, motion classifier, dead reckoning, road network, scoring |
 | `analysis/heading_error_sources.py`, `gyro_scale.py`, `gyro_columns.py` | step-2 diagnosis: why gyro heading drifts (scale, jitter, vibration) |
 | `get_osm_map.sh` | downloads the England map (1.6 GB) into `data/osm/` with a progress bar and MD5 check |
@@ -55,6 +56,7 @@ round2/get_osm_map.sh                                           # once, 1.6 GB
 .venv/bin/python3 round2/step5_particlefilter.py --limit 200    # step 5, tuning drivers only
 .venv/bin/python3 round2/step6_tune.py --limit 120              # step 6, ~1 min, freezes out/pf_params.json
 .venv/bin/python3 round2/step7_test.py                          # step 7, the one frozen run on D and E
+.venv/bin/python3 round2/run_round2_evaluation.py               # the results, per driver and per distance
 .venv/bin/python3 round2/analysis/osm_landmarks.py              # 91 s
 .venv/bin/python3 round2/analysis/landmark_usable.py            # needs osm_landmarks.py
 .venv/bin/python3 round2/analysis/osm_junctions.py              # 107 s

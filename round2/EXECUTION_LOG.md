@@ -279,3 +279,22 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   since a turn" case, and on A+B it nearly halved the harm (13% against 25%) for a worse median (6.2% against 4.9%).
   Changing it now would be tuning on the test set. It is the first candidate for round 3, to be settled on A+B and then
   tested once more — each further test of D+E weakens what the test means.
+
+## 20 · Round-2 results, driver by driver — 2026-09-16
+
+- **Why:** report in round 1's format (`run_evaluation.py`) — per driver, per distance — from what step 7 already saved.
+  Nothing is re-run and nothing is retuned.
+- **Script:** `run_round2_evaluation.py` → `out/round2_results.csv`, `out/plots/r2_drift_by_driver.png`, log
+  `out/round2_results_run.txt`.
+- **With the map, every driver is under 10% at every distance** (no stops), at 50 / 100 / 200 / 500 / 1000 m:
+  E 2.5 / 3.5 / 3.0 / 6.2 / 9.5% · B 3.8 / 5.2 / 5.9 / 5.2 / 5.0% · A 4.2 / 5.9 / 5.3 / 5.3 / 5.5% ·
+  D 5.0 / 6.8 / 6.7 / 3.8 / 3.0%.
+- **In metres:** at 1 km E 95.4 m, B 49.5 m, A 54.8 m, D 30.5 m, all inside the 100 m target; at 50 m 1.2–2.5 m against
+  the 5 m target.
+- **The map never lowers a driver's median at any distance.** Its one loss stays inside the condition breakdown — fast
+  motorway at 1 km, 8.3% → 10.0% — which E's own median absorbs.
+- **Stop-and-go:** every driver at or under 10% at every distance — E 10.0% at 1 km (on the line), B 7.8%, A 8.9%, D 6.2%.
+- **Caveat kept in view:** these are medians. At 1 km the share of individual blackouts inside 10% is 52% (E), 66% (B),
+  65% (A), 70% (D).
+- **Condition mix, 1 km blackouts:** E is 74% fast motorway with a median of 0 turns; D is 47% slow and 40% mixed with 3
+  turns; A and B sit between. That mix, not driver skill, is what the per-driver numbers mostly reflect.
