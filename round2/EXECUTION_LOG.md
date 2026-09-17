@@ -552,3 +552,16 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
 - **Stops:** the classifier found 511 of 2,198 stopped rows (23%), calling 1.5% of moving rows stopped.
 - **Caveats:** one test ride; the 58 blackouts overlap (a start every 250 m, each 1 km), so they are far from 58
   independent measurements; still well above the 10% goal overall and under 40 km/h.
+
+## 29 · The trip stored as three segments — 2026-09-17
+
+- **The three rides are one trip:** outbound (ride 1, 12:04–12:41, 18.55 km), the requested 10-minute tuning ride at the
+  destination (ride 2, 13:35–13:45, 2.59 km), return (ride 3, 14:01–14:44, 17.9 km); the return starts where the tuning
+  ride ended and ends near where the outbound began. Access to the bike has ended: this is the whole real dataset.
+- **Stored locally** in `round2/phone_data/` (git-ignored through `round2/.gitignore`; location traces): `raw/` every
+  recording as pulled, `segments/` each segment cut to its riding plus a minute either side, `index.json`, a README,
+  and the replay results per segment.
+- **Replayed per segment** (entry 28's frozen settings), median 2D drift at 1 km with the map, round 2 against 248 Hz:
+  outbound (tuning) 22.1% against 18.4% (52 blackouts); return (test) 24.0% against 15.8% (56), at 50–70 km/h 18.7%
+  against 8.7% (31); town segment too short for 1 km blackouts (3 automatic, at 500 m 67.0% against 30.6%).
+  Trimming the return's walking tail moved its figures from 24.9% / 16.0% to 24.0% / 15.8%.
