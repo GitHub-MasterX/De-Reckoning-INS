@@ -21,8 +21,8 @@ and tag `round-1` have **never been pushed** (remote: `github.com/GitHub-MasterX
 | Path | Size | What | Must copy by hand? |
 |---|---|---|---|
 | `round2/android/` | 5.8 MB without `build/` | **the whole Android app: the replay app plus the live 248 Hz engine, all Kotlin, all tests.** The most valuable untracked thing | **yes** |
-| `round2/phone_data/` | recordings | the only real dataset (3 segments + 6 raw recordings), git-ignored because they are location traces | **yes** — cannot be re-recorded, bike access has ended |
-| `data/osm/` | ~0.4 GB | England + Tamil Nadu pbf, `road_network*.npz`, landmarks; `data/osm/phone/` the phone networks and test fixtures | can be rebuilt (commands in §6), but slow |
+| `round2/phone_data/` | 354 MB | the only real dataset (3 segments + 6 raw recordings), git-ignored because they are location traces | **yes** — cannot be re-recorded, bike access has ended |
+| `data/osm/` | 2.6 GB | England + Tamil Nadu pbf, `road_network*.npz`, landmarks; `data/osm/phone/` the phone networks and test fixtures | can be rebuilt (commands in §6), but slow |
 | `round2/phone_backup/` | 16 MB | the app as it was on the phone before any change (APK) + jadx decompile | nice to have |
 | `round2/step9_export_replay.py`, `round2/out/replay/`, `round2/out/step9_run.txt` | small | exporter for the replay clips (documented in `android/README.md`) and its output | yes, if the replay app is kept |
 | `round2/analysis/leak_check.py`, `round2/out/leak_check_run.txt` | small | proves no ground truth after a blackout starts reaches the engine (poisons it, re-runs, bit-identical) | yes |
