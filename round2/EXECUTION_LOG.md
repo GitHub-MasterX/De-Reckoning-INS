@@ -527,3 +527,28 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
 - **Lesson for the next rides:** calibration needs several real turns ridden above ~9 km/h before a blackout; ride 1
   had them by minute 8.
 - **Installed on the phone:** the frozen build.
+
+## 28 · Ride 3, the test on the same route — 2026-09-17
+
+- **Fetched:** `drive_20260917_140117` (58.1 min; riding for about 37 min on the ride-1 NH38 corridor, 18.5 km, top
+  74 km/h, 11 manual blackouts, then walking pace), `135926` (1.8 min, standing), `151440` (107 min of walking or
+  parked near the campus, GPS gaps up to 14 min — not a ride; still recording when fetched).
+- **Replayed with the settings frozen after ride 1** (entry 27), nothing changed for it. 58 automatic 1 km blackouts,
+  median 2D drift with the map, round 2 against the 248 Hz engine:
+
+  | | 50 m | 100 m | 200 m | 500 m | 1 km |
+  |---|---|---|---|---|---|
+  | all (58) | 4.6% / 4.3% | 6.4% / 4.8% | 5.6% / 6.1% | 12.9% / 13.5% | **24.9% / 16.0%** |
+  | under 40 km/h (20 at 1 km) | 7.7% / 6.5% | 15.6% / 15.2% | 43.5% / 35.0% | 43.8% / 45.7% | 72.9% / 51.0% |
+  | 50–70 km/h (31) | 4.5% / 4.2% | 5.3% / 4.7% | 5.1% / 4.8% | 10.8% / 12.3% | 18.7% / **8.7%** |
+
+  Without the map at 1 km: 31.5% against 17.2%. The direction matches ride 1 (22.3% against 18.9%).
+- **Where the gain came from:** heading only. The speed error in blackouts was identical for both engines in every band
+  (under 40 km/h 11.9 m/s RMS): the vehicle-axes fit was trusted only between minutes 26 and 30 (r 0.67–0.77), so the
+  accelerometer speed never engaged in a scored blackout. The 248 Hz gyro fit (rotation about true vertical) calibrated
+  from minute 16 at scale 0.82–0.92, close to ride 1's 0.83–0.95; round 2's free-axis fit wandered from 0.50 to 0.82.
+- **Manual blackouts, drift at the end:** the 248 Hz engine lower in 8 of 11 (e.g. 49.6% against 1.3%, 51.6% against
+  13.7%, 32.9% against 3.7%), higher in 3 (31.1% against 48.3%, 8.8% against 24.3%, 99.8% against 102.0%).
+- **Stops:** the classifier found 511 of 2,198 stopped rows (23%), calling 1.5% of moving rows stopped.
+- **Caveats:** one test ride; the 58 blackouts overlap (a start every 250 m, each 1 km), so they are far from 58
+  independent measurements; still well above the 10% goal overall and under 40 km/h.
