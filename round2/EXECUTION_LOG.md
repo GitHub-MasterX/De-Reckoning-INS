@@ -565,3 +565,20 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   outbound (tuning) 22.1% against 18.4% (52 blackouts); return (test) 24.0% against 15.8% (56), at 50–70 km/h 18.7%
   against 8.7% (31); town segment too short for 1 km blackouts (3 automatic, at 500 m 67.0% against 30.6%).
   Trimming the return's walking tail moved its figures from 24.9% / 16.0% to 24.0% / 15.8%.
+
+## 30 · Where the error comes from — 2026-09-17
+
+- **Why:** too many candidate causes (the 10 Hz car model, the phone held in hand, the accelerometer speed rarely on).
+- **How** (`ErrorSourcesTest`, analysis only): every automatic blackout also runs the 248 Hz engine's map-free dead
+  reckoning with one input replaced by the truth from GPS: the stops, the speed, the heading, then speed and heading.
+  The drop in drift when an input is made perfect is that input's share.
+- **Median 2D drift at 1 km without the map** (as it ran → true stops → true speed → true heading → both true):
+  - outbound, all (52): 24.4% → 24.1% → **6.0%** → 21.6% → 1.9%; under 40 km/h (29): 47.3% → 46.6% → **8.1%** → 38.8% → 4.2%
+  - return, all (56): 15.8% → 15.6% → **7.2%** → 12.2% → 1.5%; under 40 km/h (18): 78.2% → 75.0% → **11.2%** → 84.0% → 5.9%
+  - town segment at 200 m (3): 44.7% → **12.1%** → 8.4% → 52.2% → 6.9% (stops matter most there)
+- **Reading:** speed is the main loss — held GPS speed while the accelerometer speed stays off. Stops alone change little
+  on the corridor (the speed is wrong while moving too) but a lot in town. Heading is the second factor (6–7% left
+  once speed is true). The engine's own arithmetic is not the problem: 1.5–1.9% with both inputs true.
+- **The hand:** blackouts in thirds by the phone's rotation about horizontal axes; heading-only error (true speed):
+  outbound 4.7% calmest (4.0–5.5 °/s) against 14.3% shakiest (10.1–20.7 °/s); return 4.4% (6.6–8.5 °/s) against 9.7%
+  (12.3–56.6 °/s). A moving hand roughly doubles to triples the heading error.
