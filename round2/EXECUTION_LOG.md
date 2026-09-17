@@ -502,3 +502,28 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   which has almost no corners, so the differences between variants are within its noise. Not yet evidence.
 - **Open:** the stop classifier on this phone (31% of stops found); drives with corners — town streets — and, ideally,
   a handlebar mount; tuning on some rides and testing on others.
+
+## 27 · The second ride, a tuning rule, and settings frozen for the next ride — 2026-09-17
+
+- **Second ride:** town streets, 11.8 min of riding, 2.6 km, median 15 km/h (none above 40), 3.5 turns over 45° per km,
+  3 manual blackouts; sensors 248.6 Hz with one 0.45 s gap, no GPS gaps. No more town rides are possible; the next
+  rides will repeat the first ride's NH38 route.
+- **Rule from here:** settings are chosen on ride 1 only; ride 2 is a test; the next ride on the same route is replayed
+  with every setting frozen beforehand.
+- **Stop detector for this phone — prototyped, not adopted.** Vibration bands per second (accelerometer 0.5–124 Hz,
+  gyroscope 0.5–124 Hz), logistic regression trained on ride 1, threshold set on ride 1:
+  absolute features found 15% of ride 2's stopped seconds at 1.5% false stops; features relative to the ride's own recent
+  moving vibration found 39% at 2.3% (ride 1: 81% at 5%). With stops ~6% of the time, 39% of them recovered is cancelled
+  by 2.3% of moving time frozen, and ride 2 has only 33 stopped seconds. `deploy_all` stays (ride 2: 5% at 1.2%).
+- **Slow-riding calibration, chosen on ride 1:** the 248 Hz engine's gyro fit learns from 10 s stretches above 2.5 m/s
+  (was 5 m/s, which the car data suggested); the vehicle's axes are fitted on the last 10 minutes with 12 turning
+  samples (was 6 minutes and 20). Ride 1, median 2D drift at 1 km with the map, round 2 against 248 Hz: 22.3% against
+  18.9% (the variants tried gave 18.9–22.3%, within that ride's noise).
+- **Ride 2 (test, frozen):** the gyro still could not calibrate — 30 full 10 s windows above 2.5 m/s but only 2 with a
+  turn of 20° (3 needed): the rider slowed below 9 km/h at most corners. The vehicle-axes fit was not trusted (r 0.30).
+  Automatic blackouts: 3 (the replay waits 5 minutes for history). Manual blackouts, drift at the end, round 2 against
+  248 Hz: 31% against 54%, 37% against 10%, 59% against 59%. The stop classifier found 20 of 370 stopped rows.
+  The threshold was not loosened further, to keep ride 2 a test.
+- **Lesson for the next rides:** calibration needs several real turns ridden above ~9 km/h before a blackout; ride 1
+  had them by minute 8.
+- **Installed on the phone:** the frozen build.
