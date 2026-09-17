@@ -22,7 +22,7 @@ and tag `round-1` have **never been pushed** (remote: `github.com/GitHub-MasterX
 |---|---|---|---|
 | `round2/android/` | 5.8 MB without `build/` | **the whole Android app: the replay app plus the live 248 Hz engine, all Kotlin, all tests.** The most valuable untracked thing | **yes** |
 | `round2/phone_data/` | 354 MB | the only real dataset (3 segments + 6 raw recordings), git-ignored because they are location traces | **yes** — cannot be re-recorded, bike access has ended |
-| `data/osm/` | 2.6 GB | England + Tamil Nadu pbf, `road_network*.npz`, landmarks; `data/osm/phone/` the phone networks and test fixtures | can be rebuilt (commands in §6), but slow |
+| `data/osm/` | 2.6 GB | England + Tamil Nadu pbf, `road_network*.npz`, landmarks; `data/osm/phone/` the phone networks and test fixtures | can be rebuilt: `round2/get_tn_map.sh`, `tn_roadnetwork.py`, `phone/export_*.py` (see `round2/README.md`), but slow |
 | `round2/phone_backup/` | 16 MB | the app as it was on the phone before any change (APK) + jadx decompile | nice to have |
 | `round2/step9_export_replay.py`, `round2/out/replay/`, `round2/out/step9_run.txt` | small | exporter for the replay clips (documented in `android/README.md`) and its output | yes, if the replay app is kept |
 | `round2/analysis/leak_check.py`, `round2/out/leak_check_run.txt` | small | proves no ground truth after a blackout starts reaches the engine (poisons it, re-runs, bit-identical) | yes |
@@ -45,7 +45,7 @@ ADB=$ANDROID_HOME/platform-tools/adb
 cd round2/android
 ~/tools/gradle-8.4/bin/gradle assembleDebug --no-daemon                     # build
 $ADB install -r app/build/outputs/apk/debug/app-debug.apk                   # install (phone on USB debugging)
-~/tools/gradle-8.4/bin/gradle testDebugUnitTest --no-daemon                 # every JVM test (fixtures must exist, §6)
+~/tools/gradle-8.4/bin/gradle testDebugUnitTest --no-daemon                 # every JVM test (fixtures from `round2/phone/export_*.py` must exist)
 ```
 
 - Phone: Samsung Galaxy M17 5G (SM-M176B), Android 16, LSM6DSV accelerometer + gyroscope at ~248 Hz.
