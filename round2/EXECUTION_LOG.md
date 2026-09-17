@@ -462,3 +462,43 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
 - **All earlier port tests still pass unchanged** — round 2's path on the phone is untouched.
 - **Open:** every setting of the speed estimator, and whether real vibration, mounts and roads behave like the
   simulation. That needs recorded drives, replayed with DriveReplay, tuned on some drives and tested on others.
+
+## 26 · The first real ride, and tilt tracking for a phone in a hand or a bag — 2026-09-17
+
+- **The ride:** Samsung Galaxy M17 on a two-wheeler, phone in hand or bag (no mount), Tiruchirappalli area:
+  41.7 min, 19.2 km of GPS distance, median 24 km/h (35% of moving time under 20 km/h, 32% at 20–40, 15% at 40–60,
+  18% at 60–80), 10 manual blackouts. Sensors 247.6 Hz continuous for the first 31 minutes; 8 gaps of up to 3.9 s in
+  the last 10 minutes at walking pace, alongside GPS gaps of 26–58 s (arriving, handling the phone).
+  Recording kept to `data/osm/phone/drives/` (git-ignored: location traces).
+- **Recording service:** live mode now runs as a location foreground service with a partial wake lock. Checked on the
+  phone: 60 s with the screen off gave 248.3 Hz on every motion stream with no gap over 50 ms. A crash when opening the
+  picker in live mode (an early return inside a Compose lambda corrupting the slot table) was found in the phone's
+  crash log from the rider's own use, fixed, and checked.
+- **Route against the Tamil Nadu map:** 99.0% of moving distance on a mapped road in the allowed direction, 98.2%
+  within 10 m of a centreline (median 1.8 m). 78% trunk road (NH38), 17% primary; only 0.9 turns over 45° per km.
+- **Replay, first version** (53 automatic 1 km blackouts): the stop classifier recognised 448 of 1,466 stopped moments
+  (31%) and called 351 of 18,987 moving ones stopped (1.8%). The accelerometer speed never switched on: the mount fit
+  rejected itself every time (sideways scale 0.13–0.39).
+- **Why:** the phone's tilt moved 5–18° minute to minute (64° at minute 39), and a two-wheeler leans into corners, which
+  lines the cornering force up with its own vertical. Against a fixed "up" the horizontal reading sat at 1.6–2.8 m/s²
+  whatever the cornering force.
+- **Tilt tracking** (`TiltTracker`): a Mahony filter on tilt — gyro rotation about horizontal axes, gravity mismatch
+  while steady pulling up back over 30 s and learning the gyro's offset. On the ride, the horizontal reading now grows
+  with v × r (0.28, 0.91, 1.24, 2.40, 3.86 m/s² across bands). Heading uses rotation about the tracked vertical;
+  the vehicle's axes are refitted on the last 6 minutes and used only if the sideways fit has r ≥ 0.6 and scale
+  0.6–1.5. Two first attempts were wrong and caught on simulation before reaching the phone: a 3 s pull leaned up into
+  every acceleration; a 60 s pull without offset learning let a 0.0025 rad/s gyro offset tilt it by 9°.
+- **Speed estimator changes:** turn readings over 2 s instead of 1 (a wobbling phone's own rotation averages out;
+  1 s and 3 s were worse across simulations); the estimate is reported only within 20 s of a reading — a corner, a
+  stop, or the GPS speed at the start — and the held GPS speed otherwise, because on the ride integrated acceleration
+  wandered on long straights. A held-speed anchor applied every reading was tried and rejected: it helped the ride but
+  counted the same old speed as new evidence, and brought the simulated braking case back to 48%.
+- **Simulated slow-town blackout** (starts at 61 km/h, brakes to 34, corners every ~100 m, a stop, speed breakers),
+  2D drift without the map, round 2 against 248 Hz: car with fixed mount 66.0% against 1.1%; two-wheeler on a
+  handlebar mount 66.4% against 3.7%; two-wheeler with the phone wobbling ±4° 66.8% against 5.3%.
+- **The real ride, final version**, median 2D drift at 1 km, round 2 against 248 Hz, with the map: all 22.4% against
+  20.1% (53 blackouts); under 40 km/h 41.7% against 34.5% (30); 50–70 km/h 12.5% against 2.9% (18). Variants tried on
+  this ride ranged 16.7–31.5% for the 248 Hz engine; every choice was made on this one ride, whose blackouts overlap and
+  which has almost no corners, so the differences between variants are within its noise. Not yet evidence.
+- **Open:** the stop classifier on this phone (31% of stops found); drives with corners — town streets — and, ideally,
+  a handlebar mount; tuning on some rides and testing on others.
