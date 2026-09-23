@@ -36,6 +36,7 @@ DEFAULTS = dict(
     rough_off=2.0, rough_speed=0.3,              # jitter after resampling
     bad_deg=60.0, bad_updates=3,                 # when to decide the map explains nothing
     reseed_radius=30.0, cluster_m=40.0,
+    sigma_speed_obs=4.0,      # m/s: how much a speed measured during a turn is trusted (round 3; unused without one)
     dr_blend_m=0.0,           # m: report plain dead reckoning until this far from the fix, then hand over to the
                               # map over the next 100 m (0 = the map from the first metre). Right after a fix,
                               # dead reckoning beats snapping to a road centreline.
@@ -126,13 +127,17 @@ def _estimate(net, st, w, lat0, lon0, cluster_m):
     return float(ww @ east[near]), float(ww @ north[near]), float(ww @ st["dist"][near])
 
 
-def run(inp, net, stationary, record_rows, params=None, rng=None, estimator=None):
+def run(inp, net, stationary, record_rows, params=None, rng=None, estimator=None, speed_obs=None):
     """Run the filter over one blackout. Returns the estimate at each row in `record_rows` (east, north metres from
     the start fix, and distance travelled), plus diagnostics.
 
     estimator: round 3 only — an alternative way of turning the particles into one reported point (core/smooth.py).
     It sees the same particles and weights, draws no random numbers and changes nothing the filter believes, so with
-    estimator=None every number round 2 published is reproduced exactly."""
+    estimator=None every number round 2 published is reproduced exactly.
+
+    speed_obs: round 3 only — one value per row, NaN where there is none: a speed measured during a turn from the
+    accelerometer (round3_accel_speed.py). Where one exists, guesses whose speed disagrees with it lose weight. With
+    speed_obs=None nothing changes."""
     p = dict(DEFAULTS)
     p.update(params or {})
     rng = rng if rng is not None else np.random.default_rng(0)
@@ -181,6 +186,12 @@ def run(inp, net, stationary, record_rows, params=None, rng=None, estimator=None
             st["logw"] += -(excess**2)/(2*p["sigma_limit"]**2)
             st["turn"][:] = 0.0
             psi_prev = psi[k + 1]
+
+            if speed_obs is not None:
+                obs = speed_obs[max(0, k + 1 - upd):k + 2]
+                obs = obs[np.isfinite(obs)]
+                if len(obs):                                  # a turn just gave an absolute speed: weigh it in
+                    st["logw"] += -((st["v"] - float(obs[-1]))**2)/(2*p["sigma_speed_obs"]**2)
 
             w = _weights(st["logw"])
             if w is None:

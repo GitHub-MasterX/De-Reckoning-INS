@@ -61,8 +61,10 @@ def fit_axes(acc, gyr_turn, v, t, stationary):
     direction it swings when the GNSS speed changes. Returns (right, forward, scale_right) or None.
     """
     ok = np.isfinite(v) & np.isfinite(gyr_turn) & ~stationary & (v > MIN_SPEED)
-    if ok.sum() < 200:
-        return None
+    if ok.sum() < 200 or not np.isfinite(acc).all():
+        acc = np.where(np.isfinite(acc), acc, 0.0)
+        if ok.sum() < 200:
+            return None
     up = acc.mean(axis=0)
     up = up/np.linalg.norm(up)
     horiz = acc - np.outer(acc @ up, up)                        # the horizontal part of every reading
@@ -72,7 +74,12 @@ def fit_axes(acc, gyr_turn, v, t, stationary):
     e2 = np.cross(up, e1)
     q1, q2 = horiz @ e1, horiz @ e2
     a_lat = v*gyr_turn                                          # what cornering should produce
-    a_fwd = np.gradient(v, t)                                   # and what speeding up or braking should produce
+    v_fill = pd.Series(v).interpolate(limit_direction="both").to_numpy()
+    a_fwd = np.gradient(v_fill, t)                              # and what speeding up or braking should produce
+    # a gap in the GNSS leaves NaNs behind: every row entering the fit must be finite, or the solve fails outright
+    ok &= np.isfinite(a_fwd) & np.isfinite(a_lat) & np.isfinite(q1) & np.isfinite(q2)
+    if ok.sum() < 200:
+        return None
     X = np.c_[a_fwd[ok], a_lat[ok], np.ones(ok.sum())]
     try:
         c1, *_ = np.linalg.lstsq(X, q1[ok], rcond=None)

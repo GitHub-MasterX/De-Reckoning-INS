@@ -873,3 +873,38 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
 - **What would actually change it:** a sensor this dataset does not have (wheel speed / CAN, which round 1 used only
   to check the gyro), or the 248 Hz phone data where the same turn readings are far cleaner — there the blocker is the
   hand-held mount, not the sampling rate.
+
+## 41 · The turn reading given to the filter — it works, on the phones that can feel a corner — 2026-09-23
+
+- **The idea (the rider's):** the accelerometer is only usable near turns, so use it only there. Entry 39 did that but
+  fed the readings to dead reckoning. The blackouts that fail do not fail gradually — they fail *at a junction*, and a
+  turn reading exists exactly then. So the reading was given to the particle filter instead: `core/particle.py` gained
+  an optional `speed_obs`, and guesses whose speed disagrees with the measured one lose weight. With it unset, nothing
+  changes (round 2 still reproduces exactly).
+- **On the tuning drivers, where a reading exists** (101 blackouts, median 7 readings each, reading error 2.7 m/s):
+
+  | | under 10% | path median | worst moment | off route |
+  |---|---|---|---|---|
+  | today | 57% | 8.0% | 20.1% | 29% |
+  | with the reading (σ 2 m/s) | **61%** | **6.8%** | **19.2%** | **23%** |
+
+  Better on 54% of blackouts, worse on 45%. Modest, but the first speed idea that helps at all, and it helps most on
+  the failure that matters: leaving the road.
+- **On the test drivers it cannot be used at all**, and the reason is the phones. How much of the true cornering force
+  each driver's accelerometer actually registers, with the quality of the fit against speed × turn rate:
+
+  | driver | lateral force registered | fit r |
+  |---|---|---|
+  | A | 0.42 | 0.40 |
+  | B | 0.80 | 0.71 |
+  | D | **0.12** | 0.16 |
+  | E | **0.06** | 0.06 |
+
+  Gravity reads 9.86 m/s² on all four, so this is not a units or axis problem: D's and E's phones barely respond to
+  cornering — heavily damped mounts, or a filtered accelerometer stream. Driver E's gyro already under-reported turning
+  by about 46% (round 2, step 2); its accelerometer is worse. Of 2,389 test blackouts, **none** had a usable fit, so
+  the single test run shows no change at all — not a failure of the idea, an absence of signal.
+- **Kept, as an opportunistic input:** it costs nothing when the fit is poor (it simply never fires), it is gated on
+  r ≥ 0.6, and it helps on phones that can feel a corner. The test-set numbers are unchanged by it.
+- **Where it should pay off properly:** the 248 Hz phone. There the same readings were three times cleaner, and the
+  blocker was the hand-held mount rather than the sensor.
