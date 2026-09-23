@@ -1021,3 +1021,30 @@ same turn readings were three times cleaner; or any GNSS glimpse inside the blac
   deployment lesson is that the gate must be chosen from what the local map actually contains.
 - **Caveat:** this is dead reckoning without the map, so it isolates the speed contribution; the particle filter on the
   Tamil Nadu network was not re-run here. Segment 2 (town) is too short for the 1 km blackout rule — 0 blackouts.
+
+## 45 · Indian road furniture as landmarks — and a control that ate most of the result — 2026-09-24
+
+- **Why:** on the NH38 corridor the map has 0.9 turns/km, so the filter almost never gets an along-track fix, and
+  bends cannot help (measured: median radius 1,578 m, so an along-track error of 138 m shifts the road's bearing by
+  only 5°, which is the gyro's own error over 1 km). Point landmarks can. India has speed breakers everywhere.
+- **What the map has, near the rides** (Tamil Nadu extract, ride bounding box): 17 speed breakers (12 within 25 m of
+  the route), 4 traffic signals, 2 toll booths, 32 level crossings (none on the route). No speed limits at all —
+  which is why the England gate never fires here (entry 44).
+- **Are bumps visible?** Not at 10 Hz — binning to 100 ms averages a 0.2 s bump away. In the **raw 248 Hz** stream they
+  are: of the mapped bumps within 5 m of the ridden line, **4 of 5 were detected**, the clearest peaking at
+  **23 m/s² against a 4 m/s² background**. This is a 248 Hz phenomenon and invisible to the dataset's 10 Hz phones.
+- **Self-mapped landmarks ("pseudo markers")** — the rides cover one corridor twice, so a jolt found at the same place
+  on both runs should be real furniture nobody mapped. Detector: the force along gravity, high-passed, where the
+  short-term energy exceeds twelve times its own rolling background. 170 jolts outbound, 182 on the return, 50 of them
+  within 20 m of each other — **2.7 per km, apparently five times what OSM carries.**
+- **A control destroyed most of that.** Sliding the return's detections 100–300 m along their own track (same road,
+  wrong places) still produces 35.6 matches within 20 m and 8.6 within 10 m. The genuine excess is **+14 at 20 m and
+  +10 at 10 m** — about **0.7 real landmarks per km**, comparable to OSM's 0.5, not five times it. Worse, restricted
+  to the **strongest 30% of jolts the excess is zero**: the violent spikes do not repeat.
+- **Why:** the phone was hand-held, so most of what the accelerometer sees is the rider, not the road. The repeatable
+  jolts are the moderate ones; the 23 m/s² spikes are one-off potholes, lean, or the phone moving in a hand.
+- **Verdict:** speed breakers are real, detectable point landmarks that a parallel service road cannot imitate, and
+  they are the one map element that attacks the along-track error a bend cannot. Self-mapping them is promising and
+  **not yet demonstrated**: it needs a rigidly mounted phone (so the vertical channel is road-only) and at least three
+  passes of a corridor (so a landmark must appear in 2 of 3, which no amount of coincidence provides). Both are an
+  afternoon of riding with a phone mount.
