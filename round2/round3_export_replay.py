@@ -32,9 +32,13 @@ from core.geo import enu, inv_enu
 from round3_accel_speed import fit_axes, readings, MIN_FIT_R, HISTORY_S, FS
 from round3_shrink_speed import fit_curves, expected, road_is_fast
 from round3_combo import SIGMA_OBS, SLOW_START_MS
+from round3_vibration_speed import features as vib_features, HOP as VIB_HOP
+from round3_learned_speed import training_table, map_feats
+from sklearn.ensemble import HistGradientBoostingRegressor
 
 T0 = time.time()
 CURVES = None
+SPEED_MODELS, SPEED_ALL, SPEED_FEATS = {}, None, None
 LEAD_IN_S = 15.0
 CHECKPOINT = 1000
 FLOOR_M = 100.0
@@ -144,8 +148,20 @@ def build_clip(row, BL, net, cache, hz):
     if reads is not None and not np.isfinite(reads).any():
         reads = None
     fast = road_is_fast(net, S, i)
-    target = (expected(CURVES, fast, inp.speed0, t_rel)
-              if inp.speed0 < SLOW_START_MS and not fast else None)
+    # the learned speed (IMU + map + last fix), held back on fast roads where holding the last speed is near-perfect
+    target = None
+    if not fast:
+        F, c = vib_features(S.acc[i:j + 1], S.gyr[i:j + 1])
+        if len(F):
+            k = np.arange(0, len(F), max(1, 10//VIB_HOP))
+            F, c = F[k], c[k]
+            M = map_feats(net, S, i + c)
+            X = np.c_[F, M, np.full(len(c), inp.speed0), t_rel[c]]
+            mdl = SPEED_MODELS.get(f"{row.drive}_{int(row.session)}", SPEED_ALL)
+            v_hat = np.clip(mdl.predict(X), 0.0, 45.0)
+            target = np.where(stationary, 0.0, np.interp(np.arange(j - i + 1), c, v_hat))
+    if target is None and inp.speed0 < SLOW_START_MS and not fast:
+        target = expected(CURVES, fast, inp.speed0, t_rel)
     params = dict(PARAMS)
     if reads is not None:
         params["sigma_speed_obs"] = SIGMA_OBS
@@ -221,8 +237,18 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     BL = pd.read_parquet(R2/"out/blackouts.parquet").set_index(["drive", "session", "row_start"])
     net = roadnet.RoadNetwork()
-    global CURVES
+    global CURVES, SPEED_MODELS, SPEED_ALL, SPEED_FEATS
     _, CURVES = fit_curves(net)
+    D = training_table(net, ["A", "B"])              # the speed model, trained on the tuning drivers only
+    SPEED_FEATS = [c for c in D.columns if c not in ("target", "group")]
+    def gb(df):
+        return HistGradientBoostingRegressor(max_iter=300, learning_rate=0.06, max_depth=6,
+                                             l2_regularization=1.0, random_state=0).fit(
+            df[SPEED_FEATS].to_numpy(float), df.target.to_numpy(float))
+    for grp in D.group.unique():                     # a clip is never scored by a model that saw its session
+        SPEED_MODELS[grp] = gb(D[D.group != grp])
+    SPEED_ALL = gb(D)
+    log(f"speed model: {len(D):,} training rows, {len(SPEED_MODELS)} leave-one-out models")
     picks = originals() if "--originals" in sys.argv else by_rule()
     log(f"exporting {len(picks)} clips at {hz} Hz — round 3 against round 2 on the same blackouts")
 
