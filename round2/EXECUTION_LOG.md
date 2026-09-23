@@ -582,3 +582,35 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
 - **The hand:** blackouts in thirds by the phone's rotation about horizontal axes; heading-only error (true speed):
   outbound 4.7% calmest (4.0–5.5 °/s) against 14.3% shakiest (10.1–20.7 °/s); return 4.4% (6.6–8.5 °/s) against 9.7%
   (12.3–56.6 °/s). A moving hand roughly doubles to triples the heading error.
+
+## 31 · Round 3 — the tail, the driver A clip, and speed from the map's curvature — 2026-09-23
+
+- **Why:** round 2's medians pass, but the goal for round 3 is every driver under 10% *per blackout*, not on median.
+- **How big the tail is** (test errors, 1 km, 2D, with the map): under 10% on only **53%** of blackouts —
+  A 57%, B 58%, D 61%, E 51%; p90 32.5%, worst 178%. Failures differ from passes in one thing above all: distance since
+  the last real turn, **791 m against 364 m**. On a featureless straight the map fixes position across the road but not
+  along it, so a held speed that is wrong slides freely.
+- **The driver A replay clip** (`A_S4_s1_44419`, the one that ends at 8.7%): it ends well by luck. Split into along- and
+  across-track error against the driven path: the engine holds 74.9 km/h while the car slows to 20–40, so it runs up to
+  **+122 m ahead** by t = 30 s; then it **takes a wrong road for about 20 s** (150 m across-track, peak drift 268 m =
+  28%); it rejoins the right road at t = 50 s but lands **behind**, down to −274 m, and drifts back to −83 m (8.4%) at
+  1 km. Both round-3 failure modes in one clip, and the final number hides them: its mean drift over the blackout
+  is 15.6%.
+- **Tried: speed from the map's curvature** (`round2/round3_curve_speed.py`, tuning drivers A+B, 120 blackouts).
+  Turn rate = speed × curvature, so speed = turn rate ÷ curvature — no accelerometer, no mount, no gravity.
+  Curvature is read from the network's own geometry at the **true** position (an upper bound: the filter would read the
+  road under each particle).
+  - *Pointwise ratio:* a reading on 10.7% of rows, 57% of blackouts get at least one. Against the true speed those
+    readings are biased **+7.3 m/s** with **13.9 m/s RMS**; holding the last GNSS speed on the same rows is 5.7 m/s.
+    Over a whole blackout, distance error at 1 km: held 125 m against curve 257 m. Better on 16% of blackouts.
+  - *Shape matching* (10 s of gyro turning matched against the road's bearing profile ahead, which cancels weaving):
+    much less biased, +1.2 m/s, but still **11.0 m/s RMS** against the held speed's 5.1; keeping only the unambiguous
+    matches (30% of them) gives 8.3 against 6.1.
+  - **Why it fails:** OSM centrelines are a smoothed, digitised version of the road (nodes every 13 m, metres of
+    position error), and a vehicle's yaw adds lane weaving and corner cutting the centreline does not have. Map
+    curvature correlates with the curvature actually driven at only **r = 0.22**. Where the bend is tight (κ > 1/80 m)
+    readings improve (7.4 m/s RMS) but exist on ~1% of rows.
+  - **Verdict: not adopted.** The map's shape is good for *where along the road* (matching), not for *how fast*.
+- **What this leaves for round 3:** speed has to come from the accelerometer (mount-free corner readings, since the
+  phone-to-vehicle rotation is what failed on the rides) or from along-track structure the map does have — junctions
+  passed, stop lines, road-class changes — used as position landmarks rather than as a speed sensor.
