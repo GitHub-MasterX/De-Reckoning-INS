@@ -10,8 +10,10 @@ without the map. Here the third track is repurposed to the thing worth looking a
 Both cursors come from one run of the filter per clip with the same seed, so any difference on screen is the reporting
 layer and nothing else.
 
-The clips are the same blackouts the app has always replayed — the set step9_export_replay.py exported, with the same
-ids and the same "England ride N" names — so what changed on screen is the engine's behaviour and not the examples.
+Which blackouts are shown is decided by a rule fixed before any of them is scored: for each driver, the first blackout
+that qualifies in each driving-condition band (under 40, 40-50, 50-70, 70+), earliest first, at most three. Nothing is
+chosen for looking good, and nothing is dropped for looking bad. `--originals` replays the old set instead (the clips
+step9_export_replay.py picked in round 2 by how they ended, which is the hardest possible sample for a path average).
 
 Outputs: round2/out/replay3/*.json and the same files copied into the app's assets.
 Run from the repo root:  .venv/bin/python3 round2/round3_export_replay.py [--hz 10]
@@ -41,6 +43,32 @@ ASSETS = R2/"android/app/src/main/assets/replay"
 def arg(flag, default):
     return type(default)(sys.argv[sys.argv.index(flag) + 1]) if flag in sys.argv else default
 def log(m): print(f"[{time.time()-T0:5.0f}s] {m}", flush=True)
+
+
+def by_rule(per_driver=3):
+    """The demo set, by a rule stated in advance: per driver, the earliest blackout in each condition band."""
+    BL = pd.read_parquet(R2/"out/blackouts.parquet")
+    BL = BL[BL.moving_1000 & BL.end_1000.notna() & (BL.history_s >= 300)]
+    rows = []
+    for driver, g in BL.groupby("driver"):
+        taken = []
+        for band in ("slow", "mixed", "ps_60", "fast"):
+            q = g[g.band_1000 == band].sort_values(["drive", "session", "row_start"])
+            for r in q.itertuples(index=False):
+                # never two clips of the same stretch of road: they replay as the same route twice
+                if any(t[:2] == (r.drive, r.session) and abs(t[2] - r.row_start) < 1200 for t in taken):
+                    continue
+                taken.append((r.drive, int(r.session), int(r.row_start), band, driver))
+                break
+            if len(taken) >= per_driver:
+                break
+        for drive, session, start, band, drv in taken:
+            rows.append(dict(id=f"{drv}_{drive}_s{session}_{start}", driver=drv, drive=drive, session=session,
+                             row_start=start, band=band, role="tuning" if drv in ("A", "B") else "test"))
+    R = pd.DataFrame(rows).sort_values(["driver", "drive", "session", "row_start"]).reset_index(drop=True)
+    R["ride"] = R.groupby("driver").cumcount() + 1
+    R["name"] = "England ride " + R.ride.astype(str)
+    return R
 
 
 def originals():
@@ -154,7 +182,7 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     BL = pd.read_parquet(R2/"out/blackouts.parquet").set_index(["drive", "session", "row_start"])
     net = roadnet.RoadNetwork()
-    picks = originals()
+    picks = originals() if "--originals" in sys.argv else by_rule()
     log(f"exporting {len(picks)} clips at {hz} Hz — round 3 against round 2 on the same blackouts")
 
     index, cache = [], {}

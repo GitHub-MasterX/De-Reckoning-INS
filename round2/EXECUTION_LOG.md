@@ -762,3 +762,26 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   settings should be judged on A+B alone.
 - **Clips re-exported** with the final settings, and the map's recentre control is now a round button on the right edge
   that centres both cursors at once, instead of a pill that looked like the north-up toggle.
+
+## 37 · Trying to reach the 10% benchmark along the path — 2026-09-23
+
+- **Target:** the professor's benchmark read the new way — the error averaged along the whole blackout under 10%, not
+  the error at the finish line.
+- **Where it stands** (test drivers, entry 36): path median 5.9%, **80% of blackouts under 10%**. The benchmark is met
+  on the median and on four blackouts in five; it is the last fifth that fails.
+- **Nineteen filter settings tried on A+B** (`round3_engine_sweep.py`, 150 blackouts, scored through the round-3
+  reporting layer). Share under 10%: baseline 65%; more guesses n=1500 65%, n=3000 **69%**; resample later 67%;
+  tighter heading 67%; tighter turning 64%; looser speed **55%** (clearly worse); straight-road handover 300 m 67%
+  with path median 5.8% and lag 10 m but **off route 58%** (it hands back to dead reckoning, which leaves the road).
+  Nothing beats the baseline by more than a few points, which is inside the noise of 150 blackouts. **Nothing adopted.**
+  The remaining failures are not a matter of knob settings: the filter commits to a road it cannot tell apart from the
+  right one, and only better information — junction structure, or a real speed sensor — will change that.
+- **The demo clips were the unrepresentative part.** The twelve in the app were picked in round 2 *by how they ended*,
+  which is the worst possible sample for a path average: only 5 of 12 passed. The set is now chosen by a rule fixed
+  before scoring — per driver, the earliest qualifying blackout in each condition band, no two on the same stretch of
+  road — and nothing is dropped for looking bad. `--originals` still replays the old set.
+- **The new set, path average round 2 → round 3:** A 5.0→2.4, 5.9→2.9, 4.9→4.8; B 6.9→4.4, 13.3→9.8, 7.0→15.5;
+  D 2.1→1.9, 4.4→2.4, 24.7→37.7; E 8.1→7.4, 5.0→4.9, 25.5→27.0. **Nine of twelve under 10%**, three not, and the three
+  are kept on screen. Round 3 is better than round 2 in nine of the twelve.
+- **The picker now colours the number**: green under 10%, amber to 20%, red above — so a clip that fails the benchmark
+  says so.
