@@ -812,3 +812,35 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   (v = sideways acceleration ÷ turn rate — the phone engine's method, not yet tried on IO-VNBD's 10 Hz data);
   a stronger prior from the road's tagged speed limit (this road is tagged well below 75 km/h, and the current penalty
   allows 25% over); and detecting the deceleration itself rather than assuming it away.
+
+## 39 · The accelerometer, finally asked for speed — and what a speed sensor would have to be worth — 2026-09-23
+
+- **Where the accelerometer stood:** nowhere. Round 1 trained a speed regressor on it and it lost to coasting (10 Hz
+  aliases vibration onto the vehicle's own 0–2 Hz band), so the accelerometer has only ever fed the stop classifier.
+  Position has been gyro heading + held GNSS speed, constrained by the map.
+- **Tried now** (`round3_accel_speed.py`, tuning drivers): the phone engine's trick — during a steady turn,
+  speed = sideways acceleration ÷ turn rate. No integration, so no accumulating bias. The vehicle's axes are fitted on
+  the GNSS history before each blackout, exactly as `MountCalibration` does on the phone.
+  - the axes fit well enough to divide by (r ≥ 0.6) in **24%** of blackouts; median r 0.74, and the accelerometer reads
+    about 0.85 of the true sideways force;
+  - where they do, the readings beat the held speed: **RMS 4.0 m/s against 6.1**, within 2 m/s on 45% of readings
+    against 24%; at r ≥ 0.8, RMS 2.6 against 7.6;
+  - but they are rare — median 3 readings per blackout, covering 23% of it — so the path average barely moves:
+    **10.1% held → 9.9% with readings** (true speed would be 2.5%). Replacing, half-weighting or third-weighting the
+    reading makes no difference; each is better on about a third of blackouts and worse on the rest. **Not adopted.**
+- **Why, quantified** — dead reckoning with a speed reading of a given accuracy at a given cadence, path average,
+  median over 80 blackouts (held speed today: 10.3%):
+
+  | reading every | σ 1 m/s | σ 2 m/s | σ 4 m/s | σ 6 m/s |
+  |---|---|---|---|---|
+  | 5 s | **6.0%** | **7.3%** | 9.8% | 12.7% |
+  | 20 s | 8.2% | 10.3% | 15.9% | 22.6% |
+  | 60 s | 11.6% | 15.6% | 23.5% | 26.7% |
+
+  Holding the last GNSS speed is a stronger prior than it looks, because speed is heavily autocorrelated: a sensor
+  accurate to 4 m/s reporting every 20 s is **worse than assuming nothing changed**. Our turn readings are about
+  4 m/s every 30 s — squarely in the region that hurts.
+- **What that means for round 3:** to beat the held speed a speed source needs roughly **σ ≤ 2 m/s and a reading every
+  5 s or so**. Two ways to get there, neither tried yet: bridge the gaps between turn readings with integrated forward
+  acceleration (a Kalman filter, as `SpeedEstimator.kt` does, rather than holding the last reading), and add a weak but
+  continuous anchor from the road's tagged speed limit. The turn reading alone cannot carry it.
