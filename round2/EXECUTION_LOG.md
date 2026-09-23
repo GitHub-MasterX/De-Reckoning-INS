@@ -641,3 +641,32 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   number (73% pass against 53% on the test drivers).
 - **What this makes the round-3 target:** the worst moment. Median worst excursion is 16% on test blackouts and 37%
   under 40 km/h — the estimate leaving the road and coming back is what a rider sees, and no checkpoint metric shows it.
+
+## 33 · The excursions — what a reviewer actually sees — 2026-09-23
+
+- **Why:** a cursor drifting along the right road is an acceptable error; a cursor in another street, on the wrong
+  branch of a junction, or jumping across the map is not. The worst-moment column of entry 32 is made of those.
+- **How** (`round2/round3_excursions.py`, frozen filter, nothing retuned): the estimate recorded every second and
+  decomposed against the path the vehicle actually drove — sideways distance (cross-track), position along the route,
+  how fast the cursor itself moves, and how far it moves in a single second.
+- **Findings, test drivers (2,421 blackouts):**
+
+  | condition | n | off route (>30 m) | worst sideways | cursor froze (any) |
+  |---|---|---|---|---|
+  | under 40 | 98 | **52%** | 33 m | 77% |
+  | 40–50 | 177 | 37% | 14 m | 55% |
+  | 50–70 (PS) | 407 | 34% | 14 m | 35% |
+  | 70+ | 1,739 | 44% | 14 m | 12% |
+  | all | 2,421 | **42%** | 15 m | 22% |
+
+  Of the blackouts that go off route: worst sideways **104 m median, 242 m at p90**; the excursion itself is short
+  (2 s median, 9 s at p90) but only **12% are back on the route by the end**.
+- **The cursor teleports.** In **100%** of blackouts the estimate moves more than 20 m in a single second at least once,
+  median worst jump **84 m**. That is not dead reckoning drifting — it is the estimate being the weighted mean over
+  particles sitting on different roads: when the weights shift, the reported point jumps across the gap. It is invisible
+  to every checkpoint metric and it is the most obvious thing on screen.
+- **Freezing is not a real problem** (cursor stopped for more than 3 s while the vehicle drove: 1% of blackouts).
+- **The map is still worth having**: off route 42% with the map against 85% without — but the map-free estimate leaves
+  smoothly, while the map-aided one snaps between roads.
+- **Round-3 target, stated in the order it matters:** (1) no teleporting — the reported position must move like a
+  vehicle; (2) fewer wrong-branch commitments, worst in slow town driving; (3) the path-average drift of entry 32.
