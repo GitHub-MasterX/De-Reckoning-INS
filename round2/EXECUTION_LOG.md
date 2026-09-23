@@ -1048,3 +1048,34 @@ same turn readings were three times cleaner; or any GNSS glimpse inside the blac
   **not yet demonstrated**: it needs a rigidly mounted phone (so the vertical channel is road-only) and at least three
   passes of a corridor (so a landmark must appear in 2 of 3, which no amount of coincidence provides). Both are an
   afternoon of riding with a phone mount.
+
+## 46 · Trying to fix the three stubborn England clips — 2026-09-24
+
+- **Three clips, three different diseases** (B ride 2, B ride 3, D ride 3), diagnosed by substituting the truth:
+  - **B ride 2** — the car swings 51→63→29→46→38→47 km/h. The model beats holding on RMS (2.77 against 3.21) but is
+    **under every window**, so its error integrates into lag (+23 m) instead of cancelling. True speed: 2.7%.
+  - **B ride 3** — the car accelerates 40→78 km/h and the model calls 42: it predicts what a context usually carries
+    and cannot see a driver flooring it. Round 2 scored 7.0% here *because it teleported forward*; round 3's cursor
+    forbids that, which is why this clip regressed.
+  - **D ride 3** — not speed at all. The model cuts speed error 8.92→3.99 m/s and map-free error 47.6%→16.7%, but with
+    the map it only reaches 24.2%, and **with perfect speed it is still 21%**: the filter has committed to a wrong road.
+- **Four cures tried, all measured on the tuning drivers:**
+
+  | cure | what it does | result |
+  |---|---|---|
+  | **same-way prior** (new `same_way_bonus`) | a vehicle carries on along the road it is on; bearing alone cannot separate a highway from its service road | A+B off route 26%→23%, **driver B 60%→64% under 10%**, mixed driving 31%→23% off route |
+  | **class-drop penalty** (new `class_drop`) | leaving a big road for a small one costs weight | off route 26%→20% in one sweep, but **A ride 4 collapses 6.6%→26.7%** — that blackout legitimately turns onto a smaller road |
+  | **trend features** | the speed model sees how the shaking has changed over five seconds, not only its level — a mount-free way to notice acceleration | 71% under 10% against 72% without: **no gain** |
+  | **prediction expansion** | undo the shrinkage of a squared-error model by pushing predictions away from their mean | 67% (×1.25) and 66% (×1.5) against 72%: **harmful — the shrinkage is protective** |
+- **One test run on D+E with the same-way prior**: **no change at all** (80% under 10%, 5.9% median, off route 29%→30%).
+  It helps urban driving on the tuning drivers and does nothing on a test set that is 72% motorway. Kept available
+  (`out/round3_engine_choice.json`) but not adopted as a headline setting.
+- **The finding that matters more than any of the cures.** Across 500 tuning blackouts, a small prior change moves the
+  median of the distribution by 0.3 points, while **5% of individual blackouts flip across the 10% line**. The three
+  stubborn clips are in that 5%: A ride 4 alone scores 6.6%, 3.3%, 8.0% or 26.7% depending on which combination is
+  used, because the filter is genuinely torn between two roads there and any nudge decides it differently.
+  **Individual clips cannot be engineered — only the distribution can.** Quoting a per-clip improvement from a tuning
+  change is measuring chaos.
+- **What would actually address D ride 3's class of failure:** not tuning. It needs information that separates parallel
+  roads — lane-level geometry, one-way and class tags (sparse in both maps), or point landmarks such as the speed
+  breakers shown detectable at 248 Hz (entry 45). Speed cannot fix a road choice.

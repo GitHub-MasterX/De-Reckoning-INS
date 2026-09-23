@@ -37,6 +37,8 @@ DEFAULTS = dict(
     bad_deg=60.0, bad_updates=3,                 # when to decide the map explains nothing
     reseed_radius=30.0, cluster_m=40.0,
     sigma_speed_obs=4.0,      # m/s: how much a speed measured during a turn is trusted (round 3; unused without one)
+    same_way_bonus=0.0,       # round 3: log-odds for staying on the same OSM way through a junction (0 = round 2)
+    class_drop=0.0,           # round 3: cost per step down the road hierarchy when leaving for a smaller road
     dr_blend_m=0.0,           # m: report plain dead reckoning until this far from the fix, then hand over to the
                               # map over the next 100 m (0 = the map from the first metre). Right after a fix,
                               # dead reckoning beats snapping to a road centreline.
@@ -60,6 +62,11 @@ def _seed(net, lat, lon, course, speed, n, p, rng, radius=None):
     return dict(edge=edge, off=off, v=v, logw=np.zeros(n), turn=np.zeros(n), dist=np.zeros(n))
 
 
+# How big a road is, for the purpose of "a vehicle rarely leaves a trunk road for a service road": the class index
+# for real roads, and each link placed just below the road it serves.
+CLASS_RANK = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 0.5, 1.5, 2.5, 3.5, 4.5, 5.0])
+
+
 def _advance(net, st, psi_now, p, rng, max_rounds=8):
     """Move particles past the ends of their roads, choosing an exit at each junction."""
     sig = np.radians(p["sigma_choice_deg"])
@@ -79,6 +86,16 @@ def _advance(net, st, psi_now, p, rng, max_rounds=8):
         valid = (np.arange(k_max)[None, :] < deg[:, None])
         lp = (-(roadnet.wrap(net.edge_bearing[cand] - psi_now)**2)/(2*sig**2)
               + prior[net.seg_class[net.edge_seg[cand]]])
+        if p["same_way_bonus"] or p["class_drop"]:
+            # Round 3: a vehicle usually carries on along the road it is already on. Bearing alone cannot separate a
+            # highway from the service road beside it — both run the same way — but the road's own identity can.
+            cur_seg = net.edge_seg[edge[ii]]
+            cand_seg = net.edge_seg[cand]
+            if p["same_way_bonus"]:
+                lp = lp + p["same_way_bonus"]*(net.seg_way[cand_seg] == net.seg_way[cur_seg][:, None])
+            if p["class_drop"]:
+                drop = CLASS_RANK[net.seg_class[cand_seg]] - CLASS_RANK[net.seg_class[cur_seg]][:, None]
+                lp = lp - p["class_drop"]*np.maximum(0.0, drop)
         allow = valid & (cand != net.edge_rev[edge[ii]][:, None])       # no U-turns unless there is nowhere else
         solo = ~allow.any(axis=1)
         allow[solo] = valid[solo]

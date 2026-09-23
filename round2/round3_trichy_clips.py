@@ -50,15 +50,19 @@ def route_overlap(a, b):
 
 def main():
     per_ride = arg("--per-ride", 4)
+    take_all = "--all" in sys.argv          # every blackout, no route thinning: the whole trip, clip by clip
     net = roadnet.RoadNetwork(path=TN)
     log(f"Tamil Nadu network: {len(net.seg_u):,} segments")
     raw = {n: load_segment(R2/"phone_data/segments"/f) for n, f in SEG.items()}
-    train = table(raw[1], net)
-    feats = [c for c in train.columns if c != "target"]
-    mdl = HistGradientBoostingRegressor(max_iter=300, learning_rate=0.06, max_depth=6,
-                                        l2_regularization=1.0, random_state=0).fit(
-        train[feats].to_numpy(float), train.target.to_numpy(float))
-    log(f"speed model trained on the outbound ride ({len(train):,} rows)")
+    # each ride is scored by a model trained on the other one, so no clip is scored by a model that saw it
+    models = {}
+    for a, b in ((1, 3), (3, 1)):
+        tr = table(raw[b], net)
+        fe = [c for c in tr.columns if c != "target"]
+        models[a] = HistGradientBoostingRegressor(max_iter=300, learning_rate=0.06, max_depth=6,
+                                                  l2_regularization=1.0, random_state=0).fit(
+            tr[fe].to_numpy(float), tr.target.to_numpy(float))
+        log(f"model for ride {a} trained on ride {b} ({len(tr):,} rows)")
 
     OUT.mkdir(parents=True, exist_ok=True)
     made, index = [], []
@@ -71,15 +75,16 @@ def main():
         F, c = F[k], c[k]
         M = map_feats(net, S, c)
         stat = np.zeros(len(Sr["t"]), bool)
+        mdl = models[seg]
         kept = 0
         for i, j in blackouts(Sr):
-            if kept >= per_ride:
+            if not take_all and kept >= per_ride:
                 break
             cal = calibration.engine_calibration(C, i, "window")
             if cal is None:
                 continue
             la, lo = Sr["lat"][i:j + 1], Sr["lon"][i:j + 1]
-            if any(route_overlap((la, lo), prev) > OVERLAP_MAX for prev in made):
+            if not take_all and any(route_overlap((la, lo), prev) > OVERLAP_MAX for prev in made):
                 continue                                   # same stretch of road as a clip we already have
             inp = engine_input.build(S, cal, i, j)
             t = inp.t - inp.t[0]
@@ -123,7 +128,7 @@ def main():
             avg = 3.6*true_s[-1]/max(t[-1], 1.0)
             clip = dict(
                 id=cid, driver="TRICHY", role="live ride",
-                drive=f"{RIDE[seg]} {kept}", session=seg, row_start=int(i),
+                drive=f"{RIDE[seg]} {kept:02d}", session=seg, row_start=int(i),
                 band="slow" if avg < 40 else ("mixed" if avg < 50 else ("ps_60" if avg < 70 else "fast")),
                 turns=int(round(np.abs(np.degrees(np.diff(psi))).sum()/45)),
                 avg_kmh=round(float(avg), 1), distance_m=round(float(true_s[-1]), 1),

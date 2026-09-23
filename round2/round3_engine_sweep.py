@@ -37,17 +37,9 @@ FIX = json.loads((R2/"out/round3_report_choice.json").read_text())
 # too little room in speed, and a heading test so tight that the true road is squeezed out at a junction.
 VARIANTS = {
     "round 3 (as it stands)": {},
-    # The map already knows the tagged limit, but a guess may sit 25% above it before it costs weight, and the cost is
-    # gentle (sigma 3 m/s). A car that slows for a town keeps being explained by guesses doing motorway speeds.
-    "limit slack 1.10": dict(speed_limit_slack=1.10),
-    "limit slack 1.00": dict(speed_limit_slack=1.00),
-    "limit slack 0.90": dict(speed_limit_slack=0.90),
-    "limit slack 1.00, firm": dict(speed_limit_slack=1.00, sigma_limit=1.5),
-    "limit slack 0.90, firm": dict(speed_limit_slack=0.90, sigma_limit=1.5),
-    "limit slack 0.80, firm": dict(speed_limit_slack=0.80, sigma_limit=1.5),
-    "limit 0.90 firm + n=1500": dict(speed_limit_slack=0.90, sigma_limit=1.5, n=1500),
-    "limit 0.90 firm + spread 15%": dict(speed_limit_slack=0.90, sigma_limit=1.5, sigma_v0=0.15),
-    "limit 0.90 firm + wander 0.8": dict(speed_limit_slack=0.90, sigma_limit=1.5, q_speed=0.8),
+    "same way +0.4": dict(same_way_bonus=0.4),
+    "same way +0.7": dict(same_way_bonus=0.7),
+    "same way +1.0": dict(same_way_bonus=1.0),
 }
 
 def arg(flag, default):

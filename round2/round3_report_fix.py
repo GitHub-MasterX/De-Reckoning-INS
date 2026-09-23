@@ -105,13 +105,17 @@ def run_variants(drivers, variants, limit=0):
         raw = {}
         for name, v in variants.items():
             src = (f"hyst{v.get('margin', 1.6)}_{v.get('hold', 3)}_{v.get('release_m', 80.0)}_"
-                   f"{v.get('min_share', 0.05)}") if v["hysteresis"] else "plain"
+                   f"{v.get('min_share', 0.05)}_{v.get('same_way_bonus', 0.0)}") if v["hysteresis"] else \
+                  f"plain{v.get('same_way_bonus', 0.0)}"
             if src not in raw:
                 cluster_m = PARAMS.get("cluster_m", particle.DEFAULTS["cluster_m"])
                 mt = (smooth.ModeTracker(cluster_m, v.get("margin", 1.6), v.get("hold", 3),
                                          v.get("release_m", 80.0), v.get("min_share", 0.05))
                       if v["hysteresis"] else None)
-                res = particle.run(inp, net, stat[i:j + 1], rows, params=PARAMS,
+                params = dict(PARAMS)
+                if v.get("same_way_bonus"):
+                    params["same_way_bonus"] = v["same_way_bonus"]
+                res = particle.run(inp, net, stat[i:j + 1], rows, params=params,
                                    rng=np.random.default_rng(i), estimator=mt)
                 raw[src] = (np.asarray(res["east"], float), np.asarray(res["north"], float))
             e, n = raw[src]
@@ -186,7 +190,8 @@ def main():
                           f"  worst sideways {g.worst_cross.median():4.0f} m  jumps {100*(g.jumps > 0).mean():3.0f}%")
     else:
         chosen = json.loads((R2/"out/round3_report_choice.json").read_text())
-        variants = {"round 2 (as published)": dict(hysteresis=False, smooth=False), "round 3 (chosen)": chosen}
+        variants = {"round 2 (as published)": dict(hysteresis=False, smooth=False), "round 3 (chosen)": chosen,
+                    "round 3 + same way": dict(chosen, same_way_bonus=0.4)}
         P = run_variants(TEST, variants, limit)
         P.to_parquet(R2/"out/round3_report_fix_test.parquet", index=False)
         report(P, f"TEST drivers D+E — one run with the settings chosen on A+B: {chosen}")
