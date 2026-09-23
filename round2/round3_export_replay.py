@@ -29,8 +29,12 @@ ROOT = R2.parent
 sys.path.insert(0, str(R2))
 from core import sessions, calibration, engine_input, motion, particle, roadnet, smooth
 from core.geo import enu, inv_enu
+from round3_accel_speed import fit_axes, readings, MIN_FIT_R, HISTORY_S, FS
+from round3_shrink_speed import fit_curves, expected, road_is_fast
+from round3_combo import SIGMA_OBS, SLOW_START_MS
 
 T0 = time.time()
+CURVES = None
 LEAD_IN_S = 15.0
 CHECKPOINT = 1000
 FLOOR_M = 100.0
@@ -128,11 +132,30 @@ def build_clip(row, BL, net, cache, hz):
     inp = engine_input.build(S, cal, i, j)
     rows = list(range(1, j - i + 1))
 
+    # the two narrow speed inputs of the finished engine: a reading from cornering where this phone can feel one,
+    # and regression to the mean where the fix was slow on an ordinary road
+    stationary = stat[i:j + 1]
+    h0 = max(0, i - int(HISTORY_S*FS))
+    turn_hist = cal.scale*(S.gyr[h0:i] @ cal.axis) - cal.bias
+    axes = fit_axes(S.acc[h0:i], turn_hist, S.v[h0:i], S.t[h0:i], stat[h0:i])
+    t_rel = inp.t - inp.t[0]
+    reads = (readings(inp.acc, inp.turn_rate(), t_rel, axes, stationary)
+             if axes is not None and axes["r"] >= MIN_FIT_R else None)
+    if reads is not None and not np.isfinite(reads).any():
+        reads = None
+    fast = road_is_fast(net, S, i)
+    target = (expected(CURVES, fast, inp.speed0, t_rel)
+              if inp.speed0 < SLOW_START_MS and not fast else None)
+    params = dict(PARAMS)
+    if reads is not None:
+        params["sigma_speed_obs"] = SIGMA_OBS
+
     old = particle.run(inp, net, stat[i:j + 1], rows, params=PARAMS, rng=np.random.default_rng(i))
     tracker = smooth.ModeTracker(PARAMS.get("cluster_m", particle.DEFAULTS["cluster_m"]),
                                  FIX["margin"], FIX["hold"], FIX.get("release_m", 80.0),
                                  FIX.get("min_share", 0.05))
-    new = particle.run(inp, net, stat[i:j + 1], rows, params=PARAMS, rng=np.random.default_rng(i), estimator=tracker)
+    new = particle.run(inp, net, stat[i:j + 1], rows, params=params, rng=np.random.default_rng(i),
+                       estimator=tracker, speed_obs=reads, speed_target=target)
 
     lat0, lon0 = float(S.lat[i]), float(S.lon[i])
     true_e, true_n = enu(S.lat[i:j + 1], S.lon[i:j + 1], lat0, lon0)
@@ -198,6 +221,8 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     BL = pd.read_parquet(R2/"out/blackouts.parquet").set_index(["drive", "session", "row_start"])
     net = roadnet.RoadNetwork()
+    global CURVES
+    _, CURVES = fit_curves(net)
     picks = originals() if "--originals" in sys.argv else by_rule()
     log(f"exporting {len(picks)} clips at {hz} Hz — round 3 against round 2 on the same blackouts")
 
