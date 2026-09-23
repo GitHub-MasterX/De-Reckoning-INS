@@ -844,3 +844,32 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   5 s or so**. Two ways to get there, neither tried yet: bridge the gaps between turn readings with integrated forward
   acceleration (a Kalman filter, as `SpeedEstimator.kt` does, rather than holding the last reading), and add a weak but
   continuous anchor from the road's tagged speed limit. The turn reading alone cannot carry it.
+
+## 40 · Two more ways to get speed, both measured, both negative — 2026-09-23
+
+- **Integrating forward acceleration** (`round3_accel_bridge.py`, tuning drivers, only where the vehicle axes fit at
+  r ≥ 0.6). Error in the change of speed over a window, against what the car actually did:
+
+  | window | integrated acceleration | assuming no change |
+  |---|---|---|
+  | 5 s | 3.34 m/s | **2.28 m/s** |
+  | 10 s | 4.70 m/s | **3.63 m/s** |
+  | 20 s | 5.99 m/s | **3.99 m/s** |
+  | 30 s | 7.77 m/s | **5.52 m/s** |
+
+  Integration is worse than assuming the speed never changed, at every window, with or without removing its standing
+  bias. So there is nothing to bridge between turn readings with: the Kalman idea from entry 39 cannot work on 10 Hz
+  IO-VNBD data. Round 1 reached the same place by training a regressor; this is the same wall measured directly.
+- **Letting the held speed relax toward what the road carries** (`round3_speed_prior.py`): v(t) decaying from the last
+  GNSS speed toward the tagged limit, or toward what these drivers actually do on that road class (69% of blackouts
+  start on a tagged road). Path average, median: held 10.9%; relaxing over 10 s 13.3%, 20 s 11.8%, 40 s 11.5%,
+  80 s 11.2%. Share under 10%: 45% → 44%. Better on about half the blackouts and worse on the other half, which is
+  what a prior that does not know about traffic looks like. **Not adopted.**
+- **Where this leaves speed on IO-VNBD:** four independent routes have now been measured and none beats holding the
+  last GNSS speed — a trained regressor (round 1), the map's curvature (entry 31), turn readings from the
+  accelerometer (entry 39), integrated forward acceleration and a road-class prior (this entry). The dataset's 10 Hz
+  IMU cannot measure speed, and the map cannot infer it. The remaining ~20% of blackouts that miss the 10% benchmark
+  fail because the car changed speed and nothing on board could tell.
+- **What would actually change it:** a sensor this dataset does not have (wheel speed / CAN, which round 1 used only
+  to check the gyro), or the 248 Hz phone data where the same turn readings are far cleaner — there the blocker is the
+  hand-held mount, not the sampling rate.
