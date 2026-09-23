@@ -785,3 +785,30 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   are kept on screen. Round 3 is better than round 2 in nine of the twelve.
 - **The picker now colours the number**: green under 10%, amber to 20%, red above — so a clip that fails the benchmark
   says so.
+
+## 38 · Why A's off-road clip sits at 16.6% — 2026-09-23
+
+- **The blackout:** A/S4 s1 row 44419, 1,000 m in 93 s, 3 turns, slow band — the app's "England ride 4 · off road".
+- **What happened:** the car was doing 75 km/h at the last fix and slowed to about 33 km/h within fifteen seconds,
+  staying there for the rest of the blackout. The engine holds the speed from that last fix, so it was **40 km/h too
+  fast for 80 of the 93 seconds** — enough to add **928 m** of travel over a 1 km blackout.
+- **Replacing one input with the truth at a time** (dead reckoning, no map, path average):
+
+  | as it ran | true speed | true heading | true stops only | speed and heading |
+  |---|---|---|---|---|
+  | 49.8% | **2.7%** | 48.3% | 49.8% | 0.3% |
+
+  Speed is the whole error. Heading is already good: fixing it alone changes nothing (48.3%), and the gyro's turning
+  through the critical corner was +35° against the car's real +31°.
+- **What the map is doing:** it converts that 49.8% into 16.6%, which is the map earning its keep — but a map can only
+  say *which road*, never *how far along it*. Dragged along at twice the car's speed, the estimate met a junction with
+  its position 39 m out, and both branches fitted the gyro's turn equally well; it took the wrong one, ran 165 m off
+  the road for 22 s, then rejoined 15 m from the car and finally fell 182 m behind.
+- **With honest speed the same filter behaves:** started at the car's mean speed it never leaves the road (23 m worst)
+  and averages 12.3%; with the true speed at every instant, plain dead reckoning with no map at all is 2.7%.
+- **So the answer to "why not under 10%" is not the map, the cursor, or the gyro.** This engine has no speed sensor.
+  It holds the last GNSS speed, and a car that halves its speed right after the fix cannot be tracked that way.
+- **What would change it, in order of promise:** a speed reading from the accelerometer during turns
+  (v = sideways acceleration ÷ turn rate — the phone engine's method, not yet tried on IO-VNBD's 10 Hz data);
+  a stronger prior from the road's tagged speed limit (this road is tagged well below 75 km/h, and the current penalty
+  allows 25% over); and detecting the deceleration itself rather than assuming it away.
