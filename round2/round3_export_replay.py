@@ -45,6 +45,11 @@ def arg(flag, default):
 def log(m): print(f"[{time.time()-T0:5.0f}s] {m}", flush=True)
 
 
+# Kept on screen whatever the rule picks: the blackouts worth watching because they go wrong. A_S4_s1_44419 leaves the
+# road by 162 m and comes back — the wrong-branch failure that no summary number conveys.
+ALWAYS = {"A_S4_s1_44419": "off road"}
+
+
 def by_rule(per_driver=3):
     """The demo set, by a rule stated in advance: per driver, the earliest blackout in each condition band."""
     BL = pd.read_parquet(R2/"out/blackouts.parquet")
@@ -65,9 +70,19 @@ def by_rule(per_driver=3):
         for drive, session, start, band, drv in taken:
             rows.append(dict(id=f"{drv}_{drive}_s{session}_{start}", driver=drv, drive=drive, session=session,
                              row_start=start, band=band, role="tuning" if drv in ("A", "B") else "test"))
+    for cid, note in ALWAYS.items():
+        if cid in {r["id"] for r in rows}:
+            continue
+        drv, drive, sess, start = cid.split("_")[0], cid.split("_")[1], int(cid.split("_")[2][1:]), int(cid.split("_")[3])
+        band = BL[(BL.drive == drive) & (BL.session == sess) & (BL.row_start == start)].band_1000
+        rows.append(dict(id=cid, driver=drv, drive=drive, session=sess, row_start=start,
+                         band=(band.iloc[0] if len(band) else "slow"),
+                         role="tuning" if drv in ("A", "B") else "test", note=note))
     R = pd.DataFrame(rows).sort_values(["driver", "drive", "session", "row_start"]).reset_index(drop=True)
+    if "note" not in R:
+        R["note"] = None
     R["ride"] = R.groupby("driver").cumcount() + 1
-    R["name"] = "England ride " + R.ride.astype(str)
+    R["name"] = "England ride " + R.ride.astype(str) + R.note.apply(lambda n: f" · {n}" if isinstance(n, str) else "")
     return R
 
 
@@ -78,8 +93,9 @@ def originals():
     for c in idx["clips"]:
         drive, session, start = c["drive"], int(c["session"]), int(c["id"].rsplit("_", 1)[1])
         rows.append(dict(id=c["id"], driver=c["driver"], drive=drive, session=session, row_start=start,
-                         band=c["band"], role=c["role"]))
+                         band=c["band"], role=c["role"], note=None))
     R = pd.DataFrame(rows).sort_values(["driver", "drive", "session", "row_start"]).reset_index(drop=True)
+    R["note"] = None
     # two of the exported blackouts start 14 s apart on the same road (A's 44419 and 44559) and replay as the same
     # route twice; keep the earlier one so nothing is chosen by its score
     keep = []
