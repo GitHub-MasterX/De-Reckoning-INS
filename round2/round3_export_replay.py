@@ -175,8 +175,10 @@ def main():
     # replace the app's clips with these: the Trichy ones are rebuilt from round2/phone_data by make_trichy_clips.sh
     for f in ASSETS.glob("*.json"):
         f.unlink()
-    for f in OUT.glob("*.json"):
-        shutil.copy(f, ASSETS/f.name)
+    wanted = {c["id"] + ".json" for c in index} | {"index.json"}
+    for f in OUT.glob("*.json"):                      # only what this export produced: no leftovers from earlier runs
+        if f.name in wanted:
+            shutil.copy(f, ASSETS/f.name)
     meta = dict(generated=time.strftime("%Y-%m-%d"), checkpoint_m=CHECKPOINT, hz=hz, params=PARAMS,
                 calibration=CHOICE, reporting=FIX, clips=index)
     (OUT/"index.json").write_text(json.dumps(meta, indent=1))
