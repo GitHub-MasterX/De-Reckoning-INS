@@ -614,3 +614,30 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
 - **What this leaves for round 3:** speed has to come from the accelerometer (mount-free corner readings, since the
   phone-to-vehicle rotation is what failed on the rides) or from along-track structure the map does have — junctions
   passed, stop lines, road-class changes — used as position landmarks rather than as a speed sensor.
+
+## 32 · The metric changes: error along the path, not at the end — 2026-09-23
+
+- **Why:** watching the replay clips, the rider saw the cursor sit far off the road for tens of seconds and still score
+  a few per cent, because round 2 scored the error *at a checkpoint*. From here on every result is reported as
+  **end-point drift and the average drift along the whole blackout, with the path average the number that counts**.
+- **Measured** (`round2/round3_path_metric.py`): the frozen round-2 filter re-run with the estimate recorded every
+  second, error as % of distance travelled, averaged from 100 m of travel to 1 km. Nothing retuned.
+
+  | | n | end median | end <10% | **path median** | **path <10%** | worst moment (median) | no map, path |
+  |---|---|---|---|---|---|---|---|
+  | D+E (test) | 2,421 | 9.3% | 53% | **7.0%** | **73%** | 16.3% | 8% |
+  | · under 40 | 98 | 6.0% | 56% | 10.6% | 47% | 37.0% | 23% |
+  | · 40–50 | 177 | 9.1% | 54% | 9.7% | 51% | 30.5% | 19% |
+  | · 50–70 (PS) | 407 | 5.7% | 64% | 7.9% | 61% | 22.2% | 16% |
+  | · 70+ | 1,739 | 10.0% | 50% | 6.6% | 80% | 14.6% | 6% |
+  | A+B (tuning) | 698 | 5.4% | 66% | 6.9% | 70% | 21.1% | 12% |
+
+- **The two numbers disagree** on 13% of the blackouts that pass at the end: those average 14% along the path and reach
+  36% at their worst. Correlation between them is only r = 0.76.
+- **The app's clips were the misleading part.** `step9_export_replay.py` picks clips *by their ending* (the map helps
+  most and the estimate finishes inside 10%), so all 12 England clips pass at the end while only 5 hold up along the
+  path — A ride 1 4.8%, B ride 1 3.8%, D ride 2 6.4%, E ride 1 5.7%, E ride 2 8.1%; the others average 15–32%.
+  That is selection, not a property of the engine: across all blackouts the path average is *kinder* than the end
+  number (73% pass against 53% on the test drivers).
+- **What this makes the round-3 target:** the worst moment. Median worst excursion is 16% on test blackouts and 37%
+  under 40 km/h — the estimate leaving the road and coming back is what a rider sees, and no checkpoint metric shows it.
