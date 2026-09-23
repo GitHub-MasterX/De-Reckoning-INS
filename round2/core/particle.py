@@ -126,9 +126,13 @@ def _estimate(net, st, w, lat0, lon0, cluster_m):
     return float(ww @ east[near]), float(ww @ north[near]), float(ww @ st["dist"][near])
 
 
-def run(inp, net, stationary, record_rows, params=None, rng=None):
+def run(inp, net, stationary, record_rows, params=None, rng=None, estimator=None):
     """Run the filter over one blackout. Returns the estimate at each row in `record_rows` (east, north metres from
-    the start fix, and distance travelled), plus diagnostics."""
+    the start fix, and distance travelled), plus diagnostics.
+
+    estimator: round 3 only — an alternative way of turning the particles into one reported point (core/smooth.py).
+    It sees the same particles and weights, draws no random numbers and changes nothing the filter believes, so with
+    estimator=None every number round 2 published is reproduced exactly."""
     p = dict(DEFAULTS)
     p.update(params or {})
     rng = rng if rng is not None else np.random.default_rng(0)
@@ -219,7 +223,8 @@ def run(inp, net, stationary, record_rows, params=None, rng=None):
                 east, north, dist_est, on_map = dr_e[k + 1], dr_n[k + 1], dr_d[k + 1], False
                 out["fallback_rows"] += 1
             else:
-                east, north, dist_est = _estimate(net, st, w, inp.lat0, inp.lon0, p["cluster_m"])
+                east, north, dist_est = (_estimate(net, st, w, inp.lat0, inp.lon0, p["cluster_m"]) if estimator is None
+                                         else estimator(net, st, w, inp.lat0, inp.lon0, p))
                 on_map = True
                 if p["straight_blend_m"] > 0:            # long straight: coast on from the last map-corrected point
                     since = dr_d[k + 1] - anchor[5]

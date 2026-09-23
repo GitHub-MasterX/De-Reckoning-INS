@@ -670,3 +670,35 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   smoothly, while the map-aided one snaps between roads.
 - **Round-3 target, stated in the order it matters:** (1) no teleporting — the reported position must move like a
   vehicle; (2) fewer wrong-branch commitments, worst in slow town driving; (3) the path-average drift of entry 32.
+
+## 34 · Fixing what the cursor does — mode hysteresis and a speed-limited cursor — 2026-09-23
+
+- **Why:** entry 33 — 42% of test blackouts leave the driven road and every blackout contains a teleport (84 m median
+  worst step). Both are what a reviewer sees; neither shows in any checkpoint metric.
+- **What was built** (`round2/core/smooth.py`, both in the reporting layer):
+  - `ModeTracker` — the filter believes several roads at once; round 2 reported whichever group of guesses was
+    strongest at that instant, so a rival that edged ahead for one update stole the cursor and gave it back. Now the
+    group reported last time keeps the cursor until a rival is clearly better (1.3×) for 2 updates running, or until
+    the reported group dies.
+  - `smooth_track` — the reported point chases the filter at a speed a vehicle could manage
+    (max(1.5 × believed speed, speed + 3 m/s)), so a correction arrives as motion, not as a jump. The believed speed is
+    the engine's held GNSS speed, never the truth.
+  - `core/particle.py` gained one optional argument (`estimator=`) and nothing else; with it unset every round-2 number
+    is reproduced exactly (checked: 199 checkpoints, 0 differ).
+- **Chosen on A+B only** (300 blackouts, `round3_report_fix.py --stage tune`): of seven variants, margin 1.3 / hold 2
+  with the 1.5× cursor. Hysteresis alone fixed the excursions but not the teleports (74% of blackouts still jumped);
+  the cursor alone fixed the teleports but left more excursions; a firmer hold or a slower cursor cost accuracy.
+- **Run once on D+E with that frozen** (2,421 blackouts):
+
+  | | path median | path <10% | end median | worst moment | off route | worst sideways | teleports | worst jump |
+  |---|---|---|---|---|---|---|---|---|
+  | round 2 | 7.0% | 73% | 9.3% | 16.3% | 45% | 20 m | 71% | 84 m |
+  | **round 3** | **6.4%** | **77%** | 9.4% | **13.3%** | **12%** | **14 m** | **2%** | **34 m** |
+
+  By condition, off route: fast 47% → 6%, 50–70 38% → 21%, 40–50 39% → 32%, under 40 53% → 44%. Teleports fall to
+  1–6% in every band. Path drift improves everywhere except under 40 km/h (10.6% → 11.3%), where the cursor's speed
+  limit costs a little because the vehicle itself is slow.
+- **A jump is now measured honestly**: a step counts only if the cursor covers more ground than the vehicle plausibly
+  could (1.5× what the vehicle actually moved, plus 20 m), so ordinary motorway motion is not counted.
+- **Still open:** under-40 driving — 44% of those blackouts still leave the road, and the path drift there is 11.3%.
+  That is the wrong-branch problem at junctions, which hysteresis softens but does not solve.
