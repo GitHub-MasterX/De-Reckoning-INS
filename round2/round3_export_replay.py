@@ -51,7 +51,18 @@ def originals():
         drive, session, start = c["drive"], int(c["session"]), int(c["id"].rsplit("_", 1)[1])
         rows.append(dict(id=c["id"], driver=c["driver"], drive=drive, session=session, row_start=start,
                          band=c["band"], role=c["role"]))
-    R = pd.DataFrame(rows).sort_values(["driver", "id"]).reset_index(drop=True)
+    R = pd.DataFrame(rows).sort_values(["driver", "drive", "session", "row_start"]).reset_index(drop=True)
+    # two of the exported blackouts start 14 s apart on the same road (A's 44419 and 44559) and replay as the same
+    # route twice; keep the earlier one so nothing is chosen by its score
+    keep = []
+    for _, g in R.groupby("driver"):
+        last = None
+        for r in g.itertuples(index=False):
+            same_road = last is not None and (r.drive, r.session) == last[:2] and abs(r.row_start - last[2]) < 1200
+            if not same_road:
+                keep.append(r.id)
+                last = (r.drive, r.session, r.row_start)
+    R = R[R.id.isin(keep)].reset_index(drop=True)
     # the readable names, numbered per driver exactly as the app numbers them
     R["ride"] = R.groupby("driver").cumcount() + 1
     R["name"] = "England ride " + R.ride.astype(str)
