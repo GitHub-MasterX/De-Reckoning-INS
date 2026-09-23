@@ -908,3 +908,54 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   r ≥ 0.6, and it helps on phones that can feel a corner. The test-set numbers are unchanged by it.
 - **Where it should pay off properly:** the 248 Hz phone. There the same readings were three times cleaner, and the
   blocker was the hand-held mount rather than the sensor.
+
+## 42 · Everything tried to reach 10% on every blackout, and where the wall is — 2026-09-23
+
+The benchmark, read the way it should be (error averaged along the whole blackout): test drivers sit at **5.9% median
+with 80% of blackouts under 10%**. This entry is the attempt to move the last fifth, and it is mostly a record of what
+does not work, which is worth as much as what does.
+
+**Why the error is where it is.** Position error splits into across-track (which road) and along-track (where on it).
+The map fixes the first and cannot fix the second; along-track error is exactly the integral of the speed error. So the
+whole problem is speed, and everything else is managing its consequences.
+
+**Measuring speed — five routes, all measured, none usable on this data:**
+
+| route | result |
+|---|---|
+| trained IMU regressor (round 1) | lost to coasting |
+| map curvature, speed = turn rate ÷ curvature (entry 31) | 11–14 m/s RMS; map curvature correlates with the driven curvature at r = 0.22 |
+| accelerometer turn readings (entries 39, 41) | 2.7–4.0 m/s RMS where the phone can feel a corner — better than holding, but only 24% of blackouts and 3 readings each |
+| integrating forward acceleration (entry 40) | worse than assuming no change, at every window from 5 s to 30 s |
+| vibration energy → speed, fitted per session | fits its own history at r = 0.78, but carries into the blackout at 4.76 m/s RMS against holding's 3.00 |
+
+**Predicting speed instead — three routes, all measured, none usable:**
+- toward the tagged limit (entry 40): 10.9% → 11.2%; drivers exceed limits routinely.
+- tightening the filter's own speed-limit penalty: slack 1.25 → 1.10 is a wash, → 0.90 costs 65% → 50% under 10%.
+- regression to the mean, learned from data (v(60 s) = 0.59·v0 + 5.6, RMS 5.42 against holding's 6.10): full, half and
+  third strengths all lose overall, because the benchmark is a *share* and shrinkage helps the rare big decelerations
+  while hurting the common steady case.
+
+**Widening the filter's hypotheses instead of measuring** — the seeding spread `sigma_v0` is 4% of the GNSS speed, so
+when a car halves its speed the truth was never among the guesses. Widening it to 15/30/50% makes things worse
+(65% → 55% → 46% → 38% under 10%): the map's turns are too sparse and too alike to select the right hypothesis back,
+so widening only adds variance. This is the clearest statement of the wall: **along-track position is not identifiable
+from a 10 Hz IMU and OSM geometry alone.**
+
+**What did survive**, both narrow by design and adopted because they cost nothing where they do not apply:
+- turn readings given to the filter as a speed measurement (entry 41): where a reading exists, under 10% 57% → 61%,
+  off route 29% → 23%;
+- regression to the mean applied only to slow starts on ordinary roads, where the effect is strong and the risk small.
+
+**Both together, tuning drivers (300 blackouts):** under 10% 66% → 68%; on the 60 blackouts that start slow,
+37% → 50% and path 11.4% → 9.9%. **One test run on D+E (2,421 blackouts):** fleet unchanged at 80% under 10% and 5.9%
+median — no test blackout has a usable turn reading (D's and E's phones register 12% and 6% of cornering force) and
+only 3% start slow — but on those 80 blackouts, under 10% 24% → 30% and path 17.4% → 14.6%, and the slow band as a
+whole moves 43% → 46% with path 12.0% → 10.7%.
+
+**Where the benchmark stands by condition** (test drivers, path average): 70+ km/h **88% under 10%**, 50–70 (the PS
+case) 65% with median 7.1%, 40–50 53%, under 40 46%. The failures concentrate exactly where speed changes most.
+
+**What would actually break the wall**, none of it a tuning question: a wheel-speed or OBD/CAN feed (the floor with
+true speed is 2.5–3%); a phone whose accelerometer feels cornering, rigidly mounted — on the 248 Hz Trichy rides the
+same turn readings were three times cleaner; or any GNSS glimpse inside the blackout.

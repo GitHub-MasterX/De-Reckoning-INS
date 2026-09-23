@@ -127,7 +127,8 @@ def _estimate(net, st, w, lat0, lon0, cluster_m):
     return float(ww @ east[near]), float(ww @ north[near]), float(ww @ st["dist"][near])
 
 
-def run(inp, net, stationary, record_rows, params=None, rng=None, estimator=None, speed_obs=None):
+def run(inp, net, stationary, record_rows, params=None, rng=None, estimator=None, speed_obs=None,
+        speed_target=None):
     """Run the filter over one blackout. Returns the estimate at each row in `record_rows` (east, north metres from
     the start fix, and distance travelled), plus diagnostics.
 
@@ -137,7 +138,11 @@ def run(inp, net, stationary, record_rows, params=None, rng=None, estimator=None
 
     speed_obs: round 3 only — one value per row, NaN where there is none: a speed measured during a turn from the
     accelerometer (round3_accel_speed.py). Where one exists, guesses whose speed disagrees with it lose weight. With
-    speed_obs=None nothing changes."""
+    speed_obs=None nothing changes.
+
+    speed_target: round 3 only — the speed the guesses should drift toward as the blackout goes on, one value per row
+    (round3_shrink_speed.py). Every guess is carried by the same expected change, so the spread is untouched and only
+    the centre moves. With speed_target=None nothing changes."""
     p = dict(DEFAULTS)
     p.update(params or {})
     rng = rng if rng is not None else np.random.default_rng(0)
@@ -169,6 +174,8 @@ def run(inp, net, stationary, record_rows, params=None, rng=None, estimator=None
         else:
             st["v"] += (p["speed_pull"]*(inp.speed0 - st["v"])*dt[k]
                         + rng.normal(0.0, p["q_speed"]*np.sqrt(max(dt[k], 1e-6)), n))
+            if speed_target is not None:                   # everyone follows the expected change of speed
+                st["v"] += float(speed_target[k + 1] - speed_target[k])
             np.clip(st["v"], p["v_min"], p["v_max"], out=st["v"])
             step = st["v"]*dt[k]
         st["off"] += step
