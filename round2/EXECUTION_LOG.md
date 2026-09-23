@@ -702,3 +702,31 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   could (1.5× what the vehicle actually moved, plus 20 m), so ordinary motorway motion is not counted.
 - **Still open:** under-40 driving — 44% of those blackouts still leave the road, and the path drift there is 11.3%.
   That is the wrong-branch problem at junctions, which hysteresis softens but does not solve.
+
+## 35 · The fix on screen — round 2's cursor against round 3's — 2026-09-23
+
+- **The Trichy clips were removed from the app** (the rides themselves stay in `round2/phone_data/`, and
+  `make_trichy_clips.sh` rebuilds them whenever they are wanted).
+- **New replay clips** (`round2/round3_export_replay.py`, `out/replay3/`): the app's third track no longer shows the
+  map-free baseline but **round 2's own raw estimate**, so one clip shows both cursors — green GNSS truth, cyan the
+  round-3 cursor (mode hysteresis + speed limit), red round 2's, from the same filter run with the same seed. Any
+  difference on screen is the reporting layer and nothing else.
+- **Chosen by what happened along the path, never by the ending** (the rule from entry 32): three per driver — the
+  blackout where round 2 jumped worst, a typical one, and the driver's best. The reason is written into the clip and
+  shown in the picker.
+- **What they show** (path average, round 2 → round 3):
+
+  | clip | condition | path | worst moment |
+  |---|---|---|---|
+  | A · biggest jump | 50–70 | 39.4% → **20.0%** | 59.2% → 24.1% |
+  | A · typical | 40–50 | 7.2% → 5.9% | 28.5% → 13.4% |
+  | D · biggest jump | under 40 | 67.0% → 63.5% | 131.3% → 114.3% |
+  | D · typical | 40–50 | 6.4% → 4.5% | 25.1% → 14.8% |
+  | E · biggest jump | under 40 | 36.6% → **21.9%** | 126.0% → 53.5% |
+  | E · typical | 50–70 | 6.9% → 5.5% | 18.6% → 11.8% |
+  | B · biggest jump | 40–50 | 32.4% → **59.7%** | 80.6% → 76.7% |
+
+  The B clip is worse with the fix and is kept as it fell: holding a mode through a junction can hold the wrong one,
+  which is exactly the open problem from entry 34.
+- **App labels** now read ROUND 3 CURSOR / ROUND 2 CURSOR, and each row shows the path average with round 2's beside it.
+  Built and installed on the phone.
