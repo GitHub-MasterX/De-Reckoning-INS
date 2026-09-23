@@ -4,3 +4,4 @@ phone_data/
 # the phone-derived replay clips carry location traces
 out/replay_trichy/
 out/round3_trichy*.parquet
+TRICHY_REPORT.md
