@@ -9,20 +9,26 @@ median blackout. A vehicle cannot do that, and on a screen it is the most obviou
 This is a reporting layer, not a change to what the filter believes: the filter's own estimate is the target, and the
 reported cursor chases it at a speed a vehicle could manage.
 
-    limit = max(CATCH_UP x speed, speed + EXTRA_MS)      how fast the cursor may travel, m/s
-    the cursor moves toward the filter's estimate, never further than limit x dt in one step
+    limit = max(CATCH_UP x speed, speed + EXTRA_MS)      the ordinary allowance, m/s
+    if the gap is large, the cursor is allowed gap / CLOSE_S instead, capped at MAX_FACTOR x speed (or speed +
+    MAX_EXTRA_MS), so it closes a standing gap in about CLOSE_S seconds rather than trailing behind for the whole
+    blackout
 
-So a brief wrong-road excursion is mostly absorbed (the cursor leans towards it and comes back), and a real correction
-still arrives, a few seconds later, as motion instead of a teleport. The speed used is the engine's own held speed, not
-the truth.
+Both halves matter. Without the first the cursor teleports; without the second it lags — measured on the replay clips,
+the plain speed limit left the cursor 169 m behind the vehicle where round 2 had been 83 m behind, because round 2 got
+there by jumping 188 m in one step. The speed used is the engine's own held speed, never the truth.
 """
 import numpy as np
 
 CATCH_UP = 1.5               # the cursor may move this much faster than the vehicle is believed to be going
 EXTRA_MS = 3.0               # plus this, so it can still close a gap when the vehicle is slow or stopped
+CLOSE_S = 8.0                # a standing gap should be closed in about this long, so the cursor never trails for ever
+MAX_FACTOR = 3.0             # but never faster than this multiple of the vehicle's speed
+MAX_EXTRA_MS = 15.0          # or this much above it, whichever is the more generous
 
 
-def smooth_track(t, east, north, speed, catch_up=CATCH_UP, extra_ms=EXTRA_MS, start=(0.0, 0.0)):
+def smooth_track(t, east, north, speed, catch_up=CATCH_UP, extra_ms=EXTRA_MS, start=(0.0, 0.0),
+                 close_s=CLOSE_S, max_factor=MAX_FACTOR, max_extra_ms=MAX_EXTRA_MS):
     """Follow the filter's estimates (east, north, metres) with a cursor that never exceeds a vehicle's speed.
 
     t        the time of each estimate, s
@@ -37,18 +43,34 @@ def smooth_track(t, east, north, speed, catch_up=CATCH_UP, extra_ms=EXTRA_MS, st
     out_e = np.empty_like(east)
     out_n = np.empty_like(north)
     cx, cy = float(start[0]), float(start[1])
+    hx, hy = 0.0, 0.0            # the direction the cursor is travelling, kept between steps
     prev_t = t[0] - (t[1] - t[0] if len(t) > 1 else 1.0)
     for k in range(len(t)):
         dt = max(float(t[k] - prev_t), 1e-6)
         prev_t = t[k]
         dx, dy = east[k] - cx, north[k] - cy
         gap = float(np.hypot(dx, dy))
-        limit = max(catch_up*float(speed[k]), float(speed[k]) + extra_ms)*dt
+        v = float(speed[k])
+        allow = max(catch_up*v, v + extra_ms)                       # ordinary following
+        if close_s > 0 and gap > 0:
+            # Catching up is only safe in the direction the cursor is already travelling. A gap that lies ahead of
+            # (or behind) the cursor is a place on the same road, so close it fast; a gap off to the side means the
+            # filter has changed its mind about which road, and hurrying there is exactly the jump we are removing.
+            if hx == 0.0 and hy == 0.0:
+                hx, hy = dx/gap, dy/gap
+            ahead = abs(dx*hx + dy*hy)
+            ceiling = max(max_factor*v, v + max_extra_ms)
+            allow = min(max(allow, ahead/close_s), ceiling)
+        limit = allow*dt
+        px, py = cx, cy
         if gap > limit and gap > 0:
             cx += dx*limit/gap
             cy += dy*limit/gap
         else:
             cx, cy = float(east[k]), float(north[k])
+        step = float(np.hypot(cx - px, cy - py))
+        if step > 0.5:                                             # remember where it is heading, ignoring jitter
+            hx, hy = (cx - px)/step, (cy - py)/step
         out_e[k], out_n[k] = cx, cy
     return out_e, out_n
 
@@ -65,10 +87,12 @@ class ModeTracker:
     resampling. Only the choice of which mode is shown.
     """
 
-    def __init__(self, cluster_m, margin=1.6, hold=3):
+    def __init__(self, cluster_m, margin=1.6, hold=3, release_m=80.0, min_share=0.05):
         self.cluster_m = float(cluster_m)
         self.margin = float(margin)
         self.hold = int(hold)
+        self.release_m = float(release_m)      # holding a mode this far from the filter's best guess helps nobody
+        self.min_share = float(min_share)      # nor holding one the filter has all but abandoned
         self.anchor = None          # (east, north) of the mode being reported
         self.streak = 0
         self.switches = 0
@@ -94,8 +118,9 @@ class ModeTracker:
         else:
             keep = np.hypot(east - self.anchor[0], north - self.anchor[1]) <= self.cluster_m
             w_keep = float(w[keep].sum())
-            if w_keep <= 0:
-                keep, self.streak = comp, 0                       # the mode we were reporting is gone
+            far = float(np.hypot(self.anchor[0] - east[best], self.anchor[1] - north[best]))
+            if w_keep <= 0 or w_keep < self.min_share or far > self.release_m:
+                keep, self.streak = comp, 0                       # gone, abandoned, or left far behind
                 self.switches += 1
             elif not keep[best] and w_comp > self.margin*w_keep:      # the rival is a different mode, not our own
                 self.streak += 1

@@ -54,12 +54,17 @@ def measure(est_e, est_n, t, tx, ty, ts, true_s, keep, v_true=None):
     counted and a hop between roads is.
     """
     pct = 100*np.hypot(est_e - tx, est_n - ty)/np.maximum(true_s, 1e-9)
-    cross, _ = decompose(est_e, est_n, tx, ty, ts)
+    cross, along = decompose(est_e, est_n, tx, ty, ts)
+    behind = true_s - along                                   # positive: the cursor sits back down the road
     moved = np.hypot(np.diff(est_e, prepend=est_e[0]), np.diff(est_n, prepend=est_n[0]))
     dt = np.diff(t, prepend=t[0] - SAMPLE_S)
     allow = (1.5*np.asarray(v_true, float)*dt + JUMP_M) if v_true is not None else np.full(len(t), JUMP_M)
     n_off, long_off, total_off = episodes((cross > OFF_M) & keep, t)
-    return dict(path=float(np.mean(pct[keep])), end=float(pct[-1]), worst=float(np.max(pct[keep])),
+    # frozen: the cursor barely moving while the vehicle covers ground
+    vmoved = np.diff(true_s, prepend=true_s[0])
+    frozen = float(((moved < 0.2*np.maximum(vmoved, 1e-6)) & (vmoved > 5.0) & keep).sum())*SAMPLE_S
+    return dict(frozen_s=frozen, lag_m=float(np.mean(behind[keep])), lag_worst_m=float(np.max(np.abs(behind[keep]))),
+                path=float(np.mean(pct[keep])), end=float(pct[-1]), worst=float(np.max(pct[keep])),
                 worst_cross=float(np.max(cross[keep])), off=bool(n_off > 0), off_longest_s=float(long_off),
                 jumps=int(((moved > allow) & keep).sum()), worst_jump=float(np.max(moved[keep])),
                 worst_excess=float(np.max((moved - allow)[keep])))
@@ -99,18 +104,22 @@ def run_variants(drivers, variants, limit=0):
         tx, ty = tx_all[r], ty_all[r]
         raw = {}
         for name, v in variants.items():
-            src = f"hyst{v.get('margin', 1.6)}_{v.get('hold', 3)}" if v["hysteresis"] else "plain"
+            src = (f"hyst{v.get('margin', 1.6)}_{v.get('hold', 3)}_{v.get('release_m', 80.0)}_"
+                   f"{v.get('min_share', 0.05)}") if v["hysteresis"] else "plain"
             if src not in raw:
                 cluster_m = PARAMS.get("cluster_m", particle.DEFAULTS["cluster_m"])
-                mt = (smooth.ModeTracker(cluster_m, v.get("margin", 1.6), v.get("hold", 3))
+                mt = (smooth.ModeTracker(cluster_m, v.get("margin", 1.6), v.get("hold", 3),
+                                         v.get("release_m", 80.0), v.get("min_share", 0.05))
                       if v["hysteresis"] else None)
                 res = particle.run(inp, net, stat[i:j + 1], rows, params=PARAMS,
                                    rng=np.random.default_rng(i), estimator=mt)
                 raw[src] = (np.asarray(res["east"], float), np.asarray(res["north"], float))
             e, n = raw[src]
             if v["smooth"]:
-                e, n = smooth.smooth_track(t, e, n, inp.speed0, v.get("catch_up", 1.5), v.get("extra", 3.0))
-            m = measure(e, n, t, tx, ty, ts, true_s, keep, v_true=S.v[i + r])
+                e, n = smooth.smooth_track(t, e, n, inp.speed0, v.get("catch_up", 1.5), v.get("extra", 3.0),
+                                           close_s=v.get("close_s", smooth.CLOSE_S),
+                                           max_factor=v.get("max_factor", smooth.MAX_FACTOR))
+            m = measure(e, n, t, tx, ty, ts[r], true_s, keep, v_true=S.v[i + r])
             m.update(variant=name, driver=b.driver, drive=b.drive, session=int(b.session), row_start=i,
                      band=b.band_1000)
             recs.append(m)
@@ -120,12 +129,12 @@ def run_variants(drivers, variants, limit=0):
 def report(P, title):
     head(title)
     print(f"  {'variant':<22}{'n':>6}{'PATH med':>10}{'path<10%':>10}{'end med':>9}{'end<10%':>9}"
-          f"{'worst med':>11}{'off route':>11}{'worst side':>11}{'jumps':>8}{'worst jump':>11}")
+          f"{'worst med':>11}{'off route':>11}{'worst side':>11}{'jumps':>8}{'worst jump':>11}{'frozen':>9}{'lag':>9}")
     for name, g in P.groupby("variant", sort=False):
         print(f"  {name:<22}{len(g):>6}{g.path.median():>9.1f}%{100*(g.path < 10).mean():>9.0f}%"
               f"{g['end'].median():>8.1f}%{100*(g['end'] < 10).mean():>8.0f}%{g.worst.median():>10.1f}%"
               f"{100*g.off.mean():>10.0f}%{g.worst_cross.median():>10.0f}m{100*(g.jumps > 0).mean():>7.0f}%"
-              f"{g.worst_jump.median():>10.0f}m")
+              f"{g.worst_jump.median():>10.0f}m{g.frozen_s.median():>9.1f}s{g.lag_m.median():>9.0f}m")
 
 
 def main():
@@ -142,6 +151,24 @@ def main():
             "both, firm hold": dict(hysteresis=True, smooth=True, margin=2.5, hold=5),
             "mild hold, quick cursor": dict(hysteresis=True, smooth=True, margin=1.3, hold=2, catch_up=2.0, extra=5.0),
             "mild hold, quicker still": dict(hysteresis=True, smooth=True, margin=1.3, hold=2, catch_up=3.0, extra=8.0),
+            "round 3b: catch up in 8 s": dict(hysteresis=True, smooth=True, margin=1.3, hold=2, close_s=8.0),
+            "round 3b: catch up in 5 s": dict(hysteresis=True, smooth=True, margin=1.3, hold=2, close_s=5.0),
+            "round 3b: 5 s, free mode": dict(hysteresis=True, smooth=True, margin=1.3, hold=2, close_s=5.0,
+                                             release_m=50.0),
+            "round 3b: 5 s, fast cap": dict(hysteresis=True, smooth=True, margin=1.3, hold=2, close_s=5.0,
+                                            max_factor=4.0),
+            "cursor, quick close": dict(hysteresis=False, smooth=True, close_s=4.0, max_factor=4.0),
+            "light hold": dict(hysteresis=True, smooth=True, margin=1.15, hold=2, release_m=40.0, close_s=6.0),
+            "light hold, quick close": dict(hysteresis=True, smooth=True, margin=1.15, hold=1, release_m=40.0,
+                                            close_s=4.0, max_factor=4.0),
+            "light hold, tight release": dict(hysteresis=True, smooth=True, margin=1.15, hold=2, release_m=25.0,
+                                              close_s=4.0, max_factor=4.0),
+            "firm hold + along catch-up": dict(hysteresis=True, smooth=True, margin=1.3, hold=2, release_m=80.0,
+                                               close_s=6.0),
+            "firm hold + quick along": dict(hysteresis=True, smooth=True, margin=1.3, hold=2, release_m=80.0,
+                                            close_s=3.0, max_factor=4.0),
+            "firm hold, no catch-up": dict(hysteresis=True, smooth=True, margin=1.3, hold=2, release_m=80.0,
+                                           close_s=0.0),
         }
         P = run_variants(TUNE, variants, limit)
         P.to_parquet(R2/"out/round3_report_fix_tune.parquet", index=False)

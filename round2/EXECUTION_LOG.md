@@ -730,3 +730,35 @@ Results are explained in `MAP_LANDMARK_APPROACH.md`; raw console output is in `o
   which is exactly the open problem from entry 34.
 - **App labels** now read ROUND 3 CURSOR / ROUND 2 CURSOR, and each row shows the path average with round 2's beside it.
   Built and installed on the phone.
+
+## 36 · Best of both — why round 3 lagged, and the directional catch-up — 2026-09-23
+
+- **What the rider saw in the clips, checked:** the round-3 cursor followed the right road but sat *behind* the vehicle.
+  Decomposed against the driven path: D ride 1, round 2 trails 83 m on average and round 3 trails 169 m — round 2 only
+  keeps up by teleporting (a 188 m step in that clip, 767 m in B ride 2). Removing the teleport removed the catching up
+  with it.
+- **The fix, in two halves:**
+  - `smooth_track` gained a catch-up: a standing gap is closed in about 6 s rather than at walking pace, capped at 3×
+    the believed speed so it still looks like a vehicle.
+  - That alone made things worse in a new way — the cursor now chased the filter *onto* wrong roads (off-route 12% →
+    34% on the test drivers). So the catch-up was made **directional**: fast along the way the cursor is already
+    travelling (a gap there is a place on the same road), ordinary speed sideways (a gap there means the filter has
+    changed its mind about the road, and hurrying is the jump we removed).
+  - `ModeTracker` gained two release rules: let a mode go when the filter has all but abandoned it (weight under 5%)
+    or when it has been left more than 80 m behind the filter's own best guess.
+- **Chosen on A+B** (300 blackouts, twelve variants): margin 1.3, hold 2, release 80 m, close in 6 s, cap 3×.
+- **Run on D+E** (2,421 blackouts) — round 3 now beats round 2 on every column that matters:
+
+  | | path median | path <10% | end median | worst moment | off route | worst sideways | teleports | worst step | lag |
+  |---|---|---|---|---|---|---|---|---|---|
+  | round 2 | 7.0% | 73% | 9.3% | 16.3% | 45% | 20 m | 71% | 84 m | 2 m |
+  | **round 3** | **5.9%** | **80%** | **8.2%** | **13.1%** | **29%** | **15 m** | **5%** | **37 m** | 18 m |
+
+  By condition, off route: fast 47% → 35%, 50–70 38% → 27%, 40–50 39% → 30%, under 40 53% → 44%.
+- **Honest notes:** the cursor still sits about 18 m further back than round 2's (which got there by jumping); the 5%
+  of "teleports" left are catch-up moves capped at 3× the vehicle's speed, not hops between roads — worst step 37 m
+  against round 2's 84 m. The test set has now been run three times while settling the reporting layer (engine
+  untouched, settings chosen on A+B each time); that is tuning on the test set's back, and the next change to these
+  settings should be judged on A+B alone.
+- **Clips re-exported** with the final settings, and the map's recentre control is now a round button on the right edge
+  that centres both cursors at once, instead of a pill that looked like the north-up toggle.

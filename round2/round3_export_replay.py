@@ -10,9 +10,8 @@ without the map. Here the third track is repurposed to the thing worth looking a
 Both cursors come from one run of the filter per clip with the same seed, so any difference on screen is the reporting
 layer and nothing else.
 
-Clips are chosen by what the estimate did along the whole path, never by where it happened to finish, and each driver
-contributes three: the blackout where round 2 jumped worst (what the fix is for), a typical one (its path average is
-the median for that driver), and its best. The reason is written into the clip so the picker can say which is which.
+The clips are the same blackouts the app has always replayed — the set step9_export_replay.py exported, with the same
+ids and the same "England ride N" names — so what changed on screen is the engine's behaviour and not the examples.
 
 Outputs: round2/out/replay3/*.json and the same files copied into the app's assets.
 Run from the repo root:  .venv/bin/python3 round2/round3_export_replay.py [--hz 10]
@@ -44,35 +43,19 @@ def arg(flag, default):
 def log(m): print(f"[{time.time()-T0:5.0f}s] {m}", flush=True)
 
 
-def candidates():
-    """Blackouts already measured both ways: round 2's raw cursor and round 3's, per driver."""
-    frames = []
-    for path, chosen in ((R2/"out/round3_report_fix_test.parquet", "round 3 (chosen)"),
-                         (R2/"out/round3_report_fix_tune.parquet", "both, mild hold")):
-        if not path.exists():
-            continue
-        P = pd.read_parquet(path)
-        old = P[P.variant == "round 2 (as published)"].set_index(["drive", "session", "row_start"])
-        new = P[P.variant == chosen].set_index(["drive", "session", "row_start"])
-        j = old.join(new, lsuffix="_old", rsuffix="_new", how="inner").reset_index()
-        frames.append(j)
-    C = pd.concat(frames, ignore_index=True)
-    return C.rename(columns={"driver_old": "driver", "band_old": "band"})
-
-
-def pick(C, per_driver=3):
-    """Per driver: the blackout round 2 jumped worst on, a typical one, and the best — judged along the path."""
-    out = []
-    for driver, g in C.groupby("driver"):
-        g = g[g.path_new.notna()].copy()
-        if g.empty:
-            continue
-        worst_jump = g.nlargest(1, "worst_jump_old").assign(why="biggest jump in round 2")
-        typical = g.iloc[[(g.path_new - g.path_new.median()).abs().argsort().iloc[0]]].assign(why="typical")
-        best = g.nsmallest(1, "path_new").assign(why="best")
-        take = pd.concat([worst_jump, typical, best]).drop_duplicates(subset=["drive", "session", "row_start"])
-        out.append(take.head(per_driver))
-    return pd.concat(out, ignore_index=True)
+def originals():
+    """The clips the app already had (round2/out/replay/index.json), so the showcase keeps the same examples."""
+    idx = json.loads((R2/"out/replay/index.json").read_text())
+    rows = []
+    for c in idx["clips"]:
+        drive, session, start = c["drive"], int(c["session"]), int(c["id"].rsplit("_", 1)[1])
+        rows.append(dict(id=c["id"], driver=c["driver"], drive=drive, session=session, row_start=start,
+                         band=c["band"], role=c["role"]))
+    R = pd.DataFrame(rows).sort_values(["driver", "id"]).reset_index(drop=True)
+    # the readable names, numbered per driver exactly as the app numbers them
+    R["ride"] = R.groupby("driver").cumcount() + 1
+    R["name"] = "England ride " + R.ride.astype(str)
+    return R
 
 
 def build_clip(row, BL, net, cache, hz):
@@ -92,7 +75,8 @@ def build_clip(row, BL, net, cache, hz):
 
     old = particle.run(inp, net, stat[i:j + 1], rows, params=PARAMS, rng=np.random.default_rng(i))
     tracker = smooth.ModeTracker(PARAMS.get("cluster_m", particle.DEFAULTS["cluster_m"]),
-                                 FIX["margin"], FIX["hold"])
+                                 FIX["margin"], FIX["hold"], FIX.get("release_m", 80.0),
+                                 FIX.get("min_share", 0.05))
     new = particle.run(inp, net, stat[i:j + 1], rows, params=PARAMS, rng=np.random.default_rng(i), estimator=tracker)
 
     lat0, lon0 = float(S.lat[i]), float(S.lon[i])
@@ -102,7 +86,9 @@ def build_clip(row, BL, net, cache, hz):
     t_all = inp.t[k] - inp.t[0]
     old_e = np.array([0.0] + old["east"]); old_n = np.array([0.0] + old["north"])
     new_e = np.array([0.0] + new["east"]); new_n = np.array([0.0] + new["north"])
-    new_e, new_n = smooth.smooth_track(t_all, new_e, new_n, inp.speed0, FIX["catch_up"], FIX["extra"])
+    new_e, new_n = smooth.smooth_track(t_all, new_e, new_n, inp.speed0, FIX["catch_up"], FIX["extra"],
+                                       close_s=FIX.get("close_s", smooth.CLOSE_S),
+                                       max_factor=FIX.get("max_factor", smooth.MAX_FACTOR))
     on_map = np.array([False] + new["on_map"])
 
     dt = np.clip(np.diff(inp.t), 0.0, None)
@@ -121,9 +107,9 @@ def build_clip(row, BL, net, cache, hz):
     lead = int(LEAD_IN_S*10)
     pre = slice(max(0, i - lead), i, step)
     clip = dict(
-        id=f"r3_{row.driver}_{row.drive}_s{int(row.session)}_{i}",
-        driver=str(row.driver), role="tuning" if row.driver in ("A", "B") else "test",
-        drive=str(row.why), session=int(row.session), row_start=i,
+        id=str(row.id),
+        driver=str(row.driver), role=str(row.role),
+        drive=str(row.name), session=int(row.session), row_start=i,
         band=str(row.band), turns=int(BL.loc[(row.drive, int(row.session), i), f"turns_{CHECKPOINT}"]),
         avg_kmh=round(float(3.6*true_dist[-1]/(S.t[j] - S.t[i])), 1),
         distance_m=round(float(true_dist[-1]), 1), duration_s=round(float(S.t[j] - S.t[i]), 1), hz=hz,
@@ -157,7 +143,7 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     BL = pd.read_parquet(R2/"out/blackouts.parquet").set_index(["drive", "session", "row_start"])
     net = roadnet.RoadNetwork()
-    picks = pick(candidates())
+    picks = originals()
     log(f"exporting {len(picks)} clips at {hz} Hz — round 3 against round 2 on the same blackouts")
 
     index, cache = [], {}
@@ -166,10 +152,12 @@ def main():
         if clip is None:
             continue
         (OUT/f"{clip['id']}.json").write_text(json.dumps(clip, separators=(",", ":")))
-        index.append({k: clip[k] for k in ("id", "driver", "role", "drive", "session", "band", "turns", "avg_kmh",
+        clip["dataset_drive"] = str(row.drive)          # the IO-VNBD code the name replaced
+        index.append({k: clip[k] for k in ("id", "driver", "role", "drive", "dataset_drive", "session", "band",
+                                           "turns", "avg_kmh",
                                            "distance_m", "duration_s", "final_drift_m", "final_drift_pct",
                                            "final_base_m", "final_base_pct", "mean_drift_pct", "mean_base_pct")})
-        log(f"  {clip['id']:<28} {clip['drive']:<22} {clip['band']:<6} "
+        log(f"  {clip['id']:<24} {clip['drive']:<16} {clip['band']:<6} "
             f"path: round 2 {clip['mean_base_pct']:>5.1f}% -> round 3 {clip['mean_drift_pct']:>5.1f}%   "
             f"worst {clip['worst_base_pct']:>5.1f}% -> {clip['worst_drift_pct']:>5.1f}%")
 
