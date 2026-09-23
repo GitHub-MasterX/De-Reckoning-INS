@@ -994,3 +994,30 @@ same turn readings were three times cleaner; or any GNSS glimpse inside the blac
 - **Why this works when measuring failed:** the model never measures speed. It recognises a pattern — this much
   shaking, on this class of road, this built-up, this long after a fix that read 8 m/s — which is exactly the kind of
   weak, distributed evidence that no closed-form estimator was going to find.
+
+## 44 · The learned speed on our own rides — a two-wheeler, 248 Hz, Tamil Nadu — 2026-09-24
+
+- **Why:** the learned speed was built on IO-VNBD (cars, 10 Hz, England). This changes vehicle, sensor rate, mount and
+  country at once. Trained on the **outbound** ride, tested on the **return**, as the rides were always meant to be
+  used (`round3_trichy_learned_speed.py`; the recording is binned to 10 Hz, the same rows the phone's own engine uses).
+- **Segment 3, the test ride, 57 blackouts**, dead reckoning without the map:
+
+  | | holding | learned | true speed |
+  |---|---|---|---|
+  | speed error, RMS | 3.18 m/s | **2.77 m/s** (better on 58%) | — |
+  | path average, all | 10.6% | 10.7% | 1.7% |
+  | **under 40 km/h (19)** | **75.1%** | **15.6%** | — |
+  | 40–50 (4) | 10.1% | **7.3%** | — |
+  | 50–70 (31) | 5.7% | 8.9% | — |
+  | 70+ (3) | 3.2% | 10.3% | — |
+
+  The same shape as England: the model transforms slow riding and costs a little at speed.
+- **The gate does not transfer, and that is a finding.** The England gate holds the last speed on roads tagged 80 km/h
+  or more. In Tamil Nadu **0% of blackouts start on a road with any speed limit tag** — the state's OSM barely carries
+  `maxspeed` — so the road-class gate never fires. Gating on the **last known speed** needs no tags and works:
+  holding above 43 km/h and learning below gives path **10.6% → 8.7%** and under 10% **47% → 53%** on the return ride.
+- **What this shows:** the method is not specific to cars, to England, or to a 10 Hz sensor. It carries across a
+  motorcycle with the phone in a hand, at 248 Hz, on Indian roads, trained on 19 km and tested on another 18 km. The
+  deployment lesson is that the gate must be chosen from what the local map actually contains.
+- **Caveat:** this is dead reckoning without the map, so it isolates the speed contribution; the particle filter on the
+  Tamil Nadu network was not re-run here. Segment 2 (town) is too short for the 1 km blackout rule — 0 blackouts.
