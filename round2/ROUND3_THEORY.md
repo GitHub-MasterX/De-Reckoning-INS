@@ -12,6 +12,59 @@ model" before presenting.
 
 ---
 
+## 0 · The four relationships, grouped together
+
+The four inputs walked through one at a time in this conversation, side by side. Each is explained in more depth
+further down (§1 covers the first two, §3 the other two) — this section exists purely so all four sit in one place,
+in the order they were worked through.
+
+**1. Vertical vibration spread → predicted speed**
+
+| Vibration level | Raw sensor range | Model predicts |
+|---|---|---|
+| Very low (stationary/idling) | 0.02 – 0.25 | ~8 km/h |
+| Low (just moving) | 0.25 – 0.38 | ~39 km/h |
+| Medium | 0.38 – 0.49 | ~49 km/h |
+| High | 0.49 – 0.65 | ~54 km/h |
+| Very high | 0.65 – 17.80 | ~53 km/h |
+
+**2. Jerk (sudden acceleration change) → predicted speed**
+
+| Jerk level | Model predicts |
+|---|---|
+| Very low | ~8 km/h |
+| Low | ~42 km/h |
+| Medium | ~50 km/h |
+| High | ~51 km/h |
+| Very high | ~50 km/h |
+
+**3. Map speed-limit tag → predicted speed**
+
+| Tagged road limit | Model predicts |
+|---|---|
+| 2 – 13 (residential-ish) | ~30 km/h |
+| 13 – 18 | ~42 km/h |
+| 18 – 22 | ~60 km/h |
+| 22 – 31 (dual carriageway/motorway) | ~71 km/h |
+
+**4. Last known GPS speed → predicted speed 30–90 s later**
+
+| Speed at the fix | Model predicts later |
+|---|---|
+| 0 – 14 km/h | ~25 km/h |
+| 14 – 32 | ~31 km/h |
+| 32 – 45 | ~37 km/h |
+| 45 – 59 | ~43 km/h |
+| 59+ | ~66 km/h |
+
+Reading across all four: the first two (raw sensor statistics) both show the steep-climb-then-plateau shape that
+comes from sensor noise and aliasing damage (§2) — the model stops trusting the exact magnitude past a point. The
+third (a clean map tag) is the closest to a straight line, because it never touched the accelerometer. The fourth
+shows the model's own discovery of "regression to the mean" (§8) — extreme starting speeds are predicted to move back
+toward a typical pace.
+
+---
+
 ## 1 · Why the physics formulas failed, and what replaced them
 
 Round 2 held the vehicle's speed at whatever the last GNSS fix reported, for the whole blackout. Before building
