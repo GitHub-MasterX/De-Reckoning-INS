@@ -88,6 +88,38 @@ gradient-like of the four)
 | 18 – 22 | ~60 km/h |
 | 22 – 31 (dual carriageway / motorway) | ~71 km/h |
 
+**Road class (OSM highway type) → predicted speed** — the cleanest feature of all, because unlike a numeric tag there
+is nothing to bin: this feature arrives already discrete (motorway, trunk, primary, …), so the model just looks it up
+rather than searching for a threshold.
+
+| OSM road class | Real average speed | Model predicts |
+|---|---|---|
+| motorway | 105.1 km/h | **105.0 km/h** |
+| motorway_link (slip road) | 75.0 | **74.8** |
+| trunk | 47.9 | **47.9** |
+| primary | 43.4 | **43.8** |
+| trunk_link | 27.8 | **27.5** |
+| secondary | 36.4 | **36.3** |
+| tertiary | 35.2 | **35.2** |
+| tertiary_link | 27.5 | **26.4** |
+| unclassified | 25.8 | **26.1** |
+| residential | 19.8 | **20.0** |
+| secondary_link | 17.8 | **17.5** |
+| service (driveways, car parks) | 8.2 | **9.3** |
+
+Every predicted value sits within about 1 km/h of the real average — this is the model's single most trustworthy
+input, because unlike vibration or jerk it never passed through the accelerometer at all, so it carries none of the
+sensor noise, aliasing, or averaging damage described in §3b. Notice also that the model was never told "a slip road
+is different from an ordinary motorway or trunk road" — it discovered `motorway_link` (75 km/h) and `trunk_link`
+(27.8 km/h) behave as their own, intermediate categories purely by being given the freedom to split on `road_class`
+and let each branch specialize.
+
+This is also the clearest illustration of *why the map and the IMU are combined rather than either used alone*:
+`road_class` alone already predicts speed almost perfectly here — but only because it is certain which road the
+vehicle is on. During an actual blackout the particle filter is not certain of that; it is weighing several road
+hypotheses at once (§ ENGINE_LAYERS.md, layer 3). The IMU features are what keep the speed estimate useful precisely
+when the map's own road identity is still uncertain.
+
 **Last known GPS speed → predicted speed 30–90 s later**
 
 | Speed at the fix | Model predicts later |
