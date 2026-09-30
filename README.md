@@ -448,6 +448,20 @@ same corridor — average **6.5%**, with seven of eight legs under the benchmark
 
 ---
 
+## Reproducing These Results
+
+```bash
+.venv/bin/pip install -r requirements.txt
+unzip data/clean.zip -d .                          # once — restores data/clean/, LFS-tracked
+.venv/bin/python3 run_final_evaluation.py           # full test set, drivers D+E, ~45 min
+.venv/bin/python3 run_final_evaluation.py --limit 300   # a fast subset, a few minutes
+```
+
+Runs the learned speed model and the full merged engine (classifier + speed model + particle filter + reporting
+layer) fresh against drivers D and E — never used to tune any setting — and prints the exact table above, live.
+Nothing here reads from a cache; every number is a real reproduction. A transcript is written to
+`outputs/Results/final_evaluation_summary.txt`.
+
 ---
 
 ## Honest Limitations
