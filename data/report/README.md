@@ -7,9 +7,10 @@ Nothing was discarded — degraded drives are **flagged, never deleted**, becaus
 cheap phone in a real vehicle on a bad day is exactly what this system must survive.
 
 ```python
+# data/clean.zip is LFS-tracked; unzip it once first: unzip data/clean.zip -d data
 import pandas as pd
 d = pd.read_parquet("data/clean/S1.parquet")
-m = pd.read_csv("data/manifest.csv")
+m = pd.read_csv("data/test_outputs/manifest.csv")
 ```
 
 ---
