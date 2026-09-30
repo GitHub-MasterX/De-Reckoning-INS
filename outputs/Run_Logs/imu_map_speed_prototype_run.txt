@@ -1,0 +1,32 @@
+
+====================================================================================================
+Round 3 · IMU + map + the last known speed, predicting the speed 30 s later
+====================================================================================================
+[    2s]   S1/0 (A) — 5,144 samples
+[    5s]   S2/1 (A) — 9,162 samples
+[    5s]   S3a/0 (A) — 2,425 samples
+[    5s]   S3b/1 (A) — 442 samples
+[    6s]   S3c/0 (A) — 3,687 samples
+[    7s]   S4/0 (A) — 3,486 samples
+[    8s]   S4/1 (A) — 5,234 samples
+[    9s]   M/0 (B) — 4,391 samples
+[    9s]   M/1 (B) — 892 samples
+[   11s]   M/2 (B) — 5,217 samples
+
+====================================================================================================
+result
+====================================================================================================
+  40,080 samples from 10 sessions
+  holding the last fix (what the engine does today) : RMS  6.09 m/s
+  model on IMU + last speed                         : RMS  3.59 m/s
+  model on IMU + map + last speed                   : RMS  3.15 m/s
+  a model that learned nothing (the mean)           : RMS  6.30 m/s
+
+  needed to be worth using, per the payoff table: about 2 m/s
+  correlation of the full model with the truth: 0.87
+
+  by how fast the car was at the fix (held / model, RMS m/s):
+     0- 8 m/s  n=16,902   held  6.25   model  2.47
+     8-14 m/s  n=15,449   held  5.34   model  2.70
+    14-20 m/s  n= 5,340   held  6.71   model  3.96
+    20-40 m/s  n= 2,389   held  7.83   model  6.42

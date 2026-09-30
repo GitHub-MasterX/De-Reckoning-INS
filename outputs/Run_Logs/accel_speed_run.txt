@@ -1,0 +1,116 @@
+
+========================================================================================================
+Round 3 · speed from the accelerometer during turns (tuning drivers A+B)
+========================================================================================================
+  a reading needs 2 s of steady turning above 0.1 rad/s; it is trusted for 20 s
+  the vehicle's axes are used only when the history fit reaches r >= 0.60
+[    0s] 200 blackouts
+[    1s]   M/0 (B) — 0/200
+[    1s]   M/1 (B) — 20/200
+[    2s]   M/2 (B) — 26/200
+[    2s]   S1/0 (A) — 53/200
+[    2s]   S2/1 (A) — 64/200
+[    2s]   S3a/0 (A) — 99/200
+[    3s]   S3c/0 (A) — 117/200
+[    3s]   S4/0 (A) — 145/200
+[    3s]   S4/1 (A) — 154/200
+
+========================================================================================================
+1 · could the vehicle's axes be found at all?
+========================================================================================================
+  blackouts with axes good enough to use: 24% of 200
+  how well the sideways swing matches speed x turn rate (correlation r): median 0.75, p10 0.64, p90 0.85
+  scale of that swing (1.0 would mean the accelerometer reads it exactly): median 0.85
+
+========================================================================================================
+2 · the readings against the car's true speed
+========================================================================================================
+  264 readings over 47 blackouts (median 3 per blackout, 23% of the blackout covered by a fresh reading)
+  error: median +1.04 m/s, RMS 4.00, within 2 m/s 45%
+  the held GNSS speed on the same moments: RMS 6.06 m/s, within 2 m/s 24%
+
+  by fit quality:
+    r 0.6-0.8  n=  213  RMS  4.27 m/s  held  5.62 m/s
+    r 0.8-1.0  n=   51  RMS  2.58 m/s  held  7.63 m/s
+
+========================================================================================================
+3 · what it would be worth (dead reckoning, no map, path average)
+========================================================================================================
+  held speed (today)               10.1%
+  reading replaces it               9.9%   better on  30% of blackouts
+  reading, half weight             10.1%   better on  30% of blackouts
+  reading, third weight            10.1%   better on  34% of blackouts
+  half weight, trusted 40 s        10.1%   better on  30% of blackouts
+  true speed (the floor)            2.5%   better on  96% of blackouts
+
+  by driving condition (held / half weight / true):
+    slow     n=   8      9.7%    10.5%     3.1%
+    mixed    n=  14      9.5%    10.5%     3.2%
+    ps_60    n=  18     12.2%    13.3%     1.9%
+    fast     n=   7     13.2%     7.2%     1.8%
+
+========================================================================================================
+Round 3 · speed from the accelerometer during turns (tuning drivers A+B)
+========================================================================================================
+  a reading needs 2 s of steady turning above 0.1 rad/s; it is trusted for 20 s
+  the vehicle's axes are used only when the history fit reaches r >= 0.60
+[    0s] 200 blackouts
+[    1s]   M/0 (B) — 0/200
+[    1s]   M/1 (B) — 20/200
+[    2s]   M/2 (B) — 26/200
+[    2s]   S1/0 (A) — 53/200
+[    2s]   S2/1 (A) — 64/200
+[    2s]   S3a/0 (A) — 99/200
+[    3s]   S3c/0 (A) — 117/200
+[    3s]   S4/0 (A) — 145/200
+[    3s]   S4/1 (A) — 154/200
+
+========================================================================================================
+1 · could the vehicle's axes be found at all?
+========================================================================================================
+  blackouts with axes good enough to use: 24% of 200
+  how well the sideways swing matches speed x turn rate (correlation r): median 0.75, p10 0.64, p90 0.85
+  scale of that swing (1.0 would mean the accelerometer reads it exactly): median 0.85
+
+========================================================================================================
+2 · the readings against the car's true speed
+========================================================================================================
+  264 readings over 47 blackouts (median 3 per blackout, 23% of the blackout covered by a fresh reading)
+  error: median +1.04 m/s, RMS 4.00, within 2 m/s 45%
+  the held GNSS speed on the same moments: RMS 6.06 m/s, within 2 m/s 24%
+
+  by fit quality:
+    r 0.6-0.8  n=  213  RMS  4.27 m/s  held  5.62 m/s
+    r 0.8-1.0  n=   51  RMS  2.58 m/s  held  7.63 m/s
+
+========================================================================================================
+3 · what it would be worth (dead reckoning, no map, path average)
+========================================================================================================
+  held speed (today)               10.1%
+  reading replaces it               9.9%   better on  30% of blackouts
+  reading, half weight             10.1%   better on  30% of blackouts
+  reading, third weight            10.1%   better on  34% of blackouts
+  half weight, trusted 40 s        10.1%   better on  30% of blackouts
+  true speed (the floor)            2.5%   better on  96% of blackouts
+
+  by driving condition (held / half weight / true):
+    slow     n=   8      9.7%    10.5%     3.1%
+    mixed    n=  14      9.5%    10.5%     3.2%
+    ps_60    n=  18     12.2%    13.3%     1.9%
+    fast     n=   7     13.2%     7.2%     1.8%
+
+========================================================================================================
+4 · theory — how good and how frequent would a speed sensor have to be?
+========================================================================================================
+  80 blackouts · path average, median · held speed today: 10.3%
+
+  reading every      sigma 1 m/s   sigma 2 m/s   sigma 4 m/s   sigma 6 m/s
+       5 s                  6.0%          7.3%          9.8%         12.7%
+      20 s                  8.2%         10.3%         15.9%         22.6%
+      60 s                 11.6%         15.6%         23.5%         26.7%
+
+  share of blackouts under 10% with a reading every 20 s:
+    sigma 1 m/s    64%   (held speed today: 50%)
+    sigma 2 m/s    48%   (held speed today: 50%)
+    sigma 4 m/s    24%   (held speed today: 50%)
+    sigma 6 m/s    16%   (held speed today: 50%)

@@ -1,0 +1,40 @@
+
+====================================================================================================
+Round 3 · can we learn who should decide, holding or the model?
+====================================================================================================
+[    2s]   train S1/0 (A)
+[    4s]   train S2/1 (A)
+[    5s]   train S3a/0 (A)
+[    5s]   train S3b/1 (A)
+[    6s]   train S3c/0 (A)
+[    7s]   train S4/0 (A)
+[    8s]   train S4/1 (A)
+[    9s]   train M/0 (B)
+[    9s]   train M/1 (B)
+[   10s]   train M/2 (B)
+[   30s] speed models ready (10)
+[   30s]   M/0 — 0/400
+[   36s]   M/1 — 39/400
+[   38s]   M/2 — 51/400
+[   45s]   S1/0 — 105/400
+[   50s]   S2/1 — 128/400
+[   61s]   S3a/0 — 199/400
+[   65s]   S3c/0 — 234/400
+[   71s]   S4/0 — 290/400
+[   74s]   S4/1 — 307/400
+
+====================================================================================================
+what each expert scores on its own
+====================================================================================================
+  400 blackouts · always hold: under 10% 65%, median 7.1%
+                     always model: under 10% 70%, median 6.1%
+  a perfect chooser (the ceiling): under 10% 78%, median 5.1%
+
+====================================================================================================
+can the choice be learned?
+====================================================================================================
+  the arbiter picks the model on 69% of blackouts; it is right 54% of the time
+  arbiter result: under 10% 69%, median 6.4%
+
+  for comparison — the hand-made rule (hold on fast roads):
+  under 10% 69%, median 6.4%

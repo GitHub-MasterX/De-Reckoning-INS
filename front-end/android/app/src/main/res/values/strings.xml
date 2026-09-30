@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SIH Nav Live</string>
+    <string name="nav_service_channel_name">SIH Navigation Tracking</string>
+    <string name="nav_service_channel_desc">Active high-precision fused dead-reckoning navigation</string>
+    <string name="mode_gnss">GNSS FUSED</string>
+    <string name="mode_dr">DEAD RECKONING</string>
+    <string name="mode_acquiring">ACQUIRING</string>
+</resources>

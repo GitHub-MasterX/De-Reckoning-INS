@@ -46,7 +46,7 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.metrics import confusion_matrix
 
 ROOT = Path(__file__).parent
-MODELS, OUT = ROOT/"models", ROOT/"out"
+MODELS, OUT = ROOT/"models", ROOT/"outputs"
 (OUT/"plots").mkdir(parents=True, exist_ok=True)
 FS, HOP = 10.0, 5
 STEP = HOP/FS
@@ -86,7 +86,7 @@ for D in ORDER:
     crows.append(dict(driver=D, n=int(keep.sum()), accuracy=round(acc,4),
                       stationary_recall=round(rec,4), stationary_precision=round(pre,4)))
     print(f"  {D:<10}{int(keep.sum()):>10,}{acc:>10.1%}{rec:>10.1%}{pre:>12.1%}")
-C = pd.DataFrame(crows); C.to_csv(OUT/"classifier_scores.csv", index=False)
+C = pd.DataFrame(crows); C.to_csv(OUT/"Results/classifier_scores.csv", index=False)
 print(f"\n  mean accuracy {C.accuracy.mean():.1%}   "
       f"naive vibration threshold {meta['naive_threshold_accuracy']:.1%}   "
       f"gain +{100*(C.accuracy.mean()-meta['naive_threshold_accuracy']):.1f} points")
@@ -127,7 +127,7 @@ for D in ORDER:
         if not acc["coast"][dist]: continue
         rows.append(dict(driver=D, dist_m=dist, n=len(acc["coast"][dist]),
                          **{k: round(float(np.median(acc[k][dist])),2) for k in acc}))
-T = pd.DataFrame(rows); T.to_csv(OUT/"drift_all_drivers.csv", index=False)
+T = pd.DataFrame(rows); T.to_csv(OUT/"Results/drift_all_drivers.csv", index=False)
 
 for D in ORDER:
     s = T[T.driver == D]
@@ -233,4 +233,4 @@ a2.set_title("Confusion matrix — all held-out folds pooled", fontsize=12, weig
 fig.tight_layout(); fig.savefig(OUT/"plots/04_classifier.png", dpi=150)
 plt.close(fig); print("  04_classifier.png")
 
-banner(f"DONE in {time.time()-t0:.0f}s   —   results in out/")
+banner(f"DONE in {time.time()-t0:.0f}s   —   results in outputs/")

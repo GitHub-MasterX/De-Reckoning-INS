@@ -1,0 +1,9 @@
+# Build outputs and machine-local settings
+build/
+.gradle/
+local.properties
+.idea/
+*.apk
+*.iml
+captures/
+.cxx/

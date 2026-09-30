@@ -1,0 +1,31 @@
+
+====================================================================================================
+Round 3 · the learned speed on the Trichy rides (train on the outbound, test on the return)
+====================================================================================================
+[    9s] Tamil Nadu network: 8,371,998 segments
+[   11s] segment 1: 22,431 rows, 18.9 km, median 28 km/h
+[   12s] segment 2: 6,267 rows, 2.6 km, median 18 km/h
+[   14s] segment 3: 26,070 rows, 18.3 km, median 26 km/h
+[   15s] training rows from the outbound ride: 15,441
+
+====================================================================================================
+segment 3 (3_return.csv.gz) — 57 blackouts
+====================================================================================================
+  speed error, RMS m/s:   holding  3.18   learned  2.77   better on  58% of blackouts
+  dead reckoning (no map), path average, median:
+    holding  10.6%   learned  10.7%   true speed   1.7%
+    gated (hold on a fast road, learn elsewhere)  10.7%   — 0% of blackouts start on a fast road
+    under 10%: holding  47%   learned  47%
+    gated on the last known speed (hold above the threshold, learn below):
+      above 43 km/h hold   path   8.7%   under 10%  53%   (applies to 19% of blackouts)
+      above 50 km/h hold   path   9.2%   under 10%  53%   (applies to 32% of blackouts)
+      above 58 km/h hold   path  10.3%   under 10%  49%   (applies to 47% of blackouts)
+    40-50     n=  4   held  10.1%   learned   7.3%   gated   7.3%
+    50-70     n= 31   held   5.7%   learned   8.9%   gated   8.9%
+    70+       n=  3   held   3.2%   learned  10.3%   gated  10.3%
+    under 40  n= 19   held  75.1%   learned  15.6%   gated  15.6%
+
+====================================================================================================
+segment 2 (2_town_tuning.csv.gz) — 0 blackouts
+====================================================================================================
+  too short for the blackout rule

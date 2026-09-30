@@ -1,3 +1,0 @@
-# Round 2 = the round-1 environment + the OpenStreetMap reader
--r ../requirements.txt
-osmium==4.3.1

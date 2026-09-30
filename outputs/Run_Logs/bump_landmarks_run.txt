@@ -1,0 +1,31 @@
+
+====================================================================================================
+Round 3 · bumps as landmarks, and the ones nobody mapped
+====================================================================================================
+[    4s] segment 1: 170 jolts over 18.9 km while moving = 9.0 per km
+[    5s] segment 2: 68 jolts over 2.6 km while moving = 26.0 per km
+[    9s] segment 3: 182 jolts over 18.3 km while moving = 9.9 per km
+
+====================================================================================================
+1 · do the same jolts appear on both runs of the same corridor?
+====================================================================================================
+  outbound jolts: 170   return jolts: 182
+  jolts found at the same place on both runs (within 20 m): 50
+  they repeat to 12 m (p90 18 m)
+  that is 2.73 confirmed landmarks per km of corridor, from two passes
+  for comparison, OpenStreetMap has 17 speed breakers in the whole area — about 0.5 per km
+
+====================================================================================================
+2 · what a landmark fix would be worth inside a blackout
+====================================================================================================
+  57 blackouts on the return ride
+  blackouts containing at least one confirmed landmark: 44%
+  average landmarks per blackout: 1.8
+  with one landmark, the along-track error resets to the landmark's own spread (~12 m),
+  which for a 1 km blackout is about 1.2% error at that moment
+
+====================================================================================================
+3 · how good are the detections themselves?
+====================================================================================================
+  segment 1: jolts detected at 22 km/h median speed, score 24x background (p90 96x)
+  segment 3: jolts detected at 23 km/h median speed, score 21x background (p90 52x)

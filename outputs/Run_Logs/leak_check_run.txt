@@ -1,0 +1,25 @@
+1 · RUNTIME TEST — true track after the blackout start replaced by random garbage, engine re-run, same seed
+
+  driver   blackouts   calibration  stop detection  dead reckoning  particle filter
+  A               10    10/10 same      10/10 same      10/10 same       10/10 same
+  B               10    10/10 same      10/10 same      10/10 same       10/10 same
+  D               10    10/10 same      10/10 same      10/10 same       10/10 same
+  E               10    10/10 same      10/10 same      10/10 same       10/10 same
+
+  40 blackouts · EVERY OUTPUT IDENTICAL — no ground truth after the start reaches the engine
+
+2 · STATIC LISTING — every read of a ground-truth field in the engine-path modules
+
+  core/engine_input.py — 2 reads
+      33: return EngineInput(lat0=float(S.lat[i]), lon0=float(S.lon[i]), course0=float(np.radians(S.heading[i])),
+      34: speed0=float(S.v[i]), axis=calib.axis.copy(), scale=float(calib.scale),
+  core/particle.py — 0 reads
+  core/deadreckoning.py — 0 reads
+  core/motion.py — 0 reads
+  core/roadnet.py — 0 reads
+  core/calibration.py — 5 reads
+      33: hd = pd.Series(np.where(S.v >= HOLD_BELOW, S.heading, np.nan)).ffill().bfill().to_numpy()
+      64: self.bias_ok = ok & ((S.v < STOPPED_SPEED)
+      65: | ((S.v > FIT_MIN_SPEED) & (np.abs(self.rate) < STRAIGHT_RATE)))
+      67: fit = ok & (S.v > FIT_MIN_SPEED)
+      98: target = np.where(self.S.v[m] < STOPPED_SPEED, 0.0, self.rate[m])

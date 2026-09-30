@@ -6,11 +6,6 @@ __pycache__/
 # Raw dataset — 3.5 GB, fetch from the source repo (see README)
 IO-VNBD/
 
-# Cleaned parquet — 229 MB, regenerate with analysis/clean_dataset.py
-# The .npz caches in models/ are committed instead, so run_evaluation.py works
-# without this.
-data/clean/
-
 # Scratch
 pptx_work/
 *.pptx

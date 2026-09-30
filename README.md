@@ -30,6 +30,7 @@ to 1.5 km. Urban stop-start driving reaches 16–20%, for reasons documented in
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
+unzip data/clean.zip -d .                 # once — restores data/clean/ (229 MB, LFS-tracked zip)
 python3 run_evaluation.py          # ~15 s — reproduces every number and figure
 ```
 

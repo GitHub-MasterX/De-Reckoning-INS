@@ -1,0 +1,49 @@
+
+====================================================================================================
+Round 3 · a speed that regresses to the mean — tuning A+B
+====================================================================================================
+  fitted on 5,491 samples from the tuning drivers
+  horizon           ordinary road: v_expected                 fast road
+    10 s                    0.76 x v0 +2.80           0.85 x v0 +3.33
+    30 s                    0.57 x v0 +5.30           0.55 x v0 +8.93
+    60 s                    0.52 x v0 +5.97          0.43 x v0 +10.03
+    90 s                    0.41 x v0 +6.65           0.64 x v0 +4.06
+[    2s] 200 blackouts to score
+[    3s]   M/0 (B) — 0/200
+[   14s]   M/1 (B) — 20/200
+[   17s]   M/2 (B) — 26/200
+[   30s]   S1/0 (A) — 53/200
+[   37s]   S2/1 (A) — 64/200
+[   54s]   S3a/0 (A) — 99/200
+[   63s]   S3c/0 (A) — 117/200
+[   73s]   S4/0 (A) — 145/200
+[   79s]   S4/1 (A) — 154/200
+
+====================================================================================================
+dead reckoning, no map (path average, median)
+====================================================================================================
+  held (today)               10.9%    under 10% on  46%
+  regressed to the mean      11.3%    under 10% on  40%
+  true speed                  3.1%    under 10% on  95%
+
+====================================================================================================
+with the map, through the round-3 reporting layer
+====================================================================================================
+  variant                   PATH <10%  path med  worst med  off route
+  held (today)                    66%      6.8%      17.6%        26%
+  full regression                 64%      7.9%      19.1%        20%
+  half way there                  63%      7.7%      17.8%        24%
+  a third of the way              64%      7.5%      18.1%        24%
+  half way, ordinary roads only        64%      7.2%      17.7%        25%
+  pf_shrink      better on  42% of blackouts, worse on  58%
+  pf_half        better on  40% of blackouts, worse on  60%
+  pf_third       better on  46% of blackouts, worse on  55%
+  pf_slowonly    better on  28% of blackouts, worse on  40%
+
+====================================================================================================
+by driving condition (held / regressed, with the map)
+====================================================================================================
+  slow     n=  42   path   6.0% -> half   5.8% -> full   6.1%   under 10%  64% ->  67% ->  76%   off route  38% ->  38%
+  mixed    n=  52   path   7.2% -> half   7.5% -> full   7.0%   under 10%  69% ->  69% ->  63%   off route  29% ->  29%
+  ps_60    n=  59   path   8.0% -> half   9.3% -> full   9.6%   under 10%  59% ->  51% ->  53%   off route  20% ->  19%
+  fast     n=  47   path   6.3% -> half   7.4% -> full   8.3%   under 10%  72% ->  68% ->  68%   off route  17% ->  11%

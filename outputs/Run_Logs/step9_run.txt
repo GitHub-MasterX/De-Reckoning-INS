@@ -1,0 +1,14 @@
+[    1s] exporting 12 clips (3 per driver) at 10 Hz
+[    2s]   A_S3c_s0_4907              slow   6 turns  no map   80.2%  with map   0.5%  (report says 80.2% / 0.5%)
+[    2s]   A_S4_s1_44559              slow   5 turns  no map   71.2%  with map   0.7%  (report says 71.2% / 0.7%)
+[    2s]   A_S4_s1_44419              slow   3 turns  no map   78.7%  with map   8.7%  (report says 78.7% / 8.7%)
+[    2s]   B_M_s0_39525               mixed  3 turns  no map   53.4%  with map   2.4%  (report says 53.4% / 2.4%)
+[    3s]   B_M_s0_32610               slow   5 turns  no map   44.0%  with map   3.5%  (report says 44.0% / 3.5%)
+[    3s]   B_M_s2_42552               slow   4 turns  no map   40.9%  with map   1.0%  (report says 40.9% / 1.0%)
+[    3s]   D_Y1_s3_57075              slow   8 turns  no map   55.0%  with map   1.8%  (report says 55.0% / 1.8%)
+[    3s]   D_Y1_s3_31929              ps_60  4 turns  no map   49.7%  with map   1.8%  (report says 49.7% / 1.8%)
+[    3s]   D_Y1_s3_47296              mixed  3 turns  no map   38.5%  with map   1.6%  (report says 38.5% / 1.6%)
+[    4s]   E_Vw4_s0_73625             mixed  3 turns  no map   72.8%  with map  10.0%  (report says 72.8% / 10.0%)
+[    4s]   E_Vta1a_s0_16518           slow   4 turns  no map   66.4%  with map   7.2%  (report says 66.4% / 7.2%)
+[    4s]   E_Vw4_s0_41302             ps_60  2 turns  no map   56.7%  with map   1.0%  (report says 56.7% / 1.0%)
+[    4s] done — 12 clips, 1.8 MB of assets in round2/android/app/src/main/assets/replay

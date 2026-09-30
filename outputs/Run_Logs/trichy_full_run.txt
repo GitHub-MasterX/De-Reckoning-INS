@@ -1,0 +1,30 @@
+
+====================================================================================================
+Round 3 · the merged engine on the Trichy return ride (trained on the outbound)
+====================================================================================================
+[    9s] Tamil Nadu network loaded: 8,371,998 segments
+[   15s] speed model trained on 15,441 rows from the outbound ride
+[   15s] 57 blackouts on the return ride
+[   16s]   0/57
+[   19s]   10/57
+[   21s]   20/57
+[   22s]   30/57
+[   26s]   40/57
+[   28s]   50/57
+
+====================================================================================================
+the merged engine on the return ride — 57 blackouts, with the Tamil Nadu map
+====================================================================================================
+  variant                       PATH <10%  path med  worst med  off route  worst side
+  round 2 speed (held)                44%     11.5%      27.2%        39%         11m
+  learned speed everywhere            39%     11.6%      25.7%        32%         11m
+  learned below 43 km/h               47%     10.1%      26.6%        37%         11m
+
+====================================================================================================
+by riding condition (path average, median)
+====================================================================================================
+  band          n     held   learned    gated   under 10% held -> gated
+  under 40     19    29.6%     14.7%    29.6%               16% -> 21%
+  40-50         4    13.2%      7.0%    13.4%               25% -> 50%
+  50-70        31     9.0%     11.6%     9.0%               61% -> 61%
+  70+           3     7.4%      8.9%     7.4%               67% -> 67%

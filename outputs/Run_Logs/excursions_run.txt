@@ -1,0 +1,69 @@
+
+================================================================================================================
+Round 3 · when does the estimate leave the road the vehicle is on?
+================================================================================================================
+  frozen settings {'q_speed': 0.4, 'sigma_turn_deg': 10.0, 'sigma_abs_deg': 15.0, 'dr_blend_m': 100.0, 'straight_blend_m': 0.0, 'n': 500} · calibration window
+  off route = more than 30 m sideways from the driven path · stuck = advancing under 1.5 m/s while the vehicle does 5+ m/s · measured from 100 m of travel
+[    1s] 3,119 blackouts · network 1,365,205 segments
+[    2s]   M/0 (B) — 0/3,119
+[    6s]   M/1 (B) — 67/3,119
+[    7s]   M/2 (B) — 88/3,119
+[   13s]   S1/0 (A) — 183/3,119
+[   16s]   S2/1 (A) — 222/3,119
+[   23s]   S3a/0 (A) — 346/3,119
+[   26s]   S3c/0 (A) — 408/3,119
+[   30s]   S4/0 (A) — 505/3,119
+[   32s]   S4/1 (A) — 536/3,119
+[   40s]   Vfa01/0 (E) — 698/3,119
+[   41s]   Vfa02/0 (E) — 733/3,119
+[   57s]   Vta16/0 (E) — 1,342/3,119
+[   58s]   Vta1a/0 (E) — 1,367/3,119
+[   64s]   Vta2/0 (E) — 1,504/3,119
+[   65s]   Vta29/0 (E) — 1,514/3,119
+[   68s]   Vta30/0 (E) — 1,573/3,119
+[   68s]   Vtb5/0 (E) — 1,576/3,119
+[   83s]   Vw11/0 (E) — 1,973/3,119
+[   83s]   Vw2/0 (E) — 1,979/3,119
+[   93s]   Vw4/0 (E) — 2,312/3,119
+[  117s]   Y1/3 (D) — 3,036/3,119
+[  123s] 3,119 blackouts -> round2/out/round3_excursions.parquet
+
+================================================================================================================
+D+E (test) — excursions by driving condition
+================================================================================================================
+                   n  off route  episodes  longest   worst  came back   stuck  no-map off
+                          share per b/out        s       m   of those   share       share
+  under 40        98        52%       0.8        7      33        45%     77%         99%
+  40-50          177        37%       0.5        5      14        39%     55%         95%
+  50-70 (PS)     407        34%       0.4        3      14        17%     35%         92%
+  70+           1739        44%       0.5        2      14         6%     12%         81%
+  all           2421        42%       0.5        2      15        12%     22%         85%
+
+================================================================================================================
+A+B (tuning) — excursions by driving condition
+================================================================================================================
+                   n  off route  episodes  longest   worst  came back   stuck  no-map off
+                          share per b/out        s       m   of those   share       share
+  under 40       172        48%       0.7        7      25        56%     83%         99%
+  40-50          144        32%       0.5        4      13        39%     60%         92%
+  50-70 (PS)     214        29%       0.4        2      11        32%     37%         84%
+  70+            168        20%       0.2        1       6         9%     15%         52%
+  all            698        32%       0.4        3      12        39%     48%         82%
+
+================================================================================================================
+what the excursions cost, and what kind they are
+================================================================================================================
+  test blackouts with at least one off-route moment: 1,016 of 2,421 (42%)
+  of those: worst sideways 104 m (p90 242 m), away for 2 s (p90 9 s), came back 12%
+  blackouts where the cursor froze while the vehicle drove (>3 s): 1%  (any freeze at all: 22%)
+  blackouts where the cursor jumped more than 20 m in one second: 100%  (worst jump, median of those: 84 m)
+  worst error that is purely along the road (cross under 30 m): 122 m median
+
+  the map's own contribution: off route with the map 42%, without the map 85%
+  (the map-free estimate drifts away smoothly; the map-aided one can jump to a wrong road and back)
+
+  where they happen:
+    a turn happened in the blackout  n= 1116   off route  40%   worst sideways   15 m
+    no turn at all                   n= 1305   off route  44%   worst sideways   13 m
+    last turn over 500 m back        n= 1580   off route  43%   worst sideways   13 m
+    last turn within 200 m           n=  473   off route  41%   worst sideways   18 m

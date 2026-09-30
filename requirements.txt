@@ -9,3 +9,4 @@ scikit-learn==1.9.0
 matplotlib==3.11.1
 joblib==1.5.3
 pyarrow==25.0.1
+osmium==4.3.1     # reads OpenStreetMap .pbf files, for building the road networks

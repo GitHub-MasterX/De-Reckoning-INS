@@ -1,0 +1,55 @@
+
+====================================================================================================
+Round 3 · the learned speed inside the engine — tuning A+B
+====================================================================================================
+[    2s]   train S1/0 (A)
+[    4s]   train S2/1 (A)
+[    5s]   train S3a/0 (A)
+[    5s]   train S3b/1 (A)
+[    6s]   train S3c/0 (A)
+[    7s]   train S4/0 (A)
+[    8s]   train S4/1 (A)
+[    9s]   train M/0 (B)
+[    9s]   train M/1 (B)
+[   10s]   train M/2 (B)
+[   10s] 280,060 training rows from 10 sessions
+[   33s] 10 leave-one-out models fitted
+[   33s]   score M/0 (B) — 0/250
+[   41s]   score M/1 (B) — 24/250
+[   43s]   score M/2 (B) — 32/250
+[   51s]   score S1/0 (A) — 66/250
+[   57s]   score S2/1 (A) — 80/250
+[   67s]   score S3a/0 (A) — 124/250
+[   73s]   score S3c/0 (A) — 146/250
+[   79s]   score S4/0 (A) — 181/250
+[   82s]   score S4/1 (A) — 192/250
+
+====================================================================================================
+1 · how good is the learned speed inside the blackouts?
+====================================================================================================
+  250 blackouts · model RMS 2.69 m/s · holding 3.16 m/s · better on 63%
+
+====================================================================================================
+2 · dead reckoning, no map (path average, median)
+====================================================================================================
+  held  12.2%   learned  12.7%   true   2.7%
+
+====================================================================================================
+3 · with the map, the finished reporting layer
+====================================================================================================
+  variant             PATH <10%  path med  worst med  off route
+  held (today)              66%      7.0%      18.2%        26%
+  learned speed             72%      6.4%      16.0%        20%
+  learned, under 72 km/h        69%      6.0%      16.4%        24%
+  half learned, half held        72%      6.4%      17.0%        20%
+  pf_model   better on  55% of blackouts, worse on  44%
+  pf_gated   better on  44% of blackouts, worse on  26%
+  pf_blend   better on  60% of blackouts, worse on  40%
+
+====================================================================================================
+4 · by driving condition
+====================================================================================================
+  slow     n=  65   under 10%  55% -> model  74% -> gated  72%   path   8.1% ->   5.8%   off route  42% ->  37%
+  mixed    n=  46   under 10%  65% -> model  72% -> gated  67%   path   8.0% ->   7.7%   off route  30% ->  20%
+  ps_60    n=  79   under 10%  70% -> model  70% -> gated  65%   path   6.6% ->   6.1%   off route  18% ->  22%
+  fast     n=  60   under 10%  73% -> model  73% -> gated  73%   path   5.7% ->   5.7%   off route  15% ->  15%
